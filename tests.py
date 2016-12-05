@@ -60,9 +60,22 @@ class SingleRegionInstanceTest(TestCase):
                           "created instance name doesn't match imported name")
 
     def test_imported_instances_are_present(self):
-        number_created = 5
-        self.ec2.create_instances(ImageId='ami-f9619996', MinCount=number_created, MaxCount=number_created)
-        imported_instances = Instance.update_resources(self.aws_account)
-        self.assertEquals(number_created,
-                          len([x for x in imported_instances if x.present]),
-                          "not all imported instances are marked present")
+        self.ec2.create_instances(ImageId='ami-f9619996', MinCount=1, MaxCount=1)
+        imported_instance = Instance.update_resources(self.aws_account)[0]
+        self.assertTrue(imported_instance.present,
+                        "imported instance not marked present")
+
+    def test_terminated_instance_has_present_false(self):
+        created_instance = self.ec2.create_instances(ImageId='ami-f9619996', MinCount=1, MaxCount=1)[0]
+        Instance.update_resources(self.aws_account)
+        created_instance.terminate()
+        created_instance.wait_until_terminated()
+        imported_instances = Instance.update_resources(self.aws_account)[0]
+        self.assertFalse(imported_instances.present, "terminated instance doesn't have present=False")
+
+    def test_deleted_instance_has_present_false(self):
+        id = 'id-1234'
+        Instance.objects.create(id=id, aws_account=self.aws_account, region_name='test', present=True)
+        Instance.update_resources(self.aws_account)
+        instance = Instance.objects.get(id=id)
+        self.assertFalse(instance.present, "Deleted instance doesn't have present=False")

@@ -39,6 +39,10 @@ class AWSResource(AWSBaseModel):
         raise NotImplementedError
 
     @classmethod
+    def _prune_resources(cls, created_resources):
+        cls.objects.exclude(id__in=[x.id for x in created_resources]).update(present=False)
+
+    @classmethod
     def update_resources(cls, aws_account, region_names=None, filters=None):
         filters = filters or [{}]
         region_names = region_names or AWSRegionChoice.values.keys()
@@ -58,6 +62,7 @@ class AWSResource(AWSBaseModel):
 
                 resource, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
                 created_resources.append(resource)
+        cls._prune_resources(created_resources)
         return created_resources
 
 
@@ -66,7 +71,8 @@ class Instance(AWSResource):
 
     @classmethod
     def _update_resource(cls, item, aws_account, region_name, defaults):
-        pass
+        if item.state['Name'] == 'terminated':
+            defaults['present'] = False
 
 
 class EBSVolume(AWSResource):
