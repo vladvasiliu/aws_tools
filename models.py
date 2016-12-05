@@ -43,10 +43,9 @@ class Instance(AWSResource):
         for region_name in region_names:
             ec2 = boto3.resource('ec2', region_name=region_name)
             for item in ec2.instances.filter(Filters=filters):
-                name = resource_name(item)
-                defaults = {'aws_account': aws_account, 'region_name': region_name}
-                if name:
-                    defaults['_name'] = name
+                defaults = {'aws_account': aws_account,
+                            'region_name': region_name,
+                            '_name': resource_name(item)}
 
                 instance, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
                 created_instances.append(instance)
@@ -66,10 +65,7 @@ class EBSVolume(AWSResource):
         for region_name in region_names:
             ec2 = boto3.resource('ec2', region_name=region_name)
             for item in ec2.volumes.filter(Filters=filters):
-                name = resource_name(item)
-                defaults = {'aws_account': aws_account, 'region_name': region_name}
-                if name:
-                    defaults['_name'] = name
+                defaults = {'aws_account': aws_account, 'region_name': region_name, '_name': resource_name(item)}
 
                 if item.attachments:
                     # There is only one attachment
