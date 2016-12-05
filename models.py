@@ -10,6 +10,7 @@ class AWSBaseModel(models.Model):
         abstract = True
     _name = models.CharField(max_length=100, blank=True)
     id = models.CharField(max_length=25, primary_key=True, editable=False)
+    present = models.BooleanField(default=True)
 
     @property
     def name(self):
@@ -77,7 +78,7 @@ class EBSVolume(AWSResource):
                     defaults['instance'] = instance
                 else:
                     defaults['instance'] = None
-                    
+
                 volume, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
                 created_instances.append(volume)
         return created_instances
