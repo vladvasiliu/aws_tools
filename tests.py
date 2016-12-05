@@ -23,7 +23,7 @@ class SingleRegionInstanceTest(TestCase):
 
     def test_all_created_ids_are_imported(self):
         created_instance_ids = [x.id for x in self.ec2.create_instances(ImageId='ami-f9619996', MinCount=5, MaxCount=5)]
-        Instance.get_instances(self.aws_account)
+        Instance.update_resources(self.aws_account)
         imported_instance_ids = [x.id for x in Instance.objects.all()]
         self.assertListEqual(created_instance_ids,
                              imported_instance_ids,
@@ -33,7 +33,7 @@ class SingleRegionInstanceTest(TestCase):
         instance_name = 'test123'
         created_instance = self.ec2.create_instances(ImageId='ami-f9619996', MinCount=1, MaxCount=1)[0]
         self.set_name(created_instance, instance_name)
-        imported_instance = Instance.get_instances(self.aws_account)[0]
+        imported_instance = Instance.update_resources(self.aws_account)[0]
         self.assertEquals(instance_name,
                           imported_instance.name,
                           "created instance name doesn't match imported name")
@@ -42,9 +42,9 @@ class SingleRegionInstanceTest(TestCase):
         instance_name = 'test123'
         created_instance = self.ec2.create_instances(ImageId='ami-f9619996', MinCount=1, MaxCount=1)[0]
         self.set_name(created_instance, instance_name)
-        Instance.get_instances(self.aws_account)
+        Instance.update_resources(self.aws_account)
         self.set_name(created_instance, '')
-        imported_instance = Instance.get_instances(self.aws_account)[0]
+        imported_instance = Instance.update_resources(self.aws_account)[0]
         self.assertEquals(created_instance.id,
                           imported_instance.name,
                           "created instance name doesn't match imported name")
@@ -52,9 +52,9 @@ class SingleRegionInstanceTest(TestCase):
     def test_names_are_added_on_update(self):
         instance_name = 'test123'
         created_instance = self.ec2.create_instances(ImageId='ami-f9619996', MinCount=1, MaxCount=1)[0]
-        Instance.get_instances(self.aws_account)
+        Instance.update_resources(self.aws_account)
         self.set_name(created_instance, instance_name)
-        imported_instance = Instance.get_instances(self.aws_account)[0]
+        imported_instance = Instance.update_resources(self.aws_account)[0]
         self.assertEquals(instance_name,
                           imported_instance.name,
                           "created instance name doesn't match imported name")
@@ -62,7 +62,7 @@ class SingleRegionInstanceTest(TestCase):
     def test_imported_instances_are_present(self):
         number_created = 5
         self.ec2.create_instances(ImageId='ami-f9619996', MinCount=number_created, MaxCount=number_created)
-        imported_instances = Instance.get_instances(self.aws_account)
+        imported_instances = Instance.update_resources(self.aws_account)
         self.assertEquals(number_created,
                           len([x for x in imported_instances if x.present]),
                           "not all imported instances are marked present")

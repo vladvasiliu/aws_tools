@@ -33,55 +33,60 @@ class AWSResource(AWSBaseModel):
     class Meta:
         abstract = True
 
-
-class Instance(AWSResource):
+    # Do specific work for the type of instance
     @classmethod
-    def get_instances(cls, aws_account, region_names=None, filters=None):
+    def _update_resource(cls, item, aws_account, region_name, defaults):
+        raise NotImplementedError
+
+    @classmethod
+    def update_resources(cls, aws_account, region_names=None, filters=None):
         filters = filters or [{}]
         region_names = region_names or AWSRegionChoice.values.keys()
-        created_instances = []
+        created_resources = []
 
         for region_name in region_names:
             ec2 = boto3.resource('ec2', region_name=region_name)
-            for item in ec2.instances.filter(Filters=filters):
+
+            for item in getattr(ec2, cls.resource_kind).filter(Filters=filters):
+
                 defaults = {'aws_account': aws_account,
                             'region_name': region_name,
                             '_name': resource_name(item)}
 
-                instance, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
-                created_instances.append(instance)
-        return created_instances
+                # Do specific work for the type of instance
+                cls._update_resource(item, aws_account, region_name, defaults)
+
+                resource, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
+                created_resources.append(resource)
+        return created_resources
+
+
+class Instance(AWSResource):
+    resource_kind = "instances"
+
+    @classmethod
+    def _update_resource(cls, item, aws_account, region_name, defaults):
+        pass
 
 
 class EBSVolume(AWSResource):
     instance = models.ForeignKey(Instance, blank=True, null=True, editable=False)
     present = models.BooleanField(default=True, editable=False)
 
+    resource_kind = "volumes"
+
     @classmethod
-    def get_volumes(cls, aws_account, region_names=None, filters=None):
-        filters = filters or [{}]
-        region_names = region_names or AWSRegionChoice.values.keys()
-        created_instances = []
-
-        for region_name in region_names:
-            ec2 = boto3.resource('ec2', region_name=region_name)
-            for item in ec2.volumes.filter(Filters=filters):
-                defaults = {'aws_account': aws_account, 'region_name': region_name, '_name': resource_name(item)}
-
-                if item.attachments:
-                    # There is only one attachment
-                    instance_id = item.attachments[0]['InstanceId']
-                    instance = Instance.get_instances(filters=[{'Name': "instance-id",
-                                                                'Values': [instance_id]}],
-                                                      aws_account=aws_account,
-                                                      region_names=[region_name])[0]
-                    defaults['instance'] = instance
-                else:
-                    defaults['instance'] = None
-
-                volume, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
-                created_instances.append(volume)
-        return created_instances
+    def _update_resource(cls, item, aws_account, region_name, defaults):
+        if item.attachments:
+            # There is only one attachment
+            instance_id = item.attachments[0]['InstanceId']
+            instance = Instance.update_resources(filters=[{'Name': "instance-id",
+                                                           'Values': [instance_id]}],
+                                                 aws_account=aws_account,
+                                                 region_names=[region_name])[0]
+            defaults['instance'] = instance
+        else:
+            defaults['instance'] = None
 
 
 class EBSSnapshot(AWSResource):
