@@ -74,8 +74,8 @@ class SingleRegionInstanceTest(TestCase):
         self.assertFalse(imported_instances.present, "terminated instance doesn't have present=False")
 
     def test_deleted_instance_has_present_false(self):
-        id = 'id-1234'
-        Instance.objects.create(id=id, aws_account=self.aws_account, region_name='test', present=True)
+        instance_id = 'id-1234'
+        Instance.objects.create(id=instance_id, aws_account=self.aws_account, region_name='test', present=True)
         Instance.update_resources(self.aws_account)
-        instance = Instance.objects.get(id=id)
+        instance = Instance.objects.get(id=instance_id)
         self.assertFalse(instance.present, "Deleted instance doesn't have present=False")
