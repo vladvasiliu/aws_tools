@@ -129,11 +129,22 @@ class EBSVolume(AWSResource):
         else:
             defaults['instance'] = None
 
+    def snapshot(self, snapshot_name=None):
+        snapshot_name = snapshot_name or '%s - auto' % self.name
+        aws_vol = self._aws_resource()
+        snapshot = aws_vol.create_snapshot(Description=snapshot_name)
+        snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
+        EBSSnapshot.update_resources(filters=[{'Name': "snapshot-id",
+                                               'Values': [snapshot.id]}],
+                                     aws_account=self.aws_account,
+                                     region_names=[self.region_name])
+
 
 class EBSSnapshot(AWSResource):
     state = models.CharField(max_length=20)
     ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False)
     resource_kind = "snapshots"
+    id_filter = 'snapshot-id'
 
     @classmethod
     def _update_resource(cls, item, aws_account, region_name, defaults):
