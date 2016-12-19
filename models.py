@@ -1,9 +1,12 @@
 import boto3
 from django.db import models
+import logging
 
 from .exceptions import ResourceNotFoundException
 from .helpers import resource_name
 from .constants import AWSRegionChoice
+
+logger = logging.getLogger(__name__)
 
 
 class AWSBaseModel(models.Model):
@@ -86,6 +89,8 @@ class AWSResource(AWSBaseModel):
 class Instance(AWSResource):
     resource_kind = "instances"
     id_filter = 'instance-id'
+    backup = models.BooleanField(default=True)
+    backup_time = models.TimeField(default="03:00:00")
 
     @classmethod
     def _update_resource(cls, item, aws_account, region_name, defaults):
@@ -108,11 +113,17 @@ class Instance(AWSResource):
         instance = self._aws_resource()
         return instance.state['Name']
 
+    def snapshot(self, stop_first=False):
+        for volume in self.ebsvolume_set.filter(backup=True):
+            volume.snapshot(snapshot_name=self.name)
+            logger.info("Starting snapshot of %s / %s" % (self.name, volume.name))
+
 
 class EBSVolume(AWSResource):
     instance = models.ForeignKey(Instance, blank=True, null=True, editable=False)
     present = models.BooleanField(default=True, editable=False)
     id_filter = 'volume-id'
+    backup = models.BooleanField(default=True, editable=False)
 
     resource_kind = "volumes"
 

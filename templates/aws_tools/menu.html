@@ -1,0 +1,15 @@
+{% load bootstrap3 %}
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+          {% bootstrap_icon 'sunglasses' %} AWS Tools
+      </a>
+    </div>
+
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'main' %}">Instances</a></li>
+        <li><a href="#">Queue</a></li>
+      </ul>
+  </div>
+</nav>

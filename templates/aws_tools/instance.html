@@ -1,0 +1,9 @@
+{% extends 'aws_tools/base.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}{{ instance.name }}{% endblock %}
+
+{% block page_header %}{{ instance.name }}{% endblock %}
+{% if instance.name != instance.id %}
+{% block page_header_subtext %}{{ instance.id }}{% endblock %}
+{% endif %}

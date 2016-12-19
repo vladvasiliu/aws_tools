@@ -1,0 +1,16 @@
+{% extends 'aws_tools/base.html' %}
+
+{% block page_title %}Home{% endblock %}
+
+{% block page_header %}Instances{% endblock %}
+
+{% block content %}
+    {% for instance in instances %}
+        <a href="{% url 'instance' instance_id=instance.id %}" class="list-group-item" >
+            {{ instance.name }}
+            <span class="badge pull-right">{{ instance.ebsvolume_set.count }} volumes</span>
+        </a>
+    {% empty %}
+        <span class="list-group-item">No instances found.</span>
+    {% endfor %}
+{% endblock %}
