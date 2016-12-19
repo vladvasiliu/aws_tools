@@ -1,3 +1,5 @@
 Django
 django-choices
+celery
+django-celery-beat
 boto3
