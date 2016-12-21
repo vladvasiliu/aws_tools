@@ -153,12 +153,15 @@ class EBSVolume(AWSResource):
 class EBSSnapshot(AWSResource):
     state = models.CharField(max_length=20)
     ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField()
+
     resource_kind = "snapshots"
     id_filter = 'snapshot-id'
 
     @classmethod
     def _update_resource(cls, item, aws_account, region_name, defaults):
-        pass
+        defaults['created_at'] = item.start_time
+        defaults['state'] = item.state
 
     @classmethod
     def update_resources(cls, aws_account, region_names=None, filters=None, custom_filter=None):
@@ -167,7 +170,3 @@ class EBSSnapshot(AWSResource):
                                                         region_names=region_names,
                                                         filters=filters,
                                                         custom_filter=custom_filter)
-
-    @classmethod
-    def _update_resource(cls, item, aws_account, region_name, defaults):
-        defaults['state'] = item.state
