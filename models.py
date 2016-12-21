@@ -120,8 +120,7 @@ class Instance(AWSResource):
 
 
 class EBSVolume(AWSResource):
-    instance = models.ForeignKey(Instance, blank=True, null=True, editable=False)
-    present = models.BooleanField(default=True, editable=False)
+    instance = models.ForeignKey(Instance, blank=True, null=True, editable=False, on_delete=models.SET_NULL)
     id_filter = 'volume-id'
     backup = models.BooleanField(default=True, editable=False)
 
@@ -153,7 +152,7 @@ class EBSVolume(AWSResource):
 
 class EBSSnapshot(AWSResource):
     state = models.CharField(max_length=20)
-    ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False)
+    ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False, on_delete=models.SET_NULL)
     resource_kind = "snapshots"
     id_filter = 'snapshot-id'
 
