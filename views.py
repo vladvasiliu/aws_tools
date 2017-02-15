@@ -4,7 +4,7 @@ from .models import Instance, EBSSnapshot
 
 
 def main(request):
-    instances = Instance.objects.all()
+    instances = Instance.objects.filter(present=True)
     return render(request, 'aws_tools/main.html', context={'instances': instances})
 
 
