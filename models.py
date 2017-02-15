@@ -27,11 +27,6 @@ class AWSBaseModel(models.Model):
 class AWSAccount(AWSBaseModel):
     role_arn = models.CharField(max_length=100)
 
-    def update_resources(self):
-        Instance.update_resources(aws_account=self)
-        EBSVolume.update_resources(aws_account=self)
-        EBSSnapshot.update_resources(aws_account=self)
-
 
 class AWSResource(AWSBaseModel):
     aws_account = models.ForeignKey(AWSAccount, editable=False)
@@ -42,37 +37,9 @@ class AWSResource(AWSBaseModel):
     class Meta:
         abstract = True
 
-    # Do specific work for the type of instance
-    @classmethod
-    def _update_resource(cls, item, aws_account, region_name, defaults):
-        raise NotImplementedError
-
     @classmethod
     def _prune_resources(cls, created_resources):
         cls.objects.exclude(id__in=[x.id for x in created_resources]).update(present=False)
-
-    @classmethod
-    def update_resources(cls, aws_account, region_names=None, filters=None, custom_filter=None):
-        filters = filters or [{}]
-        custom_filter = custom_filter or {}
-        region_names = region_names or AWSRegionChoice.values.keys()
-        created_resources = []
-
-        for region_name in region_names:
-            ec2 = boto3.resource('ec2', region_name=region_name)
-
-            for item in getattr(ec2, cls.resource_kind).filter(Filters=filters, **custom_filter):
-                defaults = {'aws_account': aws_account,
-                            'region_name': region_name,
-                            '_name': resource_name(item)}
-
-                # Do specific work for the type of instance
-                cls._update_resource(item, aws_account, region_name, defaults)
-
-                resource, _ = cls.objects.update_or_create(id=item.id, defaults=defaults)
-                created_resources.append(resource)
-        cls._prune_resources(created_resources)
-        return created_resources
 
     # Returns de corresponding AWS instance for this Python instance
     def _aws_resource(self):
@@ -93,9 +60,30 @@ class Instance(AWSResource):
     backup_time = models.TimeField(default="03:00:00")
 
     @classmethod
-    def _update_resource(cls, item, aws_account, region_name, defaults):
-        if item.state['Name'] == 'terminated':
-            defaults['present'] = False
+    def update(cls, aws_account):
+        region_names = AWSRegionChoice.values.keys()
+        updated_instances = []
+        for region_name in region_names:
+            ec2 = boto3.resource('ec2', region_name=region_name)
+
+            for aws_instance in ec2.instances.all():
+                defaults = {
+                    'aws_account': aws_account,
+                    'region_name': region_name,
+                    '_name': resource_name(aws_instance)
+                }
+                if aws_instance.state['Name'] == 'terminated':
+                    defaults['present'] = False
+                instance, _ = Instance.objects.update_or_create(id=aws_instance.id, defaults=defaults)
+                instance.update_volumes()
+                updated_instances.append(instance)
+        cls._prune_resources(updated_instances)
+
+    def update_volumes(self):
+        aws_instance = self._aws_resource()
+
+        for aws_volume in aws_instance.volumes.all():
+            EBSVolume.create_volume(aws_volume, self)
 
     def start(self, wait_for_it=False):
         instance = self._aws_resource()
@@ -127,17 +115,12 @@ class EBSVolume(AWSResource):
     resource_kind = "volumes"
 
     @classmethod
-    def _update_resource(cls, item, aws_account, region_name, defaults):
-        if item.attachments:
-            # There is only one attachment
-            instance_id = item.attachments[0]['InstanceId']
-            instance = Instance.update_resources(filters=[{'Name': "instance-id",
-                                                           'Values': [instance_id]}],
-                                                 aws_account=aws_account,
-                                                 region_names=[region_name])[0]
-            defaults['instance'] = instance
-        else:
-            defaults['instance'] = None
+    def create_volume(cls, aws_volume, instance):
+        EBSVolume.objects.update_or_create(id=aws_volume.id,
+                                           _name=resource_name(aws_volume),
+                                           instance=instance,
+                                           region_name=instance.region_name,
+                                           aws_account=instance.aws_account)
 
     def snapshot(self, snapshot_name=None):
         snapshot_name = snapshot_name or '%s - auto' % self.name
@@ -159,14 +142,11 @@ class EBSSnapshot(AWSResource):
     id_filter = 'snapshot-id'
 
     @classmethod
-    def _update_resource(cls, item, aws_account, region_name, defaults):
-        defaults['created_at'] = item.start_time
-        defaults['state'] = item.state
-
-    @classmethod
-    def update_resources(cls, aws_account, region_names=None, filters=None, custom_filter=None):
-        custom_filter = {'OwnerIds': [aws_account.id]}
-        return super(EBSSnapshot, cls).update_resources(aws_account=aws_account,
-                                                        region_names=region_names,
-                                                        filters=filters,
-                                                        custom_filter=custom_filter)
+    def create_snapshot(cls, aws_snapshot, volume):
+        EBSSnapshot.objects.update_or_create(id=aws_snapshot.id,
+                                             _name=resource_name(aws_snapshot),
+                                             ebs_volume=volume,
+                                             state=aws_snapshot.state,
+                                             created_at=aws_snapshot.start_time,
+                                             region_name=volume.region_name,
+                                             aws_account=volume.aws_account)
