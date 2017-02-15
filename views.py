@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from .models import Instance
+from .models import Instance, EBSSnapshot
 
 
 def main(request):
@@ -11,4 +11,6 @@ def main(request):
 def instance(request, instance_id):
     print("we're in!")
     instance = get_object_or_404(Instance, id=instance_id)
-    return render(request, 'aws_tools/instance.html', context={'instance': instance})
+    volumes = instance.ebsvolume_set.all().prefetch_related('ebssnapshot_set__')
+    return render(request, 'aws_tools/instance.html', context={'instance': instance,
+                                                               'volumes': volumes})

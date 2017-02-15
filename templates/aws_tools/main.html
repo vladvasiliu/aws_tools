@@ -8,7 +8,9 @@
     {% for instance in instances %}
         <a href="{% url 'instance' instance_id=instance.id %}" class="list-group-item" >
             {{ instance.name }}
-            <span class="badge pull-right">{{ instance.ebsvolume_set.count }} volumes</span>
+            {% with instance.ebsvolume_set.count as num_volumes %}
+            <span class="badge pull-right">{{ num_volumes }} volume{{ num_volumes|pluralize:",s" }}</span>
+            {% endwith %}
         </a>
     {% empty %}
         <span class="list-group-item">No instances found.</span>
