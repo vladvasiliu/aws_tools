@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 class AWSBaseModel(models.Model):
     class Meta:
         abstract = True
+        ordering = ['_name']
+
     _name = models.CharField(max_length=100, blank=True)
     id = models.CharField(max_length=25, primary_key=True, editable=False)
     present = models.BooleanField(default=True)
@@ -56,7 +58,6 @@ class AWSResource(AWSBaseModel):
 class Instance(AWSResource):
     resource_kind = "instances"
     id_filter = 'instance-id'
-    backup = models.BooleanField(default=True)
     backup_time = models.TimeField(default="03:00:00")
 
     @classmethod
@@ -116,11 +117,18 @@ class EBSVolume(AWSResource):
 
     @classmethod
     def create_volume(cls, aws_volume, instance):
-        EBSVolume.objects.update_or_create(id=aws_volume.id,
-                                           _name=resource_name(aws_volume),
-                                           instance=instance,
-                                           region_name=instance.region_name,
-                                           aws_account=instance.aws_account)
+        ebs_volume, _ = EBSVolume.objects.update_or_create(id=aws_volume.id,
+                                                           _name=resource_name(aws_volume),
+                                                           instance=instance,
+                                                           region_name=instance.region_name,
+                                                           aws_account=instance.aws_account)
+        ebs_volume.update_snapshots()
+
+    def update_snapshots(self):
+        aws_volume = self._aws_resource()
+
+        for aws_snapshot in aws_volume.snapshots.all():
+            EBSSnapshot.create_snapshot(aws_snapshot, self)
 
     def snapshot(self, snapshot_name=None):
         snapshot_name = snapshot_name or '%s - auto' % self.name
