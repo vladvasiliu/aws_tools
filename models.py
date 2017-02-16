@@ -149,6 +149,9 @@ class EBSSnapshot(AWSResource):
     resource_kind = "snapshots"
     id_filter = 'snapshot-id'
 
+    class Meta:
+        get_latest_by = 'created_at'
+
     @classmethod
     def create_snapshot(cls, aws_snapshot, volume):
         EBSSnapshot.objects.update_or_create(id=aws_snapshot.id,

@@ -9,6 +9,7 @@
     {% for volume in volumes %}
         <a href="{% url 'volume' volume_id=volume.id %}" class="list-group-item" >
             {{ volume.name }}
+            <span class="badge">{{ volume.ebssnapshot_set.latest.created_at }}</span>
         </a>
     {% empty %}
         <span class="list-group-item">No instances found.</span>
