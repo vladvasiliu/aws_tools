@@ -1,0 +1,17 @@
+{% extends 'aws_tools/base.html' %}
+{% load bootstrap3 %}
+
+{% block page_title %}{{ instance.name }}{% endblock %}
+
+{% block page_header %}{{ volume.name }}{% endblock %}
+{% block page_header_subtext %}<a href="{% url 'instance' instance_id=instance.id %}">{{ instance.name }}</a>{% endblock %}
+
+{% block content %}
+    {% for snapshot in snapshots %}
+        <span class="list-group-item" >
+            {{ snapshot.name }}
+        </span>
+    {% empty %}
+        <span class="list-group-item">No snapshots found.</span>
+    {% endfor %}
+{% endblock %}

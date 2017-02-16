@@ -4,9 +4,13 @@
 {% block page_title %}{{ instance.name }}{% endblock %}
 
 {% block page_header %}{{ instance.name }}{% endblock %}
-{% if instance.name != instance.id %}
-{% block page_header_subtext %}{{ instance.id }}{% endblock %}
-{% endif %}
 
 {% block content %}
+    {% for volume in volumes %}
+        <a href="{% url 'volume' volume_id=volume.id %}" class="list-group-item" >
+            {{ volume.name }}
+        </a>
+    {% empty %}
+        <span class="list-group-item">No instances found.</span>
+    {% endfor %}
 {% endblock %}
