@@ -59,6 +59,10 @@ class Instance(AWSResource):
     resource_kind = "instances"
     id_filter = 'instance-id'
     backup_time = models.TimeField(default="03:00:00")
+    backup = models.BooleanField(default=False, editable=True)
+
+    class Meta:
+        ordering = ['_name']
 
     @classmethod
     def update(cls, aws_account):
@@ -111,7 +115,7 @@ class Instance(AWSResource):
 class EBSVolume(AWSResource):
     instance = models.ForeignKey(Instance, blank=True, null=True, editable=False, on_delete=models.SET_NULL)
     id_filter = 'volume-id'
-    backup = models.BooleanField(default=True, editable=False)
+    backup = models.BooleanField(default=False, editable=True)
 
     resource_kind = "volumes"
 
@@ -135,10 +139,6 @@ class EBSVolume(AWSResource):
         aws_vol = self._aws_resource()
         snapshot = aws_vol.create_snapshot(Description=snapshot_name)
         snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
-        EBSSnapshot.update_resources(filters=[{'Name': "snapshot-id",
-                                               'Values': [snapshot.id]}],
-                                     aws_account=self.aws_account,
-                                     region_names=[self.region_name])
 
 
 class EBSSnapshot(AWSResource):

@@ -1,11 +1,18 @@
+from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404
 
-from .models import Instance, EBSVolume
+from .models import Instance, EBSVolume, AWSAccount
 
 
-def main(request):
+def main(request, account_id=None):
     instances = Instance.objects.filter(present=True)
-    return render(request, 'aws_tools/main.html', context={'instances': instances})
+    if account_id:
+        instances = instances.filter(aws_account_id=account_id)
+    instances = instances.order_by(Lower('_name'))
+    accounts = AWSAccount.objects.all()
+    return render(request, 'aws_tools/main.html', context={'instances': instances,
+                                                           'accounts': accounts,
+                                                           'account_id': account_id})
 
 
 def instance(request, instance_id):

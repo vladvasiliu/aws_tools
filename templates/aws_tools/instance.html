@@ -6,12 +6,44 @@
 {% block page_header %}{{ instance.name }}{% endblock %}
 
 {% block content %}
-    {% for volume in volumes %}
-        <a href="{% url 'volume' volume_id=volume.id %}" class="list-group-item" >
-            {{ volume.name }}
-            <span class="badge">{{ volume.ebssnapshot_set.latest.created_at }}</span>
-        </a>
-    {% empty %}
-        <span class="list-group-item">No instances found.</span>
-    {% endfor %}
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading text-center">Details</div>
+            <!-- List group -->
+            <table class="table">
+                <tr><td class="text-right"><small>Account</small></td><td>{{ instance.aws_account }}</td></tr>
+                <tr><td class="text-right"><small>Region</small></td><td>{{ instance.region_name }}</td></tr>
+                <tr><td class="text-right"><small>ID</small></td><td>{{ instance.id }}</td></tr>
+                <tr>
+                    {% if instance.backup %}
+                        <td class="text-right"><small>Backup time</small></td><td>{{ instance.backup_time }}</td>
+                    {% else %}
+                        <td class="text-right"><small>Backup</small></td><td>{{ instance.backup }}</td>
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+    {% if volumes %}
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading text-center">Volumes</div>
+            <!-- List group -->
+            <ul class="list-group">
+                {% for volume in volumes %}
+                    <a href="{% url 'volume' volume_id=volume.id %}" class="list-group-item" >
+                        {{ volume.name }}
+                        <span class="badge">{{ volume.ebssnapshot_set.latest.created_at }}</span>
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+
+    {% else %}
+        <span class="list-group-item">No volumes found.</span>
+    {% endif %}
+    </div>
 {% endblock %}
