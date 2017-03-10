@@ -124,10 +124,10 @@ class EBSVolume(AWSResource):
     @classmethod
     def create_volume(cls, aws_volume, instance):
         ebs_volume, _ = EBSVolume.objects.update_or_create(id=aws_volume.id,
-                                                           _name=resource_name(aws_volume),
-                                                           instance=instance,
-                                                           region_name=instance.region_name,
-                                                           aws_account=instance.aws_account)
+                                                           defaults={'_name': resource_name(aws_volume),
+                                                                     'instance': instance,
+                                                                     'region_name': instance.region_name,
+                                                                     'aws_account': instance.aws_account})
         ebs_volume.update_snapshots()
 
     def update_snapshots(self):
@@ -141,6 +141,7 @@ class EBSVolume(AWSResource):
         aws_vol = self._aws_resource()
         snapshot = aws_vol.create_snapshot(Description=snapshot_name)
         snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
+        EBSSnapshot.create_snapshot(snapshot, self)
 
 
 class EBSSnapshot(AWSResource):
@@ -157,9 +158,9 @@ class EBSSnapshot(AWSResource):
     @classmethod
     def create_snapshot(cls, aws_snapshot, volume):
         EBSSnapshot.objects.update_or_create(id=aws_snapshot.id,
-                                             _name=resource_name(aws_snapshot),
-                                             ebs_volume=volume,
-                                             state=aws_snapshot.state,
-                                             created_at=aws_snapshot.start_time,
-                                             region_name=volume.region_name,
-                                             aws_account=volume.aws_account)
+                                             defaults={'_name': resource_name(aws_snapshot),
+                                                       'ebs_volume': volume,
+                                                       'state': aws_snapshot.state,
+                                                       'created_at': aws_snapshot.start_time,
+                                                       'region_name': volume.region_name,
+                                                       'aws_account': volume.aws_account})
