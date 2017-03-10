@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.messages import add_message, get_messages
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -19,8 +21,10 @@ def main(request, account_id=None):
 def instance(request, instance_id):
     instance = get_object_or_404(Instance, id=instance_id)
     volumes = instance.ebsvolume_set.all()
+    msg = get_messages(request)
     return render(request, 'aws_tools/instance.html', context={'instance': instance,
-                                                               'volumes': volumes})
+                                                               'volumes': volumes,
+                                                               'messages': msg})
 
 
 def volume(request, volume_id):
@@ -34,4 +38,5 @@ def volume(request, volume_id):
 
 def snapshot_instance(request, instance_id):
     snapshot_instance_task.delay(instance_id)
+    add_message(request, messages.INFO, 'Queued snapshots for this instance')
     return redirect(instance, instance_id=instance_id)
