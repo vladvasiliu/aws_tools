@@ -17,10 +17,11 @@
                 <tr><td class="text-right"><small>ID</small></td><td>{{ instance.id }}</td></tr>
                 <tr>
                     {% if instance.backup %}
-                        <td class="text-right"><small>Backup time</small></td><td>{{ instance.backup_time }}</td>
+                        <td class="text-right"><small>Backup time</small></td><td>{{ instance.backup_time }}
                     {% else %}
-                        <td class="text-right"><small>Backup</small></td><td>{{ instance.backup }}</td>
+                        <td class="text-right"><small>Backup</small></td><td>{{ instance.backup }}
                     {% endif %}
+                    <a class="btn btn-primary btn-xs pull-right" role="button" href="{% url 'snapshot_instance' instance.id %}">Snapshot all</a></td>
                 </tr>
             </table>
         </div>

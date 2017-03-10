@@ -1,7 +1,8 @@
 from django.db.models.functions import Lower
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Instance, EBSVolume, AWSAccount
+from .tasks import snapshot_instance as snapshot_instance_task
 
 
 def main(request, account_id=None):
@@ -29,3 +30,8 @@ def volume(request, volume_id):
     return render(request, 'aws_tools/volume.html', context={'volume': volume,
                                                              'snapshots': snapshots,
                                                              'instance': instance})
+
+
+def snapshot_instance(request, instance_id):
+    snapshot_instance_task.delay(instance_id)
+    return redirect(instance, instance_id=instance_id)

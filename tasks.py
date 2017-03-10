@@ -31,8 +31,14 @@ def snapshot_volumes(volumes=None):
     if volumes:
         volumes = EBSVolume.objects.filter(id__in=volumes)
     else:
-        volumes = volumes or EBSVolume.objects.to_snapshot()
+        volumes = EBSVolume.objects.to_snapshot()
 
     for vol in volumes:
         logger.info("Snapshooting volume %s (Instance: %s, Account: %s)" % (vol, vol.instance, vol.aws_account))
         vol.snapshot()
+
+
+@shared_task
+def snapshot_instance(instance_id):
+    volumes, = EBSVolume.objects.filter(instance_id=instance_id).values_list('id')
+    snapshot_volumes.delay(volumes)
