@@ -5,6 +5,7 @@ import logging
 from .exceptions import ResourceNotFoundException
 from .helpers import resource_name
 from .constants import AWSRegionChoice
+from .managers import EBSVolumeManager
 
 logger = logging.getLogger(__name__)
 
@@ -113,11 +114,12 @@ class Instance(AWSResource):
 
 
 class EBSVolume(AWSResource):
-    instance = models.ForeignKey(Instance, blank=True, null=True, editable=False, on_delete=models.SET_NULL)
+    instance = models.ForeignKey(Instance, blank=True, null=True, editable=False)
     id_filter = 'volume-id'
     backup = models.BooleanField(default=False, editable=True)
 
     resource_kind = "volumes"
+    objects = EBSVolumeManager()
 
     @classmethod
     def create_volume(cls, aws_volume, instance):
@@ -143,7 +145,7 @@ class EBSVolume(AWSResource):
 
 class EBSSnapshot(AWSResource):
     state = models.CharField(max_length=20)
-    ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False, on_delete=models.SET_NULL)
+    ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False)
     created_at = models.DateTimeField()
 
     resource_kind = "snapshots"
