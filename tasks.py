@@ -10,13 +10,19 @@ logger = get_task_logger(__name__)
 
 
 @shared_task
-def update_instances():
-    for aws_account_id, in AWSAccount.objects.all().values_list('id'):
-        update_instance_for_account.delay(aws_account_id)
+def get_busy():
+    snapshot_volumes.delay()
+    update_instances.delay()
 
 
 @shared_task
-def update_instance_for_account(aws_account_id):
+def update_instances():
+    for aws_account_id, in AWSAccount.objects.all().values_list('id'):
+        update_instances_for_account.delay(aws_account_id)
+
+
+@shared_task
+def update_instances_for_account(aws_account_id):
     try:
         aws_account = AWSAccount.objects.get(id=aws_account_id)
     except ObjectDoesNotExist:
@@ -40,5 +46,6 @@ def snapshot_volumes(volumes=None):
 
 @shared_task
 def snapshot_instance(instance_id):
-    volumes, = EBSVolume.objects.filter(instance_id=instance_id).values_list('id')
+    volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
+    print(volumes)
     snapshot_volumes.delay(volumes)
