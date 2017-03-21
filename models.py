@@ -3,7 +3,7 @@ from django.db import models
 import logging
 
 from .exceptions import ResourceNotFoundException
-from .helpers import resource_name
+from .helpers import resource_name, aws_resource
 from .constants import AWSRegionChoice
 from .managers import EBSVolumeManager
 
@@ -41,12 +41,13 @@ class AWSResource(AWSBaseModel):
         abstract = True
 
     @classmethod
-    def _prune_resources(cls, created_resources):
-        cls.objects.exclude(id__in=[x.id for x in created_resources]).update(present=False)
+    def _prune_resources(cls, created_resources, aws_account_id):
+        cls.objects.exclude(id__in=[x.id for x in created_resources]).filter(aws_account_id=aws_account_id).update(present=False)
 
     # Returns de corresponding AWS instance for this Python instance
     def _aws_resource(self):
-        ec2 = boto3.resource('ec2', region_name=self.region_name)
+        ec2 = aws_resource('ec2', region_name=self.region_name, role_arn=self.aws_account.role_arn)
+
         try:
             resource = list(getattr(ec2, self.resource_kind).filter(Filters=[{'Name': self.id_filter,
                                                                               'Values': [self.id]}]))[0]
@@ -70,7 +71,7 @@ class Instance(AWSResource):
         region_names = AWSRegionChoice.values.keys()
         updated_instances = []
         for region_name in region_names:
-            ec2 = boto3.resource('ec2', region_name=region_name)
+            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
 
             for aws_instance in ec2.instances.all():
                 defaults = {
@@ -83,7 +84,7 @@ class Instance(AWSResource):
                 instance, _ = Instance.objects.update_or_create(id=aws_instance.id, defaults=defaults)
                 instance.update_volumes()
                 updated_instances.append(instance)
-        cls._prune_resources(updated_instances)
+        cls._prune_resources(updated_instances, aws_account.id)
 
     def update_volumes(self):
         aws_instance = self._aws_resource()
