@@ -2,5 +2,4 @@ Django
 django-choices
 celery
 django-celery-beat
-djangorestframework
 boto3
