@@ -8,7 +8,7 @@
     <ul class="nav nav-pills nav-stacked col-md-2 pull-left">
         <li role="presentation" {% if not account_id %}class="active"{% endif %}><a href="{% url 'main' %}">All</a></li>
         {% for account in accounts %}
-        <li role="presentation"{% if account_id == account.id %}class="active"{% endif %}><a href="{% url 'main' account_id=account.id %}">{{ account.name }}</a></li>
+        <li role="presentation" {% if account_id == account.id %}class="active"{% endif %}><a href="{% url 'main' account_id=account.id %}">{{ account.name }}</a></li>
         {% endfor %}
     </ul>
 
