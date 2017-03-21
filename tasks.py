@@ -47,5 +47,4 @@ def snapshot_volumes(volumes=None):
 @shared_task
 def snapshot_instance(instance_id):
     volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
-    print(volumes)
     snapshot_volumes.delay(volumes)
