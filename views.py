@@ -18,7 +18,7 @@ def main(request, account_id=None):
                                                            'account_id': account_id})
 
 
-def instance(request, instance_id):
+def instance_detail(request, instance_id):
     instance = get_object_or_404(Instance, id=instance_id)
     volumes = instance.ebsvolume_set.all()
     msg = get_messages(request)
@@ -27,7 +27,14 @@ def instance(request, instance_id):
                                                                'messages': msg})
 
 
-def volume(request, volume_id):
+def instance_backup_enable(request, instance_id, enable):
+    instance = get_object_or_404(Instance, id=instance_id)
+    instance.backup = enable
+    instance.save()
+    return redirect(instance_detail, instance_id=instance_id)
+
+
+def volume_detail(request, volume_id):
     volume = get_object_or_404(EBSVolume, id=volume_id)
     instance = volume.instance
     snapshots = volume.ebssnapshot_set.all().order_by('-created_at')
@@ -39,4 +46,4 @@ def volume(request, volume_id):
 def snapshot_instance(request, instance_id):
     snapshot_instance_task.delay(instance_id)
     add_message(request, messages.INFO, 'Queued snapshots for this instance')
-    return redirect(instance, instance_id=instance_id)
+    return redirect(instance_detail, instance_id=instance_id)

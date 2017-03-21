@@ -25,12 +25,29 @@
                 <tr><td class="text-right"><small>Region</small></td><td>{{ instance.region_name }}</td></tr>
                 <tr><td class="text-right"><small>ID</small></td><td>{{ instance.id }}</td></tr>
                 <tr>
+                    <td class="text-right">
                     {% if instance.backup %}
-                        <td class="text-right"><small>Backup time</small></td><td>{{ instance.backup_time }}
+                        <small>Backup time</small></td><td>{{ instance.backup_time }}
                     {% else %}
-                        <td class="text-right"><small>Backup</small></td><td>{{ instance.backup }}
+                        <small>Backup</small></td><td>{{ instance.backup }}
                     {% endif %}
-                    <a class="btn btn-primary btn-xs pull-right" role="button" href="{% url 'snapshot_instance' instance.id %}">Snapshot all</a></td>
+                    <div class="btn-group btn-group-xs pull-right" role="group">
+                        {% if instance.backup %}
+                            <a class="btn btn-danger"
+                               role="button"
+                               href="{% url 'enable_backup_instance' instance_id=instance.id enable=False %}">
+                                Disable
+                            </a>
+                        {% else %}
+                            <a class="btn btn-success"
+                               role="button"
+                               href="{% url 'enable_backup_instance' instance_id=instance.id enable=True %}">
+                                Enable
+                            </a>
+                        {% endif %}
+                        <a class="btn btn-primary" role="button" href="{% url 'snapshot_instance' instance.id %}">Snapshot all</a>
+                    </div>
+                    </td>
                 </tr>
             </table>
         </div>
