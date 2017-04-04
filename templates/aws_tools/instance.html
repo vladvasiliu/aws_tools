@@ -31,22 +31,29 @@
                     {% else %}
                         <small>Backup</small></td><td>{{ instance.backup }}
                     {% endif %}
-                    <div class="btn-group btn-group-xs pull-right" role="group">
-                        {% if instance.backup %}
-                            <a class="btn btn-danger"
-                               role="button"
-                               href="{% url 'enable_backup_instance' instance_id=instance.id enable=False %}">
-                                Disable
-                            </a>
-                        {% else %}
-                            <a class="btn btn-success"
-                               role="button"
-                               href="{% url 'enable_backup_instance' instance_id=instance.id enable=True %}">
-                                Enable
-                            </a>
-                        {% endif %}
-                        <a class="btn btn-primary" role="button" href="{% url 'snapshot_instance' instance.id %}">Snapshot all</a>
-                    </div>
+                        <form method="post" class="pull-right">
+                        <div class="btn-group btn-group-xs" role="group">
+                        {% csrf_token %}
+                            {% if instance.backup %}
+                                <button type="submit"
+                                        class="btn btn-danger"
+                                        formaction="{% url 'enable_backup_instance' instance_id=instance.id enable=False %}">
+                                    Disable
+                                </button>
+                            {% else %}
+                                <button type="submit"
+                                        class="btn btn-success"
+                                        formaction="{% url 'enable_backup_instance' instance_id=instance.id enable=True %}">
+                                    Enable
+                                </button>
+                            {% endif %}
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    formaction="{% url 'snapshot_instance' instance.id %}">
+                                Snapshot
+                            </button>
+                        </div>
+                        </form>
                     </td>
                 </tr>
             </table>

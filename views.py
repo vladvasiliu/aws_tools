@@ -28,9 +28,10 @@ def instance_detail(request, instance_id):
 
 
 def instance_backup_enable(request, instance_id, enable):
-    instance = get_object_or_404(Instance, id=instance_id)
-    instance.backup = enable
-    instance.save()
+    if request.method == 'POST':
+        instance = get_object_or_404(Instance, id=instance_id)
+        instance.backup = enable
+        instance.save()
     return redirect(instance_detail, instance_id=instance_id)
 
 
@@ -44,6 +45,7 @@ def volume_detail(request, volume_id):
 
 
 def snapshot_instance(request, instance_id):
-    snapshot_instance_task.delay(instance_id)
-    add_message(request, messages.INFO, 'Queued snapshots for this instance')
+    if request.method == 'POST':
+        snapshot_instance_task.delay(instance_id)
+        add_message(request, messages.INFO, 'Queued snapshots for this instance')
     return redirect(instance_detail, instance_id=instance_id)
