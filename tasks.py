@@ -71,7 +71,9 @@ def snapshot_volumes(self, volumes=None):
                 logger.info("Snapshooting volume %s (Instance: %s, Account: %s)" % (vol, vol.instance, vol.aws_account))
                 vol.snapshot()
             else:
-                logger.info("Volume %s (Instance: %s, Account: %s) is already being snapshot" % (vol, vol.instance, vol.aws_account))
+                logger.info("Volume %s (Instance: %s, Account: %s) is already being snapshot" % (vol,
+                                                                                                 vol.instance,
+                                                                                                 vol.aws_account))
 
 
 @shared_task

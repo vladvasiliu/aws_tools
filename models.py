@@ -1,4 +1,3 @@
-import boto3
 from django.db import models
 import logging
 
