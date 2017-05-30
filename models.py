@@ -158,7 +158,7 @@ class EBSSnapshot(AWSResource):
     @classmethod
     def create_snapshot(cls, aws_snapshot, volume):
         EBSSnapshot.objects.update_or_create(id=aws_snapshot.id,
-                                             defaults={'_name': resource_name(aws_snapshot),
+                                             defaults={'_name': resource_name(aws_snapshot) or aws_snapshot.description,
                                                        'ebs_volume': volume,
                                                        'state': aws_snapshot.state,
                                                        'created_at': aws_snapshot.start_time,
