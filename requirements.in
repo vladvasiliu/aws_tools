@@ -4,3 +4,5 @@ celery
 django-celery-beat
 boto3
 django-bootstrap3
+django-auth-adfs
+djangorestframework
