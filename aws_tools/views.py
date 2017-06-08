@@ -4,7 +4,7 @@ from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
 
-from .serializers import AWSAccountSerializer
+from .serializers import AWSAccountSerializer, InstanceSerializer
 from .models import Instance, EBSVolume, AWSAccount
 from .tasks import snapshot_instance as snapshot_instance_task
 
@@ -56,6 +56,11 @@ def snapshot_instance(request, instance_id):
 class AWSAccountViewSet(viewsets.ModelViewSet):
     queryset = AWSAccount.objects.all().order_by('_name')
     serializer_class = AWSAccountSerializer
+
+
+class InstanceViewSet(viewsets.ModelViewSet):
+    queryset = Instance.objects.all().order_by('_name')
+    serializer_class = InstanceSerializer
 
 
 def index(request):

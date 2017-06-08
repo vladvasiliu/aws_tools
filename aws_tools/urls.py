@@ -2,11 +2,13 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
-from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable, AWSAccountViewSet, index
+from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable, AWSAccountViewSet, \
+    InstanceViewSet, index
 
 
 router = routers.DefaultRouter()
 router.register(r'AWSAccounts', AWSAccountViewSet)
+router.register(r'Instances', InstanceViewSet)
 
 schema_view = get_schema_view(title="AWS Tools API")
 
