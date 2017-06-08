@@ -6,3 +6,6 @@ boto3
 django-bootstrap3
 django-auth-adfs
 djangorestframework
+markdown
+django-filter
+coreapi

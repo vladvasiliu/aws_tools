@@ -1,7 +1,14 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+from rest_framework import routers
+from rest_framework.schemas import get_schema_view
 
-from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable
+from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable, AWSAccountViewSet, index
 
+
+router = routers.DefaultRouter()
+router.register(r'AWSAccounts', AWSAccountViewSet)
+
+schema_view = get_schema_view(title="AWS Tools API")
 
 urlpatterns = [
     url(r'^$', main, name='main'),
@@ -10,4 +17,9 @@ urlpatterns = [
     url(r'^instance/backup/(?P<instance_id>i-[a-z0-9]*)/$', snapshot_instance, name='snapshot_instance'),
     url(r'^instance/backup/(?P<instance_id>i-[a-z0-9]*)/(?P<enable>(True|False))/$', instance_backup_enable, name='enable_backup_instance'),
     url(r'^volume/(?P<volume_id>vol-[a-z0-9]*)/$', volume_detail, name='volume'),
+
+    url(r'api/', include(router.urls)),
+    url(r'schema/$', schema_view),
+
+    url(r'vuejs/', index),
 ]

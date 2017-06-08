@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.contrib.messages import add_message, get_messages
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
+from rest_framework import viewsets
 
+from .serializers import AWSAccountSerializer
 from .models import Instance, EBSVolume, AWSAccount
 from .tasks import snapshot_instance as snapshot_instance_task
 
@@ -49,3 +51,12 @@ def snapshot_instance(request, instance_id):
         snapshot_instance_task.delay(instance_id)
         add_message(request, messages.INFO, 'Queued snapshots for this instance')
     return redirect(instance_detail, instance_id=instance_id)
+
+
+class AWSAccountViewSet(viewsets.ModelViewSet):
+    queryset = AWSAccount.objects.all().order_by('_name')
+    serializer_class = AWSAccountSerializer
+
+
+def index(request):
+    return render(request, 'aws_tools/index_vue.html')
