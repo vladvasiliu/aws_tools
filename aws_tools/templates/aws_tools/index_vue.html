@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,18 +8,25 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <div id="app">
-
-    </div>
+<div id="app">
+    {% verbatim %}
+    <ul>
+        <li v-for="account in aws_accounts">
+            {{ account.role_arn }}
+        </li>
+    </ul>
+    {% endverbatim %}
+</div>
 </body>
 <script>
     const store = new Vuex.Store({
+        string: true,
         state: {
             aws_accounts: []
         },
         actions: {
             LOAD_AWS_ACCOUNT_LIST: function({ commit }) {
-                axios.get('http://127.0.0.1:8000/api/AWSAccounts').then((response) => {
+                axios.get('{% url "awsaccount-list" %}').then((response) => {
                     commit('SET_ACCOUNT_LIST', { list: response.data })
                 }, (err) => {
                     console.log(err)
@@ -28,19 +34,18 @@
             }
         },
         mutations: {
-            SET_ACCOUNT_LIST: (state, { list }) => {
-                state.aws_accounts = list
-            }
+            SET_ACCOUNT_LIST: (state, { list }) => { state.aws_accounts = list }
         },
-        getters: {
-            aws_accounts: state => {
-                return state.aws_accounts
-            }
-        }
     });
 
-    new Vue({
-        store,
-    }).$mount('#app')
+    var app = new Vue({
+        el: '#app',
+        computed: {
+            aws_accounts (){ return store.state.aws_accounts },
+        },
+        mounted: function () {
+            store.dispatch('LOAD_AWS_ACCOUNT_LIST');
+        }
+    })
 </script>
 </html>
