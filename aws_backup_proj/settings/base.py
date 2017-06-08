@@ -19,14 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vto4v-mncswzcm*fynqqp+@wsj9#smof=nh09xnzjrgae0h9sj'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -58,7 +51,7 @@ ROOT_URLCONF = 'aws_backup_proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'aws_tools/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'aws_tools/../../aws_tools/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -73,17 +66,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'aws_backup_proj.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
@@ -104,7 +86,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -124,7 +105,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CELERY_BROKER_URL = "amqp://celery:celery@192.168.56.9:5672/celery"
 
 CACHES = {
     'default': {
