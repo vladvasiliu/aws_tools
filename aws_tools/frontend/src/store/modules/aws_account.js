@@ -1,11 +1,8 @@
-import axios from 'axios'
-
-const axios_instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
-});
+import axios_instance from '../../api/index'
 
 const state = {
-    aws_accounts: []
+    aws_accounts: [],
+    aws_account_selected: ""
 };
 const actions = {
     LOAD_AWS_ACCOUNT_LIST: function({ commit }) {
@@ -19,10 +16,15 @@ const actions = {
 
 const mutations = {
     SET_ACCOUNT_LIST: (state, { list }) => { state.aws_accounts = list },
+    SET_SELECTED_ACCOUNT: (state, { account }) => {
+        state.aws_account_selected = account;
+        console.log(state.aws_accounts)
+    }
 };
 
 const getters = {
     aws_accounts: state => state.aws_accounts,
+    aws_account_selected: state => state.aws_account_selected
 };
 
 export default {
