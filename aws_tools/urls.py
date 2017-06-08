@@ -3,7 +3,7 @@ from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
 from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable, AWSAccountViewSet, \
-    InstanceViewSet, index
+    InstanceViewSet
 
 
 router = routers.DefaultRouter()
@@ -22,6 +22,4 @@ urlpatterns = [
 
     url(r'api/', include(router.urls)),
     url(r'schema/$', schema_view),
-
-    url(r'vuejs/', index),
 ]

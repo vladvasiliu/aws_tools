@@ -61,7 +61,3 @@ class AWSAccountViewSet(viewsets.ModelViewSet):
 class InstanceViewSet(viewsets.ModelViewSet):
     queryset = Instance.objects.all().order_by('_name')
     serializer_class = InstanceSerializer
-
-
-def index(request):
-    return render(request, 'aws_tools/index_vue.html')
