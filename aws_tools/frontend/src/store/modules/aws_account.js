@@ -18,7 +18,6 @@ const mutations = {
     SET_ACCOUNT_LIST: (state, { list }) => { state.aws_accounts = list },
     SET_SELECTED_ACCOUNT: (state, { account }) => {
         state.aws_account_selected = account;
-        console.log(state.aws_accounts)
     }
 };
 

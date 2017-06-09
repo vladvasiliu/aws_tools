@@ -1,6 +1,6 @@
 <template>
     <ul>
-        <li v-for="instance in instance_list">
+        <li v-for="instance in instances_for_selected_account">
             {{ instance._name }}
         </li>
     </ul>
@@ -10,12 +10,11 @@
     import { mapGetters, mapActions } from 'vuex'
 
     export default {
-//        computed: {
-//            accounts_list: function () { return this.$store.state.aws_accounts },
-//        },
-        computed: mapGetters({
-            instance_list: 'instances'
-        }),
+        computed: {
+            ...mapGetters([
+                'instances_for_selected_account',
+            ]),
+        },
         created () {
             this.$store.dispatch('LOAD_INSTANCE_LIST')
         },

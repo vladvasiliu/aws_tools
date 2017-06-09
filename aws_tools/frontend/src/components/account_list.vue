@@ -1,6 +1,10 @@
 <template>
     <div>
         <ul>
+            <li v-on:click="select()">
+                All
+                <span v-if="!account_selected"> <-- Selected</span>
+            </li>
             <li v-for="account in accounts_list" v-on:click="select(account)">
                 {{ account._name }}
                 <span v-if="account == account_selected"> <- SELECTED</span>
@@ -27,6 +31,8 @@
             select: function(account) {
                 if (account) {
                     this.$store.commit('SET_SELECTED_ACCOUNT', {account: account})
+                } else {
+                    this.$store.commit('SET_SELECTED_ACCOUNT', {account: null})
                 }
             }
         }
