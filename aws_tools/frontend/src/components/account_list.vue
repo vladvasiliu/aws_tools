@@ -1,16 +1,8 @@
 <template>
-    <div>
-        <ul>
-            <li v-on:click="select()">
-                All
-                <span v-if="!account_selected"> <-- Selected</span>
-            </li>
-            <li v-for="account in accounts_list" v-on:click="select(account)">
-                {{ account._name }}
-                <span v-if="account == account_selected"> <- SELECTED</span>
-            </li>
-        </ul>
-    </div>
+    <b-list-group>
+        <b-list-group-item action @click.native="select()" v-bind:active="aws_account_selected ? false : true" class="mb-2"><small>All</small></b-list-group-item>
+        <b-list-group-item action @click.native="select(account)" v-bind:active="aws_account_selected == account" v-for="account in aws_accounts" :key="account"><small>{{account._name}}</small></b-list-group-item>
+    </b-list-group>
 </template>
 
 <script>
@@ -20,15 +12,18 @@
 //        computed: {
 //            accounts_list: function () { return this.$store.state.aws_accounts },
 //        },
-        computed: mapGetters({
-            accounts_list: 'aws_accounts',
-            account_selected: 'aws_account_selected'
-        }),
+        computed: {
+            ...mapGetters([
+                'aws_accounts',
+                'aws_account_selected'
+            ]),
+        },
         created () {
-            this.$store.dispatch('LOAD_AWS_ACCOUNT_LIST')
+            this.$store.dispatch('LOAD_AWS_ACCOUNT_LIST');
         },
         methods: {
             select: function(account) {
+                console.log("Select : " + account)
                 if (account) {
                     this.$store.commit('SET_SELECTED_ACCOUNT', {account: account})
                 } else {

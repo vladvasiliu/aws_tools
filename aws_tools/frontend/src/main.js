@@ -1,11 +1,13 @@
 import Vue from 'vue'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+import BootstrapVue from 'bootstrap-vue';
 
 import App from './components/App.vue'
 import store from './store'
 
-Vue.use(ElementUI);
+Vue.use(BootstrapVue);
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 new Vue({
     el: '#app',

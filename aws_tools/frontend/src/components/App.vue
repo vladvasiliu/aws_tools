@@ -1,13 +1,30 @@
 <template>
-    <div>
-        <el-row :gutter="20">
-            <el-col :span="6">
-                <account-list class="grid-content bg-purple"></account-list>
-            </el-col>
-            <el-col :span="12">
-                <instance-list class="grid-content bg-purple-light"></instance-list>
-            </el-col>
-        </el-row>
+    <div id="app">
+        <b-navbar toggleable type="inverse sticky-top" class="bg-inverse">
+    
+            <b-link class="navbar-brand" to="#">
+                <span>AWS Tools</span>
+            </b-link>
+    
+    <!--
+            <b-collapse is-nav id="nav_collapse">
+                <b-nav is-nav-bar>
+                    <b-nav-item>Instances</b-nav-item>
+                </b-nav>
+            </b-collapse>
+
+     -->
+        </b-navbar>
+        <div class="container-fluid mt-3">
+            <div class="row">
+                <div class="col-2">
+                    <account-list></account-list>
+                </div>
+                <div class="col">
+                    <instance-list></instance-list>                    
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -22,32 +39,3 @@
             AccountList, InstanceList }
     }
 </script>
-
-<style>
-    .el-row {
-        margin-bottom: 20px;
-        &:last-child {
-             margin-bottom: 0;
-         }
-    }
-    .el-col {
-        border-radius: 4px;
-    }
-    .bg-purple-dark {
-        background: #99a9bf;
-    }
-    .bg-purple {
-        background: #d3dce6;
-    }
-    .bg-purple-light {
-        background: #e5e9f2;
-    }
-    .grid-content {
-        border-radius: 4px;
-        min-height: 36px;
-    }
-    .row-bg {
-        padding: 10px 0;
-        background-color: #f9fafc;
-    }
-</style>

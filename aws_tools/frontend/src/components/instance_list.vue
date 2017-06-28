@@ -1,9 +1,7 @@
 <template>
-    <ul>
-        <li v-for="instance in instances_for_selected_account">
-            {{ instance._name }}
-        </li>
-    </ul>
+    <b-list-group>
+        <b-list-group-item v-for="instance in instances_for_selected_account" :key="instance">{{ instance._name }}</b-list-group-item>
+    </b-list-group>
 </template>
 
 <script>
