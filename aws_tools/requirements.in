@@ -5,7 +5,9 @@ django-celery-beat
 boto3
 django-bootstrap3
 django-auth-adfs
+django-cors-headers
 djangorestframework
+coreapi
 markdown
 django-filter
 coreapi
