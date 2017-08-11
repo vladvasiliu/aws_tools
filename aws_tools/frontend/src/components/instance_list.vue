@@ -10,16 +10,8 @@
                 {{ instance._name }}
                 <b-collapse :id="instance.id" class="w-100 align-self-center">
                     <div class="d-flex m-3 justify-content-left" @click.stop>
-                        <b-card header="Details" class="m-1">
-                            <table class="table">
-                                <tbody>
-                                    <tr><td class="text-right">ID</td><td colspan="2">{{ instance.id }}</td></tr>
-                                    <tr><td class="text-right">Region</td><td colspan="2">{{ instance.region_name }}</td></tr>
-                                    <tr><td class="text-right">Backup</td><td>{{ instance.backup_time }}</td><td><b-form-radio v-model="instance.backup" :options="[true, false]" stacked></b-form-radio></td></tr>
-                                </tbody>
-                            </table>
-                        </b-card>
-                        <b-card header="Volumes" class="m-1"></b-card>
+                        <instance_detail class="m-1" :instance="instance"></instance_detail>
+                        <volume_list class="m-1"></volume_list>
                     </div>
                 </b-collapse>
             </b-list-group-item>
@@ -30,6 +22,9 @@
 <script>
     import { mapGetters, mapActions } from 'vuex'
 
+    import volume_list from './volume_list.vue'
+    import instance_detail from './instance_detail.vue'
+
     export default {
         computed: {
             ...mapGetters([
@@ -39,5 +34,8 @@
         created () {
             this.$store.dispatch('LOAD_INSTANCE_LIST')
         },
+        components: {
+            volume_list, instance_detail
+        }
     }
 </script>
