@@ -1,8 +1,10 @@
 <template>
-    <b-list-group>
-        <b-list-group-item action @click.native="select()" v-bind:active="aws_account_selected ? false : true" class="mb-2"><small>All</small></b-list-group-item>
-        <b-list-group-item action @click.native="select(account)" v-bind:active="aws_account_selected == account" v-for="account in aws_accounts" :key="account"><small>{{account._name}}</small></b-list-group-item>
-    </b-list-group>
+    <b-card header="Accounts">
+        <b-list-group>
+            <b-list-group-item action @click.native="select()" v-bind:active="!aws_account_selected"><small>All</small></b-list-group-item>
+            <b-list-group-item action @click.native="select(account)" v-bind:active="aws_account_selected == account" v-for="account in aws_accounts" :key="account.id"><small>{{account._name}}</small></b-list-group-item>
+        </b-list-group>
+    </b-card>
 </template>
 
 <script>
@@ -23,7 +25,6 @@
         },
         methods: {
             select: function(account) {
-                console.log("Select : " + account)
                 if (account) {
                     this.$store.commit('SET_SELECTED_ACCOUNT', {account: account})
                 } else {
