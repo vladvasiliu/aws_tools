@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <b-navbar type="light" variant="inverse">
+        <b-navbar type="dark" variant="dark">
 
             <b-navbar-brand>
                 <span>AWS Tools</span>
