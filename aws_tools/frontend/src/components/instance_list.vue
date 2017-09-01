@@ -11,7 +11,7 @@
                 <b-collapse :id="instance.id" class="w-100 align-self-center">
                     <div class="d-flex m-3 justify-content-left" @click.stop>
                         <instance_detail class="m-1" :instance="instance"></instance_detail>
-                        <volume_list class="m-1"></volume_list>
+                        <volume_list class="m-1" :instance="instance"></volume_list>
                     </div>
                 </b-collapse>
             </b-list-group-item>

@@ -4,9 +4,9 @@ const state = {
     volumes: []
 };
 const actions = {
-    LOAD_VOLUME_LIST: function({ commit }) {
+    GET_ALL_VOLUMES: function({ commit }) {
         axios_instance.get('/Volumes/').then((response) => {
-            commit('SET_VOLUME_LIST', { list: response.data })
+            commit('UPDATE_VOLUME_LIST', { new_volume_list: response.data })
         }, (err) => {
             console.log(err)
         })
@@ -14,12 +14,14 @@ const actions = {
 };
 
 const mutations = {
-    SET_VOLUME_LIST: (state, { list }) => { state.volumes = list },
+    UPDATE_VOLUME_LIST: (state, { new_volume_list }) => {
+        state.volumes = new_volume_list;
+    },
 };
 
 const getters = {
-    volumes: state => state.instances,
-    volumes_for_selected_instance : (state, instance) => {
+    volumes: state => state.volumes,
+    volumes_for_instance : (state, getters) => (instance) => {
         if (instance) {
             return state.volumes.filter(volume => volume.instance === instance.url);
         } else {
