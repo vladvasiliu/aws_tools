@@ -34,6 +34,7 @@ def cache_lock(lock_id, oid):
 def get_busy():
     snapshot_volumes.delay()
     update_instances.delay()
+    clean_snapshots.delay()
 
 
 @shared_task
