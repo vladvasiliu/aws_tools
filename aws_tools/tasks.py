@@ -1,4 +1,7 @@
 from __future__ import absolute_import, unicode_literals
+
+from django.db.models.functions import TruncMonth
+
 from celery import shared_task, task
 from celery.five import monotonic
 from celery.utils.log import get_task_logger
@@ -6,7 +9,7 @@ from contextlib import contextmanager
 from hashlib import md5
 
 from django.core.cache import cache
-from django.db.models import ObjectDoesNotExist
+from django.db.models import ObjectDoesNotExist, Max
 
 from .models import AWSAccount, Instance, EBSVolume
 
@@ -80,3 +83,15 @@ def snapshot_volumes(self, volumes=None):
 def snapshot_instance(instance_id):
     volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
     snapshot_volumes.delay(volumes)
+
+
+@shared_task
+def clean_snapshots():
+    """Keep snapshots for the last 30 days and the last of each month"""
+    volumes = EBSVolume.objects.all()
+
+    for vol in volumes:
+        last_per_month = vol.ebssnapshot_set.annotate(month=TruncMonth('created_at')).values('month').annotate(
+            last_snapshot=Max('created_at')).values_list('last_snapshot')
+        to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month)
+        to_delete.delete()
