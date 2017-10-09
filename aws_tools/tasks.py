@@ -32,15 +32,15 @@ def cache_lock(lock_id, oid):
 
 @shared_task
 def get_busy():
-    snapshot_volumes.delay()
-    update_instances.delay()
-    clean_snapshots.delay()
+    snapshot_volumes()
+    update_instances()
+    clean_snapshots()
 
 
 @shared_task
 def update_instances():
     for aws_account_id, in AWSAccount.objects.all().values_list('id'):
-        update_instances_for_account.delay(aws_account_id)
+        update_instances_for_account(aws_account_id)
 
 
 @shared_task(bind=True)
@@ -83,7 +83,7 @@ def snapshot_volumes(self, volumes=None):
 @shared_task
 def snapshot_instance(instance_id):
     volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
-    snapshot_volumes.delay(volumes)
+    snapshot_volumes(volumes)
 
 
 @shared_task
