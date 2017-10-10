@@ -1,3 +1,4 @@
+from botocore.exceptions import ClientError
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -174,6 +175,8 @@ def delete_snapshot_on_aws(**kwargs):
     try:
         aws_ebs_snapshot = kwargs['instance']._aws_resource()
     except ResourceNotFoundException:
+        pass
+    except ClientError:
         pass
     else:
         aws_ebs_snapshot.delete()
