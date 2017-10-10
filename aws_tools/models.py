@@ -171,5 +171,9 @@ class EBSSnapshot(AWSResource):
 
 @receiver(pre_delete, sender=EBSSnapshot, weak=False)
 def delete_snapshot_on_aws(**kwargs):
-    aws_ebs_snapshot = kwargs['instance']._aws_resource()
-    aws_ebs_snapshot.delete()
+    try:
+        aws_ebs_snapshot = kwargs['instance']._aws_resource()
+    except ResourceNotFoundException:
+        pass
+    else:
+        aws_ebs_snapshot.delete()
