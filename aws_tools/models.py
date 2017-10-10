@@ -53,6 +53,7 @@ class AWSResource(AWSBaseModel):
             resource = list(getattr(ec2, self.resource_kind).filter(Filters=[{'Name': self.id_filter,
                                                                               'Values': [self.id]}]))[0]
         except IndexError:
+            self.present = False
             raise ResourceNotFoundException(self)
         else:
             return resource
@@ -170,9 +171,5 @@ class EBSSnapshot(AWSResource):
 
 @receiver(pre_delete, sender=EBSSnapshot, weak=False)
 def delete_snapshot_on_aws(**kwargs):
-    try:
-        aws_ebs_snapshot = kwargs['instance']._aws_resource()
-    except ResourceNotFoundException:
-        pass
-    else:
-        aws_ebs_snapshot.delete()
+    aws_ebs_snapshot = kwargs['instance']._aws_resource()
+    aws_ebs_snapshot.delete()

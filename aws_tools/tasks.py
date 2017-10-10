@@ -63,7 +63,7 @@ def update_instances_for_account(self, aws_account_id):
 @shared_task(bind=True)
 def snapshot_volumes(self, volumes=None):
     if volumes:
-        volumes = EBSVolume.objects.filter(id__in=volumes)
+        volumes = EBSVolume.objects.filter(id__in=volumes, present=True)
     else:
         volumes = EBSVolume.objects.to_snapshot()
 
@@ -89,11 +89,11 @@ def snapshot_instance(instance_id):
 @shared_task
 def clean_snapshots():
     """Keep snapshots for the last 30 days and the last of each month"""
-    volumes = EBSVolume.objects.all()
+    volumes = EBSVolume.objects.filter(present=True)
 
     for vol in volumes:
         logger.info("cleaning up snapshots for %s" % vol)
-        last_per_month = vol.ebssnapshot_set.annotate(month=TruncMonth('created_at')).values('month').annotate(
-            last_snapshot=Max('created_at')).values_list('last_snapshot')
+        last_per_month = vol.ebssnapshot_set.filter(present=True).annotate(month=TruncMonth('created_at')).values(
+            'month').annotate(last_snapshot=Max('created_at')).values_list('last_snapshot')
         to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month)
         to_delete.delete()
