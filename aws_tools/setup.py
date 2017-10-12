@@ -9,5 +9,22 @@ setup(
     license='',
     author='Vlad Vasiliu',
     author_email='',
-    description=''
+    description='',
+    install_requires=[
+        'Django',
+        'django-choices',
+        'celery',
+        'django-celery-beat',
+        'boto3',
+        'django-bootstrap3',
+        'django-auth-adfs',
+        'django-cors-headers',
+        'djangorestframework',
+        'coreapi',
+        'markdown',
+        'django-filter',
+        'coreapi',
+        'django-cors-headers'
+    ],
+    tests_require=['moto']
 )
