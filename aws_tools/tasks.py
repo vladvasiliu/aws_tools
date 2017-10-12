@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.db.models.functions import TruncMonth
+from django.utils.timezone import now, timedelta
 
 from celery import shared_task, task
 from celery.five import monotonic
@@ -87,13 +88,14 @@ def snapshot_instance(instance_id):
 
 
 @shared_task
-def clean_snapshots():
+def clean_snapshots(days=30):
     """Keep snapshots for the last 30 days and the last of each month"""
     volumes = EBSVolume.objects.filter(present=True)
 
     for vol in volumes:
         logger.info("cleaning up snapshots for %s" % vol)
-        last_per_month = vol.ebssnapshot_set.filter(present=True).annotate(month=TruncMonth('created_at')).values(
+        last_per_month = vol.ebssnapshot_set.annotate(month=TruncMonth('created_at')).values(
             'month').annotate(last_snapshot=Max('created_at')).values_list('last_snapshot')
-        to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month)
+        to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month).filter(present=True).exclude(
+            created_at__date__lt=now().date() - timedelta(days=days))
         to_delete.delete()
