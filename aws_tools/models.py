@@ -55,6 +55,7 @@ class AWSResource(AWSBaseModel):
                                                                               'Values': [self.id]}]))[0]
         except IndexError:
             self.present = False
+            self.save()
             raise ResourceNotFoundException(self)
         else:
             return resource
