@@ -96,6 +96,6 @@ def clean_snapshots(days=30):
         logger.info("cleaning up snapshots for %s" % vol)
         last_per_month = vol.ebssnapshot_set.annotate(month=TruncMonth('created_at')).values(
             'month').annotate(last_snapshot=Max('created_at')).values_list('last_snapshot')
-        to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month).filter(present=True).exclude(
+        to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month).filter(present=True).filter(
             created_at__date__lt=now().date() - timedelta(days=days))
         to_delete.delete()
