@@ -81,10 +81,10 @@ def snapshot_volumes(self, volumes=None):
                                                                                                  vol.aws_account))
 
 
-@shared_task
-def snapshot_instance(instance_id):
+@shared_task(bind=True)
+def snapshot_instance(self, instance_id):
     volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
-    snapshot_volumes(volumes)
+    self.snapshot_volumes(volumes)
 
 
 @shared_task
