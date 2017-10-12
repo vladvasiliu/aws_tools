@@ -143,10 +143,14 @@ class EBSVolume(AWSResource):
 
     def snapshot(self, snapshot_name=None):
         snapshot_name = snapshot_name or '%s - auto' % self.name
-        aws_vol = self._aws_resource()
-        snapshot = aws_vol.create_snapshot(Description=snapshot_name)
-        snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
-        EBSSnapshot.create_snapshot(snapshot, self)
+        try:
+            aws_vol = self._aws_resource()
+        except ResourceNotFoundException:
+            pass
+        else:
+            snapshot = aws_vol.create_snapshot(Description=snapshot_name)
+            snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
+            EBSSnapshot.create_snapshot(snapshot, self)
 
 
 class EBSSnapshot(AWSResource):
