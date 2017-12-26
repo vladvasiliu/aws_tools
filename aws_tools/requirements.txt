@@ -5,39 +5,40 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 amqp==2.2.2               # via kombu
-asn1crypto==0.23.0        # via cryptography
+asn1crypto==0.24.0        # via cryptography
 billiard==3.5.0.3         # via celery
-boto3==1.4.7
-botocore==1.7.36          # via boto3, s3transfer
+boto3==1.5.6
+botocore==1.8.20          # via boto3, s3transfer
 celery==4.1.0
-certifi==2017.7.27.1      # via requests
+certifi==2017.11.5        # via requests
 cffi==1.11.2              # via cryptography
 chardet==3.0.4            # via requests
 coreapi==2.3.3
 coreschema==0.0.4         # via coreapi
-cryptography==2.1.2       # via django-auth-adfs
-django-auth-adfs==0.2.0
-django-bootstrap3==9.0.0
-django-celery-beat==1.0.1
+cryptography==2.1.4       # via django-auth-adfs
+django-auth-adfs==0.2.1
+django-bootstrap3==9.1.0
+django-celery-beat==1.1.0
 django-choices==1.6.0
 django-cors-headers==2.1.0
-django-filter==1.0.4
-django==1.11.6
-djangorestframework==3.7.1
+django-filter==1.1.0
+django==2.0
+djangorestframework==3.7.7
 docutils==0.14            # via botocore
+ephem==3.7.6.0            # via django-celery-beat
 idna==2.6                 # via cryptography, requests
 itypes==1.1.0             # via coreapi
-jinja2==2.9.6             # via coreschema
+jinja2==2.10              # via coreschema
 jmespath==0.9.3           # via boto3, botocore
 kombu==4.1.0              # via celery
-markdown==2.6.9
+markdown==2.6.10
 markupsafe==1.0           # via jinja2
 pycparser==2.18           # via cffi
 pyjwt==1.5.3              # via django-auth-adfs
 python-dateutil==2.6.1    # via botocore
-pytz==2017.2              # via celery, django
+pytz==2017.3              # via celery, django
 requests==2.18.4          # via coreapi, django-auth-adfs
-s3transfer==0.1.11        # via boto3
+s3transfer==0.1.12        # via boto3
 six==1.11.0               # via cryptography, python-dateutil
 uritemplate==3.0.0        # via coreapi
 urllib3==1.22             # via requests
