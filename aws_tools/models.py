@@ -34,7 +34,7 @@ class AWSAccount(AWSBaseModel):
 
 
 class AWSResource(AWSBaseModel):
-    aws_account = models.ForeignKey(AWSAccount, editable=False)
+    aws_account = models.ForeignKey(AWSAccount, editable=False, on_delete=models.CASCADE)
     region_name = models.CharField(max_length=25,
                                    choices=AWSRegionChoice.choices,
                                    editable=False)
@@ -119,7 +119,7 @@ class Instance(AWSResource):
 
 
 class EBSVolume(AWSResource):
-    instance = models.ForeignKey(Instance, blank=True, null=True, editable=False)
+    instance = models.ForeignKey(Instance, blank=True, null=True, editable=False, on_delete=models.CASCADE)
     id_filter = 'volume-id'
     backup = models.BooleanField(default=False, editable=True)
 
@@ -155,7 +155,7 @@ class EBSVolume(AWSResource):
 
 class EBSSnapshot(AWSResource):
     state = models.CharField(max_length=20)
-    ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False)
+    ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False, on_delete=models.CASCADE)
     created_at = models.DateTimeField()
 
     resource_kind = "snapshots"
