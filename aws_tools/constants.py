@@ -13,4 +13,6 @@ class AWSRegionChoice(DjangoChoices):
     AP_Tokyo = ChoiceItem('ap-northeast-1', label="Asia Pacific (Tokyo)")
     EU_Frankfurt = ChoiceItem('eu-central-1', label="EU (Frankfurt)")
     EU_Ireland = ChoiceItem('eu-west-1', label="EU (Ireland)")
+    EU_London = ChoiceItem('eu-west-2', label="EU (London)")
+    EU_Paris = ChoiceItem('eu-west-3', label="EU (Paris)")
     SA_SaoPaolo = ChoiceItem('sa-east-1', label="Sout America (São Paolo)")
