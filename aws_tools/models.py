@@ -181,7 +181,12 @@ def delete_snapshot_on_aws(**kwargs):
         aws_ebs_snapshot = kwargs['instance']._aws_resource()
     except ResourceNotFoundException:
         pass
-    except ClientError:
+    except ClientError as e:
+        logger.error(e)
         pass
     else:
-        aws_ebs_snapshot.delete()
+        try:
+            aws_ebs_snapshot.delete()
+        except ClientError as e:
+            logger.error(e)
+            pass
