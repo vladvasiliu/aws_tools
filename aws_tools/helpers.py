@@ -1,12 +1,24 @@
 import boto3
 
 
+def tags_dict(resource):
+    result = {}
+    if resource.tags:
+        for tag in resource.tags:
+            result[tag['Key']] = tag['Value']
+    return result
+
+
 def resource_name(instance):
     if instance.tags:
         for tag in instance.tags:
             if tag['Key'] == 'Name':
                 return tag['Value'] or ''
     return ''
+
+
+def is_managed(resource):
+    return tags_dict(resource).get('Managed', False)
 
 
 def aws_resource(resource_class, region_name, role_arn):

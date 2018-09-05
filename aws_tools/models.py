@@ -1,12 +1,13 @@
 from botocore.exceptions import ClientError
+from django.core.validators import MinValueValidator, MaxValueValidator, MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import logging
 
 from .exceptions import ResourceNotFoundException
-from .helpers import resource_name, aws_resource
-from .constants import AWSRegionChoice
+from .helpers import resource_name, aws_resource, is_managed
+from .constants import AWSRegionChoice, IPProtocol, AWSSecurityGroupRuleType
 from .managers import EBSVolumeManager
 
 logger = logging.getLogger(__name__)
@@ -38,13 +39,16 @@ class AWSResource(AWSBaseModel):
     region_name = models.CharField(max_length=25,
                                    choices=AWSRegionChoice.choices,
                                    editable=False)
+    resource_kind = ''
+    id_filter = ''
 
     class Meta:
         abstract = True
 
     @classmethod
     def _prune_resources(cls, created_resources, aws_account_id):
-        cls.objects.exclude(id__in=[x.id for x in created_resources]).filter(aws_account_id=aws_account_id).update(present=False)
+        cls.objects.exclude(id__in=[x.id for x in created_resources]).filter(aws_account_id=aws_account_id).update(
+            present=False)
 
     # Returns de corresponding AWS instance for this Python instance
     def _aws_resource(self):
@@ -190,3 +194,55 @@ def delete_snapshot_on_aws(**kwargs):
         except ClientError as e:
             logger.error(e)
             pass
+
+
+class SecurityGroup(AWSResource):
+    resource_kind = 'security_groups'
+    id_filter = 'group-id'
+    is_managed = models.BooleanField(default=False)
+    description = models.CharField(max_length=50, editable=False)
+
+    @classmethod
+    def update(cls, aws_account):
+        region_names = AWSRegionChoice.values.keys()
+        updated_groups = []
+        for region_name in region_names:
+            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+
+            for aws_sg in ec2.security_groups.all():
+                defaults = {
+                    'aws_account': aws_account,
+                    'region_name': region_name,
+                    '_name': aws_sg.group_name,
+                    'description': aws_sg.description,
+                    'is_managed': is_managed(aws_sg),
+                }
+                security_group, _ = SecurityGroup.objects.update_or_create(id=aws_sg.id, defaults=defaults)
+
+                updated_groups.append(security_group)
+        cls._prune_resources(updated_groups, aws_account.id)
+
+    # @staticmethod
+    # def _update_rules_from_aws_group(security_group, aws_security_group):
+
+
+
+class SecurityGroupRule(models.Model):
+    security_group = models.ForeignKey(SecurityGroup, on_delete=models.CASCADE, related_name='rule')
+    from_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
+    to_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
+    ip_protocol = models.IntegerField(choices=IPProtocol.choices)
+    type = models.IntegerField(choices=AWSSecurityGroupRuleType.choices)
+
+
+class SecurityGroupRuleIPRange(models.Model):
+    security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='ip_range')
+    cidr = models.GenericIPAddressField()
+    description = models.CharField(max_length=100, blank=True)
+
+
+class SecurityGroupRuleUserGroupPair(models.Model):
+    security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='user_group_pair')
+    user_id = models.IntegerField(validators=[MaxLengthValidator(12), MinLengthValidator(12)])
+    group_id = models.CharField(max_length=25)
+    description = models.CharField(max_length=100, blank=True)

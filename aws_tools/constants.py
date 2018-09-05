@@ -16,3 +16,16 @@ class AWSRegionChoice(DjangoChoices):
     EU_London = ChoiceItem('eu-west-2', label="EU (London)")
     EU_Paris = ChoiceItem('eu-west-3', label="EU (Paris)")
     SA_SaoPaolo = ChoiceItem('sa-east-1', label="Sout America (São Paolo)")
+
+
+class AWSSecurityGroupRuleType(DjangoChoices):
+    INGRESS = ChoiceItem(0, label="ingress")
+    EGRESS = ChoiceItem(1, label="egress")
+
+
+class IPProtocol(DjangoChoices):
+    ALL = ChoiceItem(-1, label="all")
+    ICMPv4 = ChoiceItem(1, label="ICMPv4")
+    ICMPv6 = ChoiceItem(58, label="ICMPv6")
+    TCP = ChoiceItem(6, label="TCP")
+    UDP = ChoiceItem(17, label="UDP")
