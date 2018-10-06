@@ -116,7 +116,7 @@ class Instance(AWSResource):
         instance = self._aws_resource()
         return instance.state['Name']
 
-    def snapshot(self, stop_first=False):
+    def snapshot(self):
         for volume in self.ebsvolume_set.filter(backup=True):
             volume.snapshot(snapshot_name=self.name)
             logger.info("Starting snapshot of %s / %s" % (self.name, volume.name))
@@ -224,7 +224,6 @@ class SecurityGroup(AWSResource):
 
     # @staticmethod
     # def _update_rules_from_aws_group(security_group, aws_security_group):
-
 
 
 class SecurityGroupRule(models.Model):
