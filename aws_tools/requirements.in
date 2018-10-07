@@ -1,6 +1,6 @@
 boto3
 celery
-coreapi
+coreapi                 # For Django Rest Framework
 Django
 django-bootstrap3
 django-celery-beat
