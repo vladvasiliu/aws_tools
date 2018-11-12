@@ -7,9 +7,15 @@
       </a>
     </div>
 
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="{% url 'main' %}">Instances</a></li>
-        <li><a href="#">Queue</a></li>
-      </ul>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{% url 'main' %}">Instances</a></li>
+      <li><a href="#">Queue</a></li>
+    </ul>
+    <p class="navbar-text navbar-right">
+        <span title="{{ user.username }}">
+            {% bootstrap_icon 'user' %} {{ user.get_full_name }} {% bootstrap_icon 'option-vertical' %}
+        </span>
+        <a href="{% url 'account_logout' %}" class="navbar-link">Logout</a>
+    </p>
   </div>
 </nav>

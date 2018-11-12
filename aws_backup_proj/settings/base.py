@@ -30,11 +30,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'aws_tools.apps.AwsBackupConfig',
     'bootstrap3',
     'django_celery_beat',
     'rest_framework',
     'corsheaders',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.azure'
 ]
 
 MIDDLEWARE = [
@@ -53,8 +58,7 @@ ROOT_URLCONF = 'aws_backup_proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'aws_tools/../../aws_tools/templates')]
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,6 +92,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -120,3 +129,7 @@ REST_FRAMEWORK = {
         #'rest_framework.permissions.IsAdminUser',
     ],
 }
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/'

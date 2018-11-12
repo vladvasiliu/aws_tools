@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.messages import add_message, get_messages
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
@@ -9,6 +10,7 @@ from .models import Instance, EBSVolume, AWSAccount
 from .tasks import snapshot_instance as snapshot_instance_task
 
 
+@login_required
 def main(request, account_id=None):
     instances = Instance.objects.filter(present=True)
     if account_id:
@@ -20,6 +22,7 @@ def main(request, account_id=None):
                                                            'account_id': account_id})
 
 
+@login_required
 def instance_detail(request, instance_id):
     instance = get_object_or_404(Instance, id=instance_id)
     volumes = instance.ebsvolume_set.all()
@@ -29,6 +32,7 @@ def instance_detail(request, instance_id):
                                                                'messages': msg})
 
 
+@login_required
 def instance_backup_enable(request, instance_id, enable):
     if request.method == 'POST':
         instance = get_object_or_404(Instance, id=instance_id)
@@ -37,6 +41,7 @@ def instance_backup_enable(request, instance_id, enable):
     return redirect(instance_detail, instance_id=instance_id)
 
 
+@login_required
 def volume_detail(request, volume_id):
     volume = get_object_or_404(EBSVolume, id=volume_id)
     instance = volume.instance
@@ -46,6 +51,7 @@ def volume_detail(request, volume_id):
                                                              'instance': instance})
 
 
+@login_required
 def snapshot_instance(request, instance_id):
     if request.method == 'POST':
         snapshot_instance_task.delay(instance_id)
