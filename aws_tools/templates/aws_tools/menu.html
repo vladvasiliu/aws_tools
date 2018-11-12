@@ -1,9 +1,11 @@
-{% load bootstrap3 %}
+{% load bootstrap4 %}
+{% load icons %}
+
 <nav class="navbar navbar-default">
   <div class="container">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">
-          {% bootstrap_icon 'sunglasses' %} AWS Tools
+          {% icon 'sunglasses' %} AWS Tools
       </a>
     </div>
 
@@ -13,7 +15,7 @@
     </ul>
     <p class="navbar-text navbar-right">
         <span title="{{ user.username }}">
-            {% bootstrap_icon 'user' %} {{ user.get_full_name }} {% bootstrap_icon 'option-vertical' %}
+            {% icon 'user' %} {{ user.get_full_name }} {% icon 'ellipsis-v' %}
         </span>
         <a href="{% url 'account_logout' %}" class="navbar-link">Logout</a>
     </p>
