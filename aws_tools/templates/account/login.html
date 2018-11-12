@@ -1,0 +1,31 @@
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery %}
+    <title>Login • AWS Tools</title>
+</head>
+<body>
+<div class="container" role="main">
+    <h1 class="text-center">Login</h1>
+
+    <div class="col-md-12">
+        Log in with an identity provider:
+        <ul class="socialaccount_providers list-unstyled">
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+        </ul>
+    </div>
+</div>
+<script>
+    var socialaccount_provider_links = document.getElementsByClassName("socialaccount_provider"),
+        len = socialaccount_provider_links !== null ? socialaccount_provider_links.length : 0,
+        i = 0;
+    for (i; i < len; i++) {
+        socialaccount_provider_links[i].classList.add('btn', 'btn-default');
+        socialaccount_provider_links[i].setAttribute("role", "button");
+    }
+</script>
+</body>
+</html>
