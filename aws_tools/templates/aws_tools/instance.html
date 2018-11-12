@@ -1,5 +1,5 @@
 {% extends 'aws_tools/base.html' %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 
 {% block page_title %}{{ instance.name }}{% endblock %}
 
@@ -16,45 +16,41 @@
     {% endif %}
 
     <div class="col-md-5">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading text-center">Details</div>
-            <!-- List group -->
-            <table class="table">
+        <div class="card">
+            <h5 class="card-title card-header text-center">Details</h5>
+            <table class="card-text table">
                 <tr><td class="text-right"><small>Account</small></td><td>{{ instance.aws_account }}</td></tr>
                 <tr><td class="text-right"><small>Region</small></td><td>{{ instance.region_name }}</td></tr>
                 <tr><td class="text-right"><small>ID</small></td><td>{{ instance.id }}</td></tr>
                 <tr>
                     <td class="text-right">
-                    {% if instance.backup %}
-                        <small>Backup time</small></td><td>{{ instance.backup_time }}
-                    {% else %}
-                        <small>Backup</small></td><td>{{ instance.backup }}
-                    {% endif %}
-                        <form method="post" class="pull-right">
-                        <div class="btn-group btn-group-xs" role="group">
-                        {% csrf_token %}
-                            {% if instance.backup %}
-                                <button type="submit"
-                                        class="btn btn-danger"
-                                        formaction="{% url 'enable_backup_instance' instance_id=instance.id enable=False %}">
-                                    Disable
-                                </button>
+                        {% if instance.backup %}
+                            <small>Backup time</small></td><td>{{ instance.backup_time }}
                             {% else %}
+                            <small>Backup</small></td><td class="d-flex justify-content-between align-items-center">{{ instance.backup }}
+                        {% endif %}
+                        <form method="post" class="btn-group btn-group-sm">
+                                {% csrf_token %}
+                                {% if instance.backup %}
+                                    <button type="submit"
+                                            class="btn btn-danger"
+                                            formaction="{% url 'enable_backup_instance' instance_id=instance.id enable=False %}">
+                                        Disable
+                                    </button>
+                                {% else %}
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            formaction="{% url 'enable_backup_instance' instance_id=instance.id enable=True %}">
+                                        Enable
+                                    </button>
+                                {% endif %}
                                 <button type="submit"
-                                        class="btn btn-success"
-                                        formaction="{% url 'enable_backup_instance' instance_id=instance.id enable=True %}">
-                                    Enable
+                                        class="btn btn-primary"
+                                        formaction="{% url 'snapshot_instance' instance.id %}">
+                                    Snapshot
                                 </button>
-                            {% endif %}
-                            <button type="submit"
-                                    class="btn btn-primary"
-                                    formaction="{% url 'snapshot_instance' instance.id %}">
-                                Snapshot
-                            </button>
-                        </div>
                         </form>
-                    </td>
+                        </td>
                 </tr>
             </table>
         </div>
@@ -62,20 +58,20 @@
 
     <div class="col-md-7">
     {% if volumes %}
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading text-center">Volumes</div>
-            <!-- List group -->
-            <ul class="list-group">
+        <div class="card">
+            <h5 class="card-title card-header text-center">Volumes</h5>
+            <div class="card-text list-group list-group-flush">
                 {% for volume in volumes %}
-                    <a href="{% url 'volume' volume_id=volume.id %}" class="list-group-item" >
+                    <a href="{% url 'volume' volume_id=volume.id %}"
+                       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                         {{ volume.name }}
-                        <span class="badge">{{ volume.ebssnapshot_set.latest.created_at }}</span>
+                        <span class="badge badge-secondary badge-pill">
+                            {{ volume.ebssnapshot_set.latest.created_at }}
+                        </span>
                     </a>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
-
     {% else %}
         <span class="list-group-item">No volumes found.</span>
     {% endif %}

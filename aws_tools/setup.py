@@ -16,15 +16,12 @@ setup(
         'celery',
         'django-celery-beat',
         'boto3',
-        'django-bootstrap3',
-        'django-auth-adfs',
+        'django-bootstrap4',
         'django-cors-headers',
         'djangorestframework',
         'coreapi',
         'markdown',
         'django-filter',
-        'coreapi',
-        'django-cors-headers'
     ],
     tests_require=['moto']
 )

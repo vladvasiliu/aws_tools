@@ -1,13 +1,14 @@
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>{% block page_title %}{% endblock %} • AWS Tools</title>
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    {% bootstrap_javascript jquery="slim" %}
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -18,14 +19,14 @@
 <body>
 {% include 'aws_tools/menu.html' %}
 
-<div class="container" role="main">
-    <div class="page-header">
-        <h1>{% block page_header %}Header{% endblock %}
+<div class="container mb-5" role="main">
+    <div class="border-bottom mt-4 mb-4 pl-4 pr-4">
+        <h1 class="display-4">{% block page_header %}Header{% endblock %}
             <span class="pull-right"><small>{% block page_header_subtext %}{% endblock %}</small></span>
         </h1>
     </div>
 
-    <div class="col-md-12">
+    <div class="row">
     {% block content %}
         teh content
     {% endblock %}

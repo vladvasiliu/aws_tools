@@ -1,5 +1,5 @@
 {% extends 'aws_tools/base.html' %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 
 {% block page_title %}{{ instance.name }}{% endblock %}
 
@@ -7,16 +7,21 @@
 {% block page_header_subtext %}<a href="{% url 'instance' instance_id=instance.id %}">{{ instance.name }}</a>{% endblock %}
 
 {% block content %}
-    {% comment %}
-    <a href="https://{{ volume.region_name }}.console.aws.amazon.com/ec2/v2/home?region={{ volume.region_name }}#Snapshots:visibility=owned-by-me;volumeId={{ volume.id }};sort=snapshotId">Show on AWS</a>
-    {%  endcomment %}
-    {% for snapshot in snapshots %}
-        <span class="list-group-item" >
-            {{ snapshot.name }}
-            <span class="badge">{{ snapshot.state }}</span>
-            <span class="badge">{{ snapshot.created_at }}</span>
-        </span>
-    {% empty %}
-        <span class="list-group-item">No snapshots found.</span>
-    {% endfor %}
+    <div class="container">
+    <div class="row justify-content-md-center">
+    <ul class="list-group col-auto">
+        {% for snapshot in snapshots %}
+            <li class="list-group-item d-flex justify-content-between align-items-center pl-5 pr-5" >
+                <span>
+                {{ snapshot.name }}
+                <span class="badge badge-pill badge-success">{{ snapshot.state }}</span>
+                </span>
+                <span class="badge">{{ snapshot.created_at }}</span>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No snapshots found.</li>
+        {% endfor %}
+    </ul>
+    </div>
+    </div>
 {% endblock %}

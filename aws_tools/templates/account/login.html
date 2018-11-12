@@ -1,31 +1,38 @@
-{% load bootstrap3 %}
+{% load bootstrap4 %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     {% bootstrap_css %}
-    {% bootstrap_javascript jquery %}
+    {% bootstrap_javascript jquery='slim' %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <title>Login • AWS Tools</title>
 </head>
 <body>
 <div class="container" role="main">
-    <h1 class="text-center">Login</h1>
-
-    <div class="col-md-12">
-        Log in with an identity provider:
-        <ul class="socialaccount_providers list-unstyled">
-            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-        </ul>
+    <div class="border-bottom mt-4 mb-4">
+        <h1 class="display-5 text-center">AWS Tools Login</h1>
     </div>
+
+    <div class="row justify-content-center m-5">
+        <div class="col-6">
+            <div class="card">
+                <h5 class="card-header card-title pl-5 pr-5">Available SSO providers</h5>
+                <div class="pt-4 pb-4" id="loginTabContent">
+                    {# SSO Login #}
+                    {% include 'account/login-sso.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    <div class="col-auto">#}
+{#        Log in with an identity provider:#}
+{#        <ul class="socialaccount_providers list-unstyled">#}
+{#            {% include "socialaccount/snippets/provider_list.html" with process="login" %}#}
+{#        </ul>#}
+{#    </div>#}
 </div>
-<script>
-    var socialaccount_provider_links = document.getElementsByClassName("socialaccount_provider"),
-        len = socialaccount_provider_links !== null ? socialaccount_provider_links.length : 0,
-        i = 0;
-    for (i; i < len; i++) {
-        socialaccount_provider_links[i].classList.add('btn', 'btn-default');
-        socialaccount_provider_links[i].setAttribute("role", "button");
-    }
-</script>
 </body>
 </html>

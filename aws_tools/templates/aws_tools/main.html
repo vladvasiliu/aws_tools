@@ -5,16 +5,18 @@
 {% block page_header %}Instances{% endblock %}
 
 {% block content %}
-    <ul class="nav nav-pills nav-stacked col-md-2 pull-left">
-        <li role="presentation" {% if not account_id %}class="active"{% endif %}><a href="{% url 'main' %}">All</a></li>
-        {% for account in accounts %}
-        <li role="presentation" {% if account_id == account.id %}class="active"{% endif %}><a href="{% url 'main' account_id=account.id %}">{{ account.name }}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="container col-3">
+        <nav class="nav nav-pills flex-column col-auto">
+            <a class="nav-link {% if not account_id %}active{% endif %}" href="{% url 'main' %}">All</a>
+            {% for account in accounts %}
+                <a class="nav-link {% if account_id == account.id %}active{% endif %}" href="{% url 'main' account_id=account.id %}">{{ account.name }}</a>
+            {% endfor %}
+        </nav>
+    </div>
 
-    <ul class="list-group col-md-8 pull-right">
+    <ul class="list-group col-8">
     {% for instance in instances %}
-        <a href="{% url 'instance' instance_id=instance.id %}" class="list-group-item" >
+        <a href="{% url 'instance' instance_id=instance.id %}" class="list-group-item list-group-item-action" >
             {{ instance.name }}
         </a>
     {% empty %}
