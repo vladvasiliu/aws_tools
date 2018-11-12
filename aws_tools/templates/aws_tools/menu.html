@@ -12,10 +12,14 @@
         <ul class="navbar-nav navbar-right">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {% icon 'user' %} {{ user.get_full_name }}
+                    {% icon 'user' %} {{ user.get_full_name|default:user.username }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <span class="dropdown-item disabled"><em>{{ user }}</em></span>
+                    <span class="dropdown-item disabled mb-3"><em>{{ user }}</em></span>
+                    {% if user.is_staff %}
+                        <a class="dropdown-item" href="{% url 'admin:index' %}">{% icon 'toolbox' %} Admin</a>
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'account_logout' %}">{% icon 'sign-out-alt' %} Logout</a>
                 </div>
             </li>
