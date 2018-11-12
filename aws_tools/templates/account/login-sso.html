@@ -1,7 +1,8 @@
 {% load bootstrap4 %}
+{% load icons %}
 {% load socialaccount %}
 
-<div class="list-group list-group-flush justify-content-between d-flex">
+<div class="list-group list-group-flush justify-content-between">
     {% get_providers as socialaccount_providers %}
     {% for provider in socialaccount_providers %}
         {% if provider.id == "openid" %}
