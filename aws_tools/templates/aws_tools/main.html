@@ -14,7 +14,7 @@
         </nav>
     </div>
 
-    <ul class="list-group col-8 pull-right">
+    <ul class="list-group col-8">
     {% for instance in instances %}
         <a href="{% url 'instance' instance_id=instance.id %}" class="list-group-item list-group-item-action" >
             {{ instance.name }}
