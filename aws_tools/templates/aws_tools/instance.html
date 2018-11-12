@@ -27,10 +27,9 @@
                         {% if instance.backup %}
                             <small>Backup time</small></td><td>{{ instance.backup_time }}
                             {% else %}
-                            <small>Backup</small></td><td>{{ instance.backup }}
+                            <small>Backup</small></td><td class="d-flex justify-content-between align-items-center">{{ instance.backup }}
                         {% endif %}
-                        <form method="post" class="pull-right">
-                            <div class="btn-group btn-group-xs" role="group">
+                        <form method="post" class="btn-group btn-group-sm">
                                 {% csrf_token %}
                                 {% if instance.backup %}
                                     <button type="submit"
@@ -50,7 +49,6 @@
                                         formaction="{% url 'snapshot_instance' instance.id %}">
                                     Snapshot
                                 </button>
-                            </div>
                         </form>
                         </td>
                 </tr>
