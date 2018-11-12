@@ -7,9 +7,9 @@
 {% block content %}
     <div class="container col-3">
         <nav class="nav nav-pills flex-column col-auto">
-            <a role="presentation" class="nav-item nav-link {% if not account_id %}active{% endif %}" href="{% url 'main' %}">All</a>
+            <a class="nav-link {% if not account_id %}active{% endif %}" href="{% url 'main' %}">All</a>
             {% for account in accounts %}
-                <a role="presentation" class="nav-item nav-link {% if account_id == account.id %}active{% endif %}" href="{% url 'main' account_id=account.id %}">{{ account.name }}</a>
+                <a class="nav-link {% if account_id == account.id %}active{% endif %}" href="{% url 'main' account_id=account.id %}">{{ account.name }}</a>
             {% endfor %}
         </nav>
     </div>
