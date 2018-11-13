@@ -1,0 +1,20 @@
+{% extends 'account/base.html' %}
+
+{% block login_action %}Logout{% endblock %}
+
+{% block card_title %}Do you want to logout?{% endblock %}
+
+{% block card_content %}
+    <div class="list-group list-group-flush text-center">
+        <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
+            <button type="submit" class="list-group-item list-group-item-action border-0">Yes</button>
+        </form>
+        <form method="get" action="{{ request.META.HTTP_REFERER|default:'/' }}" class="">
+            <button type="submit" class="list-group-item list-group-item-action border-0">No</button>
+        </form>
+    </div>
+{% endblock %}

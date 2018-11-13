@@ -1,0 +1,33 @@
+{% load bootstrap4 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='slim' %}
+    <title>Login • AWS Tools</title>
+</head>
+<body>
+<div class="container" role="main">
+        <div class="border-bottom mt-5 pb-3">
+            <h1  class="display-4 text-center col-auto">AWS Tools</h1>
+        </div>
+        <h2 class="display-5 col-auto text-muted text-center mt-3 pb-4">
+            <small>{% block login_action %}{% endblock %}</small>
+        </h2>
+
+    <div class="row justify-content-center m-5">
+        <div class="col-5">
+            <div class="card">
+                <h5 class="card-header card-title pl-5 pr-5 text-center">{% block card_title %}{% endblock %}</h5>
+                <div class="pt-4 pb-4" id="loginTabContent">
+                    {% block card_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
