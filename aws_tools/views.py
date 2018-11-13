@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.messages import add_message, get_messages
+from django.contrib.messages import add_message
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
@@ -26,7 +26,6 @@ def main(request, account_id=None):
 def instance_detail(request, instance_id):
     instance = get_object_or_404(Instance, id=instance_id)
     volumes = instance.ebsvolume_set.all()
-    msg = get_messages(request)
     return render(request, 'aws_tools/instance.html', context={'instance': instance,
                                                                'volumes': volumes,
                                                                'messages': msg})

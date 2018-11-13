@@ -127,10 +127,14 @@ CACHES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        #'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAdminUser',
     ],
 }
 
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
+
+BOOTSTRAP4 = {
+    # "theme_url": "https://tabler.io/tabler/assets/css/dashboard.css",
+}
