@@ -1,5 +1,4 @@
 {% load bootstrap4 %}
-{% load icons %}
 {% load socialaccount %}
 
 <div class="list-group list-group-flush justify-content-between">
@@ -10,12 +9,12 @@
                 <li>
                     <a title="{{brand.name}}"
                        class="socialaccount_provider {{provider.id}} {{brand.id}}"
-                       href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
-                    >{{brand.name}}</a>
+                       href="{% provider_login_url provider.id openid=brand.openid_url process=process %}">
+                        {{brand.name}}</a>
                 </li>
             {% endfor %}
         {% endif %}
-        <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}} list-group-item list-group-item-action pl-5 pr-5"
+        <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}} list-group-item list-group-item-action pl-5 pr-5 border-0"
            href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">{{provider.name}}</a>
     {% empty %}
         <span class="list-group-item list-group-item-action pl-5 pr-5 disabled"><em>No SSO providers configured</em></span>
