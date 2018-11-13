@@ -1,5 +1,4 @@
 {% load bootstrap4 %}
-{% load alert_level %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,17 +10,7 @@
 </head>
 <body>
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="container alert alert-{% alert_level message %} alert-dismissible fade show fixed-top text-center" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    {% endfor %}
-{% endif %}
-
+{% include 'aws_tools/alert.html' %}
 
 <div class="container" role="main">
         <div class="border-bottom mt-5 pb-3">
