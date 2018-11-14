@@ -4,6 +4,9 @@ from django.contrib.messages import add_message
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer
 from .models import Instance, EBSVolume, AWSAccount
@@ -70,3 +73,21 @@ class InstanceViewSet(viewsets.ModelViewSet):
 class EBSVolumeViewSet(viewsets.ModelViewSet):
     queryset = EBSVolume.objects.all().order_by('_name')
     serializer_class = EBSVolumeSerializer
+
+
+class InstanceDetail(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'aws_tools/instance_detail.html'
+
+    def get(self, request, instance_id):
+        instance = get_object_or_404(Instance, pk=instance_id)
+        serializer = InstanceSerializer(instance, context={'request': request})
+        return Response({'serializer': serializer, 'instance': instance})
+
+    def post(self, request, instance_id):
+        instance = get_object_or_404(Instance, pk=instance_id)
+        serializer = InstanceSerializer(instance, data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer, 'instance': instance})
+        serializer.save()
+        return redirect('instance', instance_id)

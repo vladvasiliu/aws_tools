@@ -6,8 +6,8 @@
 #
 amqp==2.3.2               # via kombu
 billiard==3.5.0.4         # via celery
-boto3==1.9.43
-botocore==1.12.43         # via boto3, s3transfer
+boto3==1.9.44
+botocore==1.12.44         # via boto3, s3transfer
 celery==4.2.1
 certifi==2018.10.15       # via requests
 chardet==3.0.4            # via requests
