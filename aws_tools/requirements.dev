@@ -2,3 +2,4 @@
 
 moto  # mock aws server
 coverage
+pip-tools

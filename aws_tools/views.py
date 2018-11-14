@@ -27,8 +27,7 @@ def instance_detail(request, instance_id):
     instance = get_object_or_404(Instance, id=instance_id)
     volumes = instance.ebsvolume_set.all()
     return render(request, 'aws_tools/instance.html', context={'instance': instance,
-                                                               'volumes': volumes,
-                                                               'messages': msg})
+                                                               'volumes': volumes})
 
 
 @login_required
