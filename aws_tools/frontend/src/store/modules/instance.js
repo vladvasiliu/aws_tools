@@ -10,11 +10,24 @@ const actions = {
     }, (err) => {
       console.log(err)
     })
+  },
+  UPDATE_INSTANCE: function ({ commit }, newValue) {
+    axiosInstance.put(newValue.instance.url, newValue.changes).then((response) => {
+      commit('UPDATE_INSTANCE', { newInstance: response.data })
+    })
   }
 }
 
 const mutations = {
-  SET_INSTANCE_LIST: (state, { list }) => { state.instances = list }
+  SET_INSTANCE_LIST: (state, { list }) => { state.instances = list },
+  UPDATE_INSTANCE: (state, { newInstance }) => {
+    state.instances = state.instances.map(instance => {
+      if (instance.id === newInstance.id) {
+        return Object.assign({}, instance, newInstance)
+      }
+      return instance
+    })
+  }
 }
 
 const getters = {
