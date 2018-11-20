@@ -15,7 +15,9 @@ export default {
   props: {
     instance: {
       type: Object,
-      default: function () {}
+      default: function () {
+        return {}
+      }
     }
   },
 
