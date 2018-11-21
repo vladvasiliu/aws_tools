@@ -4,6 +4,9 @@ from django.contrib.messages import add_message
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer
 from .models import Instance, EBSVolume, AWSAccount
@@ -27,8 +30,7 @@ def instance_detail(request, instance_id):
     instance = get_object_or_404(Instance, id=instance_id)
     volumes = instance.ebsvolume_set.all()
     return render(request, 'aws_tools/instance.html', context={'instance': instance,
-                                                               'volumes': volumes,
-                                                               'messages': msg})
+                                                               'volumes': volumes})
 
 
 @login_required
@@ -71,3 +73,22 @@ class InstanceViewSet(viewsets.ModelViewSet):
 class EBSVolumeViewSet(viewsets.ModelViewSet):
     queryset = EBSVolume.objects.all().order_by('_name')
     serializer_class = EBSVolumeSerializer
+
+
+class InstanceDetail(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name = 'aws_tools/instance_detail.html'
+
+    def get(self, request, instance_id):
+        instance = get_object_or_404(Instance, pk=instance_id)
+        serializer = InstanceSerializer(instance, context={'request': request})
+        return Response({'serializer': serializer, 'instance': instance})
+
+    def post(self, request, instance_id):
+        instance = get_object_or_404(Instance, pk=instance_id)
+        serializer = InstanceSerializer(instance, data=request.data, context={'request': request})
+        if not serializer.is_valid():
+            return Response({'serializer': serializer, 'instance': instance})
+        serializer.save()
+        # return Response({'serializer': serializer, 'instance': instance})
+        return Response(data=serializer.data, status=200)

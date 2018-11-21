@@ -1,0 +1,20 @@
+{% load static %}
+
+{# TODO move somewhere else and handle dev / prod #}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<div id="instance_details">
+    [[ message ]]
+</div>
+
+{#<script src="{% static "aws_tools/js/instance_details.js" %}"></script>#}
+
+<script>
+    var app = new Vue({
+        delimiters: ["[[", "]]"],
+        el: "#instance_details",
+        data: {
+            message: "hello"
+        }
+    });
+</script>
