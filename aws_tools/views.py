@@ -1,8 +1,10 @@
+from allauth.socialaccount.providers.azure.views import AzureOAuth2Adapter
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import add_message
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
+from rest_auth.registration.views import SocialLoginView
 from rest_framework import viewsets
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
@@ -92,3 +94,7 @@ class InstanceDetail(APIView):
         serializer.save()
         # return Response({'serializer': serializer, 'instance': instance})
         return Response(data=serializer.data, status=200)
+
+
+class AzureLogin(SocialLoginView):
+    adapter_class = AzureOAuth2Adapter
