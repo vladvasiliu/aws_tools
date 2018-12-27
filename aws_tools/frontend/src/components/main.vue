@@ -34,7 +34,6 @@ export default {
     ...mapGetters(['isAuthenticated'])
   },
   created () {
-    console.log(this.isAuthenticated)
     if (!this.isAuthenticated) {
       console.log('not authenticated, redirecting...')
       this.$router.push({name: 'AccountLogin'})
