@@ -28,7 +28,15 @@ import AccountList from './account_list.vue'
 import InstanceList from './instance_list.vue'
 
 export default {
-  components: {
-    AccountList, InstanceList }
+  components: { AccountList, InstanceList },
+  created () {
+    if (!this.$store.getters.isAuthenticated) {
+      console.log('not authenticated, redirecting...')
+      this.$router.push({name: 'AccountLogin'})
+    } else {
+      console.log('authenticated')
+    }
+  }
 }
+
 </script>

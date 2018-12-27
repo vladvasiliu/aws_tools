@@ -5,6 +5,8 @@ import awsAccount from './modules/aws_account'
 import instance from './modules/instance'
 import volume from './modules/volume'
 
+import auth from '@/auth/'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -12,6 +14,7 @@ export default new Vuex.Store({
   modules: {
     aws_account: awsAccount,
     instance,
-    volume
+    volume,
+    auth
   }
 })
