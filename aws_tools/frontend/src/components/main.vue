@@ -24,13 +24,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import AccountList from './account_list.vue'
 import InstanceList from './instance_list.vue'
 
 export default {
   components: { AccountList, InstanceList },
+  computed: {
+    ...mapGetters(['isAuthenticated'])
+  },
   created () {
-    if (!this.$store.getters.isAuthenticated) {
+    console.log(this.isAuthenticated)
+    if (!this.isAuthenticated) {
       console.log('not authenticated, redirecting...')
       this.$router.push({name: 'AccountLogin'})
     } else {
@@ -38,5 +43,4 @@ export default {
     }
   }
 }
-
 </script>
