@@ -1,4 +1,4 @@
-import axiosInstance from '../../api/index'
+import axiosInstance from '@/api/'
 
 const state = {
   volumes: []

@@ -3,8 +3,7 @@ from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
 from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable, AWSAccountViewSet, \
-    InstanceViewSet, EBSVolumeViewSet
-
+    InstanceViewSet, EBSVolumeViewSet, AzureLogin
 
 router = routers.DefaultRouter()
 router.register(r'AWSAccounts', AWSAccountViewSet)
@@ -23,4 +22,6 @@ urlpatterns = [
 
     url(r'api/', include(router.urls)),
     url(r'schema/$', schema_view),
+
+    url(r'^rest-auth/azure/$', AzureLogin.as_view(), name='azure_login'),
 ]
