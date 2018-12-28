@@ -17,6 +17,12 @@
     <b-button
       type="submit"
       variant="primary">Submit</b-button>
+    <b-alert
+      v-if="error"
+      variant="danger"
+      show>
+      {{ error }}
+    </b-alert>
   </b-form>
 </template>
 
@@ -29,6 +35,7 @@ export default {
         username: '',
         password: ''
       },
+      error: null,
       show: true
     }
   },
@@ -42,6 +49,18 @@ export default {
         .then(() => {
           console.log('Logged in. Redirecting...')
           this.$router.push({name: 'Home'})
+        })
+        .catch((error) => {
+          console.log('Login failed. Reason:\n\t' + error)
+          if (error.response) {
+            if (error.response.status === 400) {
+              this.error = 'Invalid credentials'
+            } else {
+              this.error = 'Internal server error'
+            }
+          } else {
+            this.error = 'Cannot contact backend server'
+          }
         })
     }
   }

@@ -46,9 +46,6 @@ export default {
             axiosInstance.defaults.headers.common['Authorization'] = 'Token ' + token
           }
         })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   }
 }
