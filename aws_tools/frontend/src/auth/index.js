@@ -46,6 +46,19 @@ export default {
             axiosInstance.defaults.headers.common['Authorization'] = 'Token ' + token
           }
         })
+        .catch((error) => {
+          let message = null
+          if (error.response) {
+            if (error.response.status === 400) {
+              message = 'Invalid credentials'
+            } else {
+              message = 'Internal server error'
+            }
+          } else {
+            message = 'Cannot contact backend server'
+          }
+          return Promise.reject(new Error(message))
+        })
     }
   }
 }

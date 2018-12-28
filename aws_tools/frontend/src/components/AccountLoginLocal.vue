@@ -52,15 +52,7 @@ export default {
         })
         .catch((error) => {
           console.log('Login failed. Reason:\n\t' + error)
-          if (error.response) {
-            if (error.response.status === 400) {
-              this.error = 'Invalid credentials'
-            } else {
-              this.error = 'Internal server error'
-            }
-          } else {
-            this.error = 'Cannot contact backend server'
-          }
+          this.error = error.message
         })
     }
   }
