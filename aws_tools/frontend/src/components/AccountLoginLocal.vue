@@ -2,27 +2,32 @@
   <b-form
     v-if="show"
     @submit.prevent="login">
+    <label
+      id="usernameGroup"
+      for="usernameInput"
+      class="sr-only"/>
     <b-form-input
       id="usernameInput"
       v-model="form.username"
       type="text"
       required
       placeholder="Username"/>
+    <label
+      id="passwordGroup"
+      for="passwordInput"
+      class="sr-only"/>
     <b-form-input
       id="passwordInput"
       v-model="form.password"
       type="password"
+      title="password"
       required
-      placeholder="Password"/>
+      placeholder="Password"
+      class="mt-1"/>
     <b-button
       type="submit"
-      variant="primary">Submit</b-button>
-    <b-alert
-      v-if="error"
-      variant="danger"
-      show>
-      {{ error }}
-    </b-alert>
+      variant="primary"
+      class="mt-3 w-100">Submit</b-button>
   </b-form>
 </template>
 
@@ -52,7 +57,7 @@ export default {
         })
         .catch((error) => {
           console.log('Login failed. Reason:\n\t' + error)
-          this.error = error.message
+          this.$emit('login-error', error.message)
         })
     }
   }
