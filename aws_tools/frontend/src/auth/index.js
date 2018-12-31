@@ -11,18 +11,19 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
   baseUrl: 'http://127.0.0.1:8000/rest-auth/',
   loginUrl: 'login/',
   tokenName: 'key',
-  storageType: 'memoryStorage'
+  storageType: 'cookieStorage'
 
 })
 
 export default {
   state: {
-    isAuthenticated: false,
-    token: null
+    isAuthenticated: vueAuth.isAuthenticated(),
+    token: vueAuth.getToken()
   },
 
   getters: {
-    isAuthenticated: (state) => state.isAuthenticated
+    isAuthenticated: (state) => state.isAuthenticated,
+    token: (state) => state.token
   },
 
   mutations: {
