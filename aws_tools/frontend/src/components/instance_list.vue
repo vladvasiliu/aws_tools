@@ -15,9 +15,9 @@
         <b-collapse
           :id="instance.id"
           :key="instance.id + 'detail'"
-          class="w-100 align-self-center">
+          class="w-100 align-self-center mb-2">
           <b-list-group-item
-            class="d-flex m-3 justify-content-left"
+            class="d-flex justify-content-left"
             @click.stop>
             <instanceDetail
               :instance="instance"
