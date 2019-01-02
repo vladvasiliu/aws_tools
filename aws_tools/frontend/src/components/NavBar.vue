@@ -20,25 +20,27 @@
 <script>
 import { mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-regular-svg-icons'
+import { faUserSlash } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUser)
+library.add(faUser, faUserSlash)
 
 export default {
   name: 'NavBar',
 
-  data () {
-    return {
-      userIcon: faUser
+  computed: {
+    ...mapGetters(['userName', 'isAuthenticated']),
+    userIcon: function () {
+      return this.isAuthenticated ? faUser : faUserSlash
     }
   },
-
-  computed: { ...mapGetters(['userName']) },
 
   mounted () {
     this.$store.dispatch('getUser')
       .then()
       .catch((reason) => {
+        console.log('logging for getUser')
+        console.log(reason)
       })
   },
 
