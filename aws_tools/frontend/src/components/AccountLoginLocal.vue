@@ -27,7 +27,7 @@
     <b-button
       type="submit"
       variant="primary"
-      class="mt-3 w-100">Submit</b-button>
+      class="mt-3 w-100">Login</b-button>
   </b-form>
 </template>
 
