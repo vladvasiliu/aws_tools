@@ -1,14 +1,6 @@
 <template>
   <div>
-    <b-navbar
-      type="dark"
-      variant="dark">
-
-      <b-navbar-brand>
-        <span>AWS Tools</span>
-      </b-navbar-brand>
-
-    </b-navbar>
+    <NavBar/>
 
     <div class="container-fluid mt-3">
       <div class="row">
@@ -27,18 +19,17 @@
 import { mapGetters } from 'vuex'
 import AccountList from './account_list.vue'
 import InstanceList from './instance_list.vue'
+import NavBar from './NavBar'
 
 export default {
-  components: { AccountList, InstanceList },
+  components: { AccountList, InstanceList, NavBar },
   computed: {
     ...mapGetters(['isAuthenticated'])
   },
+
   created () {
     if (!this.isAuthenticated) {
-      console.log('not authenticated, redirecting...')
       this.$router.push({name: 'AccountLogin'})
-    } else {
-      console.log('authenticated')
     }
   }
 }

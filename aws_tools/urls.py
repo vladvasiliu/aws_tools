@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^volume/(?P<volume_id>vol-[a-z0-9]*)/$', volume_detail, name='volume'),
 
     url(r'api/', include(router.urls)),
-    url(r'schema/$', schema_view),
+    url(r'api/schema/$', schema_view),
 
-    url(r'^rest-auth/azure/$', AzureLogin.as_view(), name='azure_login'),
+    url(r'^api/rest-auth/azure/$', AzureLogin.as_view(), name='azure_login'),
 ]
