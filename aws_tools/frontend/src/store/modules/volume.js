@@ -23,13 +23,13 @@ const mutations = {
 const getters = {
   volumes: state => state.volumes,
   volumes_for_instance: (state) => (instance) => {
-    console.log('in vols_for_instance. state param: ' + state)
     if (instance) {
       return state.volumes.filter(volume => volume.instance === instance.url)
     } else {
       return state.volumes
     }
-  }
+  },
+  volume_name: () => (volume) => { return volume._name || volume.id }
 }
 
 export default {
