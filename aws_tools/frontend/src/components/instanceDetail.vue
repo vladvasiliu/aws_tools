@@ -2,21 +2,16 @@
   <b-card header="Details">
     <table class="table">
       <tbody>
-        <tr><td class="text-right border-top-0">ID</td><td colspan="2" class="border-top-0">{{ instance.id }}</td></tr>
-        <tr><td class="text-right">Region</td><td colspan="2">{{ instance.region_name }}</td></tr>
-        <tr><td class="text-right">Backup</td><td colspan="2">
+        <tr><td class="text-right border-top-0">ID</td><td class="border-top-0">{{ instance.id }}</td></tr>
+        <tr><td class="text-right">Region</td><td>{{ instance.region_name }}</td></tr>
+        <tr><td class="text-right">Backup</td><td>
           <b-form-checkbox
             v-model="backup">
-            <span v-if="backup">
-              <b-badge variant="success">
-                At {{ instance.backup_time }}
-              </b-badge>
-            </span>
-            <span v-else>
-              <b-badge variant="danger">
-                Disabled
-              </b-badge>
-            </span>
+            <b-badge
+              :variant="variant(instance.backup)"
+              class="align-middle">
+              {{ instance.backup ? `At ${instance.backup_time}` : 'Disabled' }}
+            </b-badge>
           </b-form-checkbox>
         </td></tr>
       </tbody>
@@ -34,6 +29,7 @@ export default {
     }
   },
   computed: {
+    variant: () => (value) => { return value ? 'success' : 'danger' },
     backup: {
       get () {
         return this.instance.backup
