@@ -1,17 +1,22 @@
 <template>
   <b-card header="Instances">
-    <b-list-group flush>
-      <b-list-group-item
-        v-b-toggle="instance.id"
-        v-for="instance in instances_for_selected_account"
-        :key="instance.id"
-        action
-        class="flex-column align-items-start">
-        {{ instance._name }}
+    <b-list-group
+      flush>
+      <template
+        v-for="instance in instances_for_selected_account">
+        <b-list-group-item
+          v-b-toggle="instance.id"
+          :key="instance.id"
+          action
+          class="border-top-1 border-bottom-0 m-0">
+          {{ instance._name }}
+        </b-list-group-item>
+
         <b-collapse
           :id="instance.id"
+          :key="instance.id + 'detail'"
           class="w-100 align-self-center">
-          <div
+          <b-list-group-item
             class="d-flex m-3 justify-content-left"
             @click.stop>
             <instanceDetail
@@ -20,9 +25,9 @@
             <volumeList
               :instance="instance"
               class="m-1"/>
-          </div>
+          </b-list-group-item>
         </b-collapse>
-      </b-list-group-item>
+      </template>
     </b-list-group>
   </b-card>
 </template>
