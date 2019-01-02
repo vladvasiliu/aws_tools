@@ -44,6 +44,9 @@ export default {
   },
   created () {
     this.$store.dispatch('LOAD_INSTANCE_LIST')
+      .then(() => {
+        this.$store.dispatch('GET_ALL_VOLUMES')
+      })
   }
 }
 </script>

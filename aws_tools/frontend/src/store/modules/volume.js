@@ -3,10 +3,11 @@ import axiosInstance from '@/api/'
 const state = {
   volumes: []
 }
+
 const actions = {
   GET_ALL_VOLUMES: function ({ commit }) {
     axiosInstance.get('/Volumes/').then((response) => {
-      commit('UPDATE_VOLUME_LIST', { new_volume_list: response.data })
+      commit('UPDATE_VOLUME_LIST', { newVolumeList: response.data })
     }, (err) => {
       console.log(err)
     })
@@ -21,7 +22,8 @@ const mutations = {
 
 const getters = {
   volumes: state => state.volumes,
-  volumes_for_instance: (state, getters) => (instance) => {
+  volumes_for_instance: (state) => (instance) => {
+    console.log('in vols_for_instance. state param: ' + state)
     if (instance) {
       return state.volumes.filter(volume => volume.instance === instance.url)
     } else {
