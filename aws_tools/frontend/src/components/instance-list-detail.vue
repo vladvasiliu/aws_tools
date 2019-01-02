@@ -4,13 +4,12 @@
       v-b-toggle="instance.id"
       :key="instance.id"
       action
-      class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center">
+      class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center instance-name">
       {{ instance._name }}
       <font-awesome-icon
         :icon="collapse"
         size="lg"
-        variant="light"
-        class="text-secondary" />
+        class="instance-name-caret" />
     </b-list-group-item>
 
     <b-collapse
@@ -65,3 +64,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.instance-name:hover .instance-name-caret {
+  opacity: inherit;
+}
+.instance-name .instance-name-caret {
+  opacity: 0.3;
+}
+</style>
