@@ -13,6 +13,11 @@
           class="small font-weight-light font-italic ml-3" >
           {{ volume.latest_snapshot_date | moment('calendar') }}
         </span>
+        <span
+          v-else
+          class="small font-weight-light font-italic ml-3" >
+          No snapshots
+        </span>
       </b-list-group-item>
     </b-list-group>
     <b-modal
