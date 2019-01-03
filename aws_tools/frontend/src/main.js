@@ -11,6 +11,7 @@ import router from './router'
 
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
+Vue.use(require('vue-moment'))
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

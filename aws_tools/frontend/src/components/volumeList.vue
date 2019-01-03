@@ -9,8 +9,18 @@
     </b-list-group>
     <b-modal
       v-if="modalShow"
-      v-model="modalShow">
-      <volume-detail :volume="modalVolume"/>
+      v-model="modalShow"
+      ok-title="Close"
+      size="lg"
+      hide-footer
+      header-bg-variant="light"
+      ok-only
+      lazy
+      centered>
+      <template slot="modal-title">{{ volume_name(modalVolume) }}</template>
+      <volume-detail
+        :volume="modalVolume"
+        :instance="instance" />
     </b-modal>
   </b-card>
 </template>
