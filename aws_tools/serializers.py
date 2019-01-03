@@ -17,7 +17,7 @@ class EBSVolumeBriefSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = EBSVolume
-        fields = ['url', 'name', 'latest_snapshot_date']
+        fields = ['url', 'name', 'latest_snapshot_date', 'id']
 
     def get_latest_snapshot_date(self, obj):
         try:

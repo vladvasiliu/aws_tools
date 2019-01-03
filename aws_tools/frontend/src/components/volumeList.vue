@@ -2,7 +2,7 @@
   <b-card header="Volumes">
     <b-list-group flush>
       <b-list-group-item
-        v-for="volume in volumes_for_instance(instance)"
+        v-for="volume in instance.ebsvolume_set"
         :key="volume.id"
         action
         @click="showModal(volume)">{{ volume.name }}</b-list-group-item>
@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'volumes_for_instance'
+      // 'volumes_for_instance'
     ]),
     modalShow: {
       get () { return !!this.modalVolume },
