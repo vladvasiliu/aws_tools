@@ -3,12 +3,13 @@ from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 
 from .views import main, instance_detail, volume_detail, snapshot_instance, instance_backup_enable, AWSAccountViewSet, \
-    InstanceViewSet, EBSVolumeViewSet, AzureLogin
+    InstanceViewSet, EBSVolumeViewSet, EBSSnapshotViewSet, AzureLogin
 
 router = routers.DefaultRouter()
 router.register(r'AWSAccounts', AWSAccountViewSet)
 router.register(r'Instances', InstanceViewSet)
 router.register(r'Volumes', EBSVolumeViewSet)
+router.register(r'Snapshots', EBSSnapshotViewSet)
 
 schema_view = get_schema_view(title="AWS Tools API")
 

@@ -10,8 +10,8 @@ from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer
-from .models import Instance, EBSVolume, AWSAccount
+from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer
+from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount
 from .tasks import snapshot_instance as snapshot_instance_task
 
 
@@ -75,6 +75,11 @@ class InstanceViewSet(viewsets.ModelViewSet):
 class EBSVolumeViewSet(viewsets.ModelViewSet):
     queryset = EBSVolume.objects.all().order_by('_name')
     serializer_class = EBSVolumeSerializer
+
+
+class EBSSnapshotViewSet(viewsets.ModelViewSet):
+    queryset = EBSSnapshot.objects.all().order_by('_name')
+    serializer_class = EBSSnapshotSerializer
 
 
 class InstanceDetail(APIView):

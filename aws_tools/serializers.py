@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AWSAccount, Instance, EBSVolume
+from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot
 
 
 class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,7 +23,16 @@ class InstanceSerializer(serializers.HyperlinkedModelSerializer):
 
 class EBSVolumeSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.CharField(read_only=True)
+    ebssnapshot_set = serializers.HyperlinkedRelatedField(many=True, view_name='ebssnapshot-detail', read_only=True)
 
     class Meta:
         model = EBSVolume
+        fields = '__all__'
+
+
+class EBSSnapshotSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = EBSSnapshot
         fields = '__all__'
