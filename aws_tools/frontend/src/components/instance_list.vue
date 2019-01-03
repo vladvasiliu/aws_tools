@@ -20,8 +20,7 @@
           :key="instance.id + 'detail'"
           class="w-100 align-self-center mb-2">
           <b-list-group-item
-            class="d-flex justify-content-left"
-            @click.stop>
+            class="d-flex justify-content-left">
             <instanceDetail
               :instance="instance"
               class="m-1"/>

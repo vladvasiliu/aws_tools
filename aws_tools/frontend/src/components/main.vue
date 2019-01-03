@@ -8,7 +8,7 @@
           <account-list/>
         </div>
         <div class="col">
-          <instance-list/>
+          <instance-list />
         </div>
       </div>
     </div>
