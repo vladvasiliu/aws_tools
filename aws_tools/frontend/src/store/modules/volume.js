@@ -28,8 +28,7 @@ const getters = {
     } else {
       return state.volumes
     }
-  },
-  volume_name: () => (volume) => { return volume._name || volume.id }
+  }
 }
 
 export default {

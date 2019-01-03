@@ -5,7 +5,7 @@
         v-for="volume in volumes_for_instance(instance)"
         :key="volume.id"
         action
-        @click="showModal(volume)">{{ volume_name(volume) }}</b-list-group-item>
+        @click="showModal(volume)">{{ volume.name }}</b-list-group-item>
     </b-list-group>
     <b-modal
       v-if="modalShow"
@@ -17,7 +17,7 @@
       ok-only
       lazy
       centered>
-      <template slot="modal-title">{{ volume_name(modalVolume) }}</template>
+      <template slot="modal-title">{{ modalVolume.name }}</template>
       <volume-detail
         :volume="modalVolume"
         :instance="instance" />
@@ -45,8 +45,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'volumes_for_instance',
-      'volume_name'
+      'volumes_for_instance'
     ]),
     modalShow: {
       get () { return !!this.modalVolume },

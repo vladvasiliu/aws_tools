@@ -9,7 +9,7 @@
           :key="instance.id"
           action
           class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center instance-name">
-          {{ instance._name }}
+          {{ instance.name }}
           <font-awesome-icon
             :icon="collapseIcon"
             class="instance-name-caret" />
