@@ -43,6 +43,9 @@ export default {
       .get(this.volume.url)
       .then(response => {
         this.snapshots = response.data.ebssnapshot_set
+        if (!this.snapshots.length) {
+          this.error = { message: 'No snapshots found.' }
+        }
       })
       .catch(error => {
         console.log(error)
