@@ -18,15 +18,19 @@
         <b-collapse
           :id="instance.id"
           :key="instance.id + 'detail'"
-          class="w-100 align-self-center mb-2">
-          <b-list-group-item
-            class="d-flex justify-content-left">
-            <instanceDetail
-              :instance="instance"
-              class="m-1"/>
-            <volumeList
-              :instance="instance"
-              class="m-1"/>
+          class="w-100 justify-content-left align-self-center mb-2">
+          <b-list-group-item class="">
+            <div class="row">
+              <div class="col-auto">
+                <instanceDetail
+                  :instance="instance" />
+              </div>
+              <div class="col">
+                <volumeList
+                  :instance="instance"
+                  class="h-100"/>
+              </div>
+            </div>
           </b-list-group-item>
         </b-collapse>
       </template>
