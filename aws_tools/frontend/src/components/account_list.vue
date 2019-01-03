@@ -44,3 +44,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* Workaround for broken modal display */
+.list-group-item.active {
+  z-index: 0;
+}
+</style>
