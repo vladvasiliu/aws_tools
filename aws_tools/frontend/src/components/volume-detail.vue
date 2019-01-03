@@ -7,7 +7,7 @@
       v-else-if="loading"
       message="Loading snapshots..."/>
     <volume-detail-snapshots
-      v-if="snapshots"
+      v-else
       :snapshots="snapshots"/>
   </div>
 </template>

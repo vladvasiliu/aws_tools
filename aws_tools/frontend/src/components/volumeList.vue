@@ -5,7 +5,15 @@
         v-for="volume in instance.ebsvolume_set"
         :key="volume.id"
         action
-        @click="showModal(volume)">{{ volume.name }}</b-list-group-item>
+        class="d-flex justify-content-between align-items-center"
+        @click="showModal(volume)">
+        {{ volume.name }}
+        <span
+          v-if="volume.latest_snapshot_date"
+          class="small font-weight-light font-italic ml-3" >
+          {{ volume.latest_snapshot_date | moment('calendar') }}
+        </span>
+      </b-list-group-item>
     </b-list-group>
     <b-modal
       v-if="modalShow"
