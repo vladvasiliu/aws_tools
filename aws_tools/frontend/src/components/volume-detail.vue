@@ -40,9 +40,9 @@ export default {
   },
   mounted () {
     AxiosInstance
-      .get('/Snapshots/')
+      .get(this.volume.url)
       .then(response => {
-        this.snapshots = response.data
+        this.snapshots = response.data.ebssnapshot_set
       })
       .catch(error => {
         console.log(error)

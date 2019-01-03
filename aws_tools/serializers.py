@@ -36,9 +36,15 @@ class InstanceSerializer(serializers.HyperlinkedModelSerializer):
         exclude = ["_name"]
 
 
+class EBSSnapshotBriefSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = EBSSnapshot
+        fields = ['url', 'id', 'created_at', 'state']
+
+
 class EBSVolumeSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.CharField(read_only=True)
-    ebssnapshot_set = serializers.HyperlinkedRelatedField(many=True, view_name='ebssnapshot-detail', read_only=True)
+    ebssnapshot_set = EBSSnapshotBriefSerializer(many=True, read_only=True)
     name = serializers.CharField(read_only=True)
 
     class Meta:
