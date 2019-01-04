@@ -37,15 +37,6 @@ export default {
     }
   },
 
-  mounted () {
-    this.$store.dispatch('getUser')
-      .then()
-      .catch((reason) => {
-        console.log('logging for getUser')
-        console.log(reason)
-      })
-  },
-
   methods: {
     logout () {
       this.$store.dispatch('logout', {})

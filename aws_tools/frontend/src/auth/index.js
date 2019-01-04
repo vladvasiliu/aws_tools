@@ -21,11 +21,7 @@ function handleLogin (context) {
     isAuthenticated: isAuthenticated,
     token: token
   })
-  if (token) {
-    axiosInstance.defaults.headers.common['Authorization'] = 'Token ' + token
-  } else {
-    delete axiosInstance.defaults.headers.common['Authorization']
-  }
+  context.dispatch('getUser')
 }
 
 function userName (response) {
@@ -90,12 +86,14 @@ export default {
         })
     },
     getUser (context) {
+      axiosInstance.defaults.headers.common['Authorization'] = 'Token ' + context.state.token
       axiosInstance.get('/rest-auth/user')
         .then((response) => {
           context.commit('SET_USERNAME', {userName: userName(response)})
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error.request)
+          delete axiosInstance.defaults.headers.common['Authorization']
         })
     }
   }

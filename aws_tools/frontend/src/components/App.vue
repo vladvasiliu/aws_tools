@@ -13,6 +13,8 @@ export default {
   created () {
     if (!this.isAuthenticated) {
       this.$router.push({name: 'AccountLogin'})
+    } else {
+      this.$store.dispatch('getUser')
     }
   }
 }

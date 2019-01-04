@@ -67,7 +67,6 @@ export default {
       this.dismissCountDown = dismissCountDown
     },
     setError (error) {
-      console.log('setting error')
       this.loginError = error
       this.dismissCountDown = this.dismissSecs
     }

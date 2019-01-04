@@ -24,7 +24,7 @@
     "style-loader": "^0.23.1",
     "vue": "^2.5.21",
     "vue-authenticate": "^1.3.4",
-    "vue-axios": "latest",
+    "vue-axios": "^2.1.4",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.2",
     "vuex": "^3.0.1"
