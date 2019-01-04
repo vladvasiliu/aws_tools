@@ -32,9 +32,7 @@ export default {
 
   computed: {
     ...mapGetters(['userName', 'isAuthenticated']),
-    userIcon: function () {
-      return this.isAuthenticated ? faUser : faUserSlash
-    }
+    userIcon () { return faUser }
   },
 
   methods: {

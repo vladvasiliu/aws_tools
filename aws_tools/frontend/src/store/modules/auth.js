@@ -13,16 +13,6 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
   storageType: 'cookieStorage'
 })
 
-function handleLogin (context) {
-  const isAuthenticated = vueAuth.isAuthenticated()
-  const token = vueAuth.getToken()
-  context.commit('IS_AUTHENTICATED', {
-    isAuthenticated: isAuthenticated,
-    token: token
-  })
-  context.dispatch('getUser')
-}
-
 function userName (response) {
   const fullName = `${response.data.first_name} ${response.data.last_name}`
   return fullName !== ' ' ? fullName : response.data.username
@@ -30,22 +20,16 @@ function userName (response) {
 
 export default {
   state: {
-    isAuthenticated: vueAuth.isAuthenticated(),
-    token: vueAuth.getToken(),
     userName: null
   },
 
   getters: {
-    isAuthenticated: (state) => state.isAuthenticated,
-    token: (state) => state.token,
+    // isAuthenticated: (state) => state.isAuthenticated,
+    isAuthenticated () { return vueAuth.isAuthenticated() },
     userName: (state) => state.userName
   },
 
   mutations: {
-    IS_AUTHENTICATED (state, payload) {
-      state.isAuthenticated = payload.isAuthenticated
-      state.token = payload.token
-    },
     SET_USERNAME (state, payload) {
       if (payload.userName) {
         state.userName = payload.userName
@@ -59,7 +43,7 @@ export default {
     login (context, payload) {
       return vueAuth.login(payload.user, payload.requestOptions)
         .then(() => {
-          handleLogin(context)
+          context.dispatch('getUser')
         })
         .catch((error) => {
           let message = null
@@ -78,7 +62,7 @@ export default {
     logout (context, payload) {
       return vueAuth.logout(payload.requestOptions)
         .then(() => {
-          handleLogin(context)
+          context.dispatch('getUser')
         })
         .catch((error) => {
           console.log(error)
