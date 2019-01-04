@@ -1,4 +1,5 @@
 from allauth.socialaccount.providers.azure.views import AzureOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import add_message
@@ -103,3 +104,5 @@ class InstanceDetail(APIView):
 
 class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
+    client_class = OAuth2Client
+    callback_url = 'http://127.0.0.1:8080'

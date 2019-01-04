@@ -10,7 +10,16 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
   loginUrl: 'login/',
   tokenName: 'key',
   tokenType: 'Token',
-  storageType: 'cookieStorage'
+  storageType: 'cookieStorage',
+  providers: {
+    oauth2: {
+      url: '/azure/',
+      name: 'AzureAD',
+      clientId: '9bb654b1-7a7f-4969-8f02-3496e46e4511',
+      authorizationEndpoint: 'https://login.microsoftonline.com/6643a3bd-8975-46e6-a6ce-1b8025b70944/oauth2/authorize',
+      scope: 'openid profile email'
+    }
+  }
 })
 
 function userName (response) {
@@ -40,6 +49,17 @@ export default {
   },
 
   actions: {
+    socialLogin: function (context) {
+      return vueAuth.authenticate('oauth2')
+        .then(function () {
+          context.dispatch('getUser')
+        })
+        .catch(error => {
+          console.log('sso failed :(')
+          console.log(error)
+          return Promise.reject(error)
+        })
+    },
     login (context, payload) {
       return vueAuth.login(payload.user, payload.requestOptions)
         .then(() => {
