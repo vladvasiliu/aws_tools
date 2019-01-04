@@ -12,7 +12,7 @@ export default {
   methods: {
     socialLogin () {
       this.$store.dispatch('socialLogin')
-        .then(() => { this.$router.push('/') })
+        .then(() => { this.$emit('login-ok') })
         .catch((error) => {
           console.log('Login failed. Reason:\n\t' + error)
           this.$emit('login-error', error.message)

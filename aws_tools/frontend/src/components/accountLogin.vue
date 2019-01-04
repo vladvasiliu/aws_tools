@@ -29,9 +29,14 @@
           <b-tabs
             card
             no-body>
-            <b-tab
-              title="Local"> <AccountLoginLocal @login-error="setError" /> </b-tab>
-            <b-tab title="SSO"> <AccountLoginSSO/> </b-tab>
+            <b-tab title="Local">
+              <AccountLoginLocal
+                @login-error="setError"
+                @login-ok="redirect"/> </b-tab>
+            <b-tab title="SSO">
+              <AccountLoginSSO
+                @login-error="setError"
+                @login-ok="redirect"/> </b-tab>
           </b-tabs>
         </b-card>
       </div>
@@ -69,6 +74,9 @@ export default {
     setError (error) {
       this.loginError = error
       this.dismissCountDown = this.dismissSecs
+    },
+    redirect () {
+      this.$router.push('/')
     }
   }
 }

@@ -52,8 +52,7 @@ export default {
               { username: this.form.username,
                 password: this.form.password}})
         .then(() => {
-          console.log('Logged in. Redirecting...')
-          this.$router.push({name: 'Home'})
+          this.$emit('login-ok')
         })
         .catch((error) => {
           console.log('Login failed. Reason:\n\t' + error)
