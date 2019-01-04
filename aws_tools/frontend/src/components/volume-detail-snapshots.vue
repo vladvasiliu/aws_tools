@@ -7,13 +7,13 @@
       {{ snapshot.id }}
       <span class="small font-weight-light font-italic" >
         {{ snapshot.created_at | moment("calendar") }}
-        <b-button
-          variant="danger"
-          class="ml-2 snapshot-delete"
-          size="sm"
-          @click="deleteSnapshot(snapshot)">
-          Delete
-        </b-button>
+        <!--<b-button-->
+        <!--variant="danger"-->
+        <!--class="ml-2 snapshot-delete"-->
+        <!--size="sm"-->
+        <!--@click="deleteSnapshot(snapshot)">-->
+        <!--Delete-->
+        <!--</b-button>-->
       </span>
     </b-list-group-item>
   </b-list-group>
@@ -29,9 +29,10 @@ export default {
     }
   },
   methods: {
-    deleteSnapshot (snapshot) {
-      console.log(`will delete snapshot ${snapshot.id}`)
-    }
+    // Not yet implemented on backend
+    // deleteSnapshot (snapshot) {
+    //   console.log(`will delete snapshot ${snapshot.id}`)
+    // }
   }
 }
 </script>
