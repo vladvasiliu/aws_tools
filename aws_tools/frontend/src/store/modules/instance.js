@@ -1,18 +1,18 @@
-import axiosInstance from '../../api/index'
+import axios from 'axios'
 
 const state = {
   instances: []
 }
 const actions = {
   LOAD_INSTANCE_LIST: function ({ commit }) {
-    return axiosInstance.get('/Instances/').then((response) => {
+    return axios.get('/Instances/').then((response) => {
       commit('SET_INSTANCE_LIST', { list: response.data })
     }, (err) => {
       console.log(err)
     })
   },
   UPDATE_INSTANCE: function ({ commit }, newValue) {
-    axiosInstance.put(newValue.instance.url, newValue.changes).then((response) => {
+    axios.put(newValue.instance.url, newValue.changes).then((response) => {
       commit('UPDATE_INSTANCE', { newInstance: response.data })
     })
   }

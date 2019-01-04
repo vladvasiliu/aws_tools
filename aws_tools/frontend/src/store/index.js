@@ -3,8 +3,7 @@ import Vuex from 'vuex'
 
 import awsAccount from './modules/aws_account'
 import instance from './modules/instance'
-
-import auth from '@/auth/'
+import auth from './modules/auth'
 
 Vue.use(Vuex)
 

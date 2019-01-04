@@ -3,14 +3,13 @@ import VueAxios from 'vue-axios'
 import { VueAuthenticate } from 'vue-authenticate'
 import axios from 'axios'
 
-import axiosInstance from '@/api/'
-
 Vue.use(VueAxios, axios)
 
 const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
   baseUrl: 'http://127.0.0.1:8000/api/rest-auth/',
   loginUrl: 'login/',
   tokenName: 'key',
+  tokenType: 'Token',
   storageType: 'cookieStorage'
 })
 
@@ -86,14 +85,12 @@ export default {
         })
     },
     getUser (context) {
-      axiosInstance.defaults.headers.common['Authorization'] = 'Token ' + context.state.token
-      axiosInstance.get('/rest-auth/user')
+      axios.get('/rest-auth/user/')
         .then((response) => {
           context.commit('SET_USERNAME', {userName: userName(response)})
         })
         .catch((error) => {
           console.log(error.request)
-          delete axiosInstance.defaults.headers.common['Authorization']
         })
     }
   }

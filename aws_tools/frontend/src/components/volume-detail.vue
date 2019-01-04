@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import AxiosInstance from '@/api/'
 import Loading from './loading'
 import Error from './error'
 import VolumeDetailSnapshots from './volume-detail-snapshots'
@@ -39,7 +38,7 @@ export default {
     }
   },
   mounted () {
-    AxiosInstance
+    this.axios
       .get(this.volume.url)
       .then(response => {
         this.snapshots = response.data.ebssnapshot_set
