@@ -29,12 +29,12 @@
           <b-tabs
             card
             no-body>
-            <b-tab title="Local">
-              <AccountLoginLocal
-                @login-error="setError"
-                @login-ok="redirect"/> </b-tab>
             <b-tab title="SSO">
               <AccountLoginSSO
+                @login-error="setError"
+                @login-ok="redirect"/> </b-tab>
+            <b-tab title="Local">
+              <AccountLoginLocal
                 @login-error="setError"
                 @login-ok="redirect"/> </b-tab>
           </b-tabs>
@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import AccountLoginLocal from './AccountLoginLocal'
 import AccountLoginSSO from './AccountLoginSSO'
 
@@ -61,11 +60,6 @@ export default {
       showDismissibleAlert: true,
       loginError: null
     }
-  },
-  computed: {
-    ...mapGetters([
-      'isAuthenticated'
-    ])
   },
   methods: {
     countDownChanged (dismissCountDown) {
