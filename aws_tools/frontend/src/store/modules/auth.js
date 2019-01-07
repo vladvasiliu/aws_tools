@@ -15,9 +15,9 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
     oauth2: {
       url: '/azure/',
       name: 'AzureAD',
+      redirectUri: 'http://127.0.0.1:8080/account/login/sso',
       clientId: '9bb654b1-7a7f-4969-8f02-3496e46e4511',
-      authorizationEndpoint: 'https://login.microsoftonline.com/6643a3bd-8975-46e6-a6ce-1b8025b70944/oauth2/authorize',
-      scope: 'openid profile email'
+      authorizationEndpoint: 'https://login.microsoftonline.com/6643a3bd-8975-46e6-a6ce-1b8025b70944/oauth2/authorize'
     }
   }
 })
@@ -33,9 +33,9 @@ export default {
   },
 
   getters: {
-    // isAuthenticated: (state) => state.isAuthenticated,
-    isAuthenticated () { return vueAuth.isAuthenticated() },
-    userName: (state) => state.userName
+    isAuthenticated: () => vueAuth.isAuthenticated(),
+    userName: (state) => state.userName,
+    auth: () => vueAuth
   },
 
   mutations: {

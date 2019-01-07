@@ -21,6 +21,9 @@ import InstanceList from './instance_list.vue'
 import NavBar from './NavBar'
 
 export default {
-  components: { AccountList, InstanceList, NavBar }
+  components: { AccountList, InstanceList, NavBar },
+  mounted () {
+    this.$store.dispatch('getUser')
+  }
 }
 </script>

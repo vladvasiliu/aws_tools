@@ -105,4 +105,4 @@ class InstanceDetail(APIView):
 class AzureLogin(SocialLoginView):
     adapter_class = AzureOAuth2Adapter
     client_class = OAuth2Client
-    callback_url = 'http://127.0.0.1:8080'
+    callback_url = 'http://127.0.0.1:8080/account/login/sso'
