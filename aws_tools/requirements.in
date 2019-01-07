@@ -10,4 +10,5 @@ django-cors-headers
 django-filter
 django-icons
 djangorestframework
+django-rest-auth
 markdown
