@@ -2,11 +2,12 @@ import Vue from 'vue'
 import VueAxios from 'vue-axios'
 import { VueAuthenticate } from 'vue-authenticate'
 import axios from 'axios'
+import router from '@/router/'
 
 Vue.use(VueAxios, axios)
 
 const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
-  baseUrl: 'http://127.0.0.1:8000/api/rest-auth/',
+  baseUrl: process.env.VUE_APP_AXIOS_BASE_URL + '/rest-auth/',
   loginUrl: 'login/',
   tokenName: 'key',
   tokenType: 'Token',
@@ -15,10 +16,10 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
     oauth2: {
       url: '/azure/',
       name: 'AzureAD',
-      redirectUri: 'http://127.0.0.1:8080/account/login/sso',
-      clientId: '9bb654b1-7a7f-4969-8f02-3496e46e4511',
-      authorizationEndpoint:
-        'https://login.microsoftonline.com/6643a3bd-8975-46e6-a6ce-1b8025b70944/oauth2/authorize'
+      redirectUri:
+        window.location.origin + router.options.routes.find(route => route.name === 'AccountLoginSSO').path,
+      clientId: process.env.VUE_APP_SSO_AZUREAD_CLIENTID,
+      authorizationEndpoint: process.env.VUE_APP_SSO_AZUREAD_AUTHORIZATION_ENDPOINT
     }
   }
 })
@@ -35,8 +36,7 @@ export default {
 
   getters: {
     isAuthenticated: () => vueAuth.isAuthenticated(),
-    userName: state => state.userName,
-    auth: () => vueAuth
+    userName: state => state.userName
   },
 
   mutations: {

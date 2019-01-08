@@ -18,7 +18,7 @@ Vue.use(require('vue-moment'))
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/'
+axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASE_URL
 
 // eslint-disable-next-line no-new
 new Vue({
