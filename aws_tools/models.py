@@ -167,6 +167,7 @@ class EBSSnapshot(AWSResource):
 
     class Meta:
         get_latest_by = 'created_at'
+        ordering = ['-created_at']
 
     @classmethod
     def create_snapshot(cls, aws_snapshot, volume):
