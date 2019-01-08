@@ -1,34 +1,35 @@
 <template>
   <b-card header="Instances">
-    <b-list-group
-      flush>
-      <template
-        v-for="instance in instances_for_selected_account">
+    <b-list-group flush>
+      <template v-for="instance in instances_for_selected_account">
         <b-list-group-item
-          v-b-toggle="instance.id"
           :key="instance.id"
+          v-b-toggle="instance.id"
           action
-          class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center instance-name">
+          class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center instance-name"
+        >
           {{ instance.name }}
           <font-awesome-icon
             :icon="collapseIcon"
-            class="instance-name-caret" />
+            class="instance-name-caret"
+          />
         </b-list-group-item>
 
         <b-collapse
           :id="instance.id"
           :key="instance.id + 'detail'"
-          class="w-100 justify-content-left align-self-center mb-2">
+          class="w-100 justify-content-left align-self-center mb-2"
+        >
           <b-list-group-item class="">
             <div class="row">
               <div class="col-auto">
-                <instanceDetail
-                  :instance="instance" />
+                <instanceDetail :instance="instance" />
               </div>
               <div class="col">
                 <volumeList
                   :instance="instance"
-                  class="h-100"/>
+                  class="h-100"
+                />
               </div>
             </div>
           </b-list-group-item>
@@ -56,14 +57,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'instances_for_selected_account'
-    ])
+    ...mapGetters(['instances_for_selected_account'])
   },
   created () {
-    this.$store.dispatch('LOAD_INSTANCE_LIST')
-      .then(() => {
-      })
+    this.$store.dispatch('LOAD_INSTANCE_LIST').then(() => {})
   }
 }
 </script>

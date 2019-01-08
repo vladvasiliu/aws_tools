@@ -1,15 +1,15 @@
 {
   "name": "frontend",
   "version": "1.0.0",
+  "private": true,
   "description": "AWS Tools frontend",
   "author": "Vlad Vasiliu <vladvasiliun@yahoo.fr>",
-  "private": true,
   "scripts": {
-    "start": "npm run dev",
-    "lint": "vue-cli-service lint",
-    "build": "vue-cli-service build",
     "serve": "vue-cli-service serve",
-    "dev": "npm run serve"
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "dev": "npm run serve",
+    "start": "npm run dev"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.12",
@@ -33,10 +33,12 @@
     "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-service": "^3.3.0",
     "@vue/eslint-config-prettier": "^4.0.1",
+    "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "css-loader": "^0.28.11",
     "eslint": "^5.8.0",
     "eslint-config-standard": "^12.0.0",
+    "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
@@ -46,13 +48,13 @@
     "postcss-url": "^8.0.0",
     "vue-template-compiler": "^2.5.21"
   },
-  "engines": {
-    "node": ">= 6.0.0",
-    "npm": ">= 3.0.0"
-  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "engines": {
+    "node": ">= 6.0.0",
+    "npm": ">= 3.0.0"
+  }
 }

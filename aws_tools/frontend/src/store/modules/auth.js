@@ -17,7 +17,8 @@ const vueAuth = new VueAuthenticate(Vue.prototype.$http, {
       name: 'AzureAD',
       redirectUri: 'http://127.0.0.1:8080/account/login/sso',
       clientId: '9bb654b1-7a7f-4969-8f02-3496e46e4511',
-      authorizationEndpoint: 'https://login.microsoftonline.com/6643a3bd-8975-46e6-a6ce-1b8025b70944/oauth2/authorize'
+      authorizationEndpoint:
+        'https://login.microsoftonline.com/6643a3bd-8975-46e6-a6ce-1b8025b70944/oauth2/authorize'
     }
   }
 })
@@ -34,7 +35,7 @@ export default {
 
   getters: {
     isAuthenticated: () => vueAuth.isAuthenticated(),
-    userName: (state) => state.userName,
+    userName: state => state.userName,
     auth: () => vueAuth
   },
 
@@ -50,7 +51,8 @@ export default {
 
   actions: {
     socialLogin: function (context) {
-      return vueAuth.authenticate('oauth2')
+      return vueAuth
+        .authenticate('oauth2')
         .then(function () {
           context.dispatch('getUser')
         })
@@ -61,11 +63,12 @@ export default {
         })
     },
     login (context, payload) {
-      return vueAuth.login(payload.user, payload.requestOptions)
+      return vueAuth
+        .login(payload.user, payload.requestOptions)
         .then(() => {
           context.dispatch('getUser')
         })
-        .catch((error) => {
+        .catch(error => {
           let message = null
           if (error.response) {
             if (error.response.status === 400) {
@@ -80,20 +83,22 @@ export default {
         })
     },
     logout (context, payload) {
-      return vueAuth.logout(payload.requestOptions)
+      return vueAuth
+        .logout(payload.requestOptions)
         .then(() => {
           context.dispatch('getUser')
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error)
         })
     },
     getUser (context) {
-      axios.get('/rest-auth/user/')
-        .then((response) => {
-          context.commit('SET_USERNAME', {userName: userName(response)})
+      axios
+        .get('/rest-auth/user/')
+        .then(response => {
+          context.commit('SET_USERNAME', { userName: userName(response) })
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error.request)
         })
     }

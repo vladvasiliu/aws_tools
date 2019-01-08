@@ -7,15 +7,20 @@ export default {
   },
   actions: {
     LOAD_AWS_ACCOUNT_LIST ({ commit }) {
-      axios.get('/AWSAccounts/').then((response) => {
-        commit('SET_ACCOUNT_LIST', { list: response.data })
-      }, (err) => {
-        console.log(err)
-      })
+      axios.get('/AWSAccounts/').then(
+        response => {
+          commit('SET_ACCOUNT_LIST', { list: response.data })
+        },
+        err => {
+          console.log(err)
+        }
+      )
     }
   },
   mutations: {
-    SET_ACCOUNT_LIST: (state, { list }) => { state.aws_accounts = list },
+    SET_ACCOUNT_LIST: (state, { list }) => {
+      state.aws_accounts = list
+    },
     SET_SELECTED_ACCOUNT: (state, { account }) => {
       state.aws_account_selected = account
     }

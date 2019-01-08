@@ -2,13 +2,16 @@
   <div class="container-fluid mh-100">
     <Error
       v-if="error"
-      v-bind="error"/>
+      v-bind="error"
+    />
     <Loading
       v-else-if="loading"
-      message="Loading snapshots..."/>
+      message="Loading snapshots..."
+    />
     <volume-detail-snapshots
       v-else
-      :snapshots="snapshots"/>
+      :snapshots="snapshots"
+    />
   </div>
 </template>
 
@@ -27,7 +30,9 @@ export default {
   props: {
     volume: {
       type: Object,
-      default () { return {} }
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -67,6 +72,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

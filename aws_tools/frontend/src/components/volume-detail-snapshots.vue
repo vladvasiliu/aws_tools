@@ -3,17 +3,18 @@
     <b-list-group-item
       v-for="snapshot in snapshots"
       :key="snapshot.id"
-      class="d-flex justify-content-between align-items-center snapshot">
+      class="d-flex justify-content-between align-items-center snapshot"
+    >
       {{ snapshot.id }}
-      <span class="small font-weight-light font-italic" >
+      <span class="small font-weight-light font-italic">
         {{ snapshot.created_at | moment("calendar") }}
-        <!--<b-button-->
-        <!--variant="danger"-->
-        <!--class="ml-2 snapshot-delete"-->
-        <!--size="sm"-->
-        <!--@click="deleteSnapshot(snapshot)">-->
-        <!--Delete-->
-        <!--</b-button>-->
+        <!-- <b-button -->
+        <!-- variant="danger" -->
+        <!-- class="ml-2 snapshot-delete" -->
+        <!-- size="sm" -->
+        <!-- @click="deleteSnapshot(snapshot)"> -->
+        <!-- Delete -->
+        <!-- </b-button> -->
       </span>
     </b-list-group-item>
   </b-list-group>
@@ -25,7 +26,9 @@ export default {
   props: {
     snapshots: {
       type: Array,
-      default () { return [] }
+      default () {
+        return []
+      }
     }
   },
   methods: {

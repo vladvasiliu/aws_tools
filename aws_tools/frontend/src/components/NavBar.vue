@@ -2,16 +2,24 @@
   <b-navbar
     type="dark"
     variant="dark"
-    toggleable>
+    toggleable
+  >
     <div class="container">
       <b-navbar-brand>AWS Tools</b-navbar-brand>
       <b-collapse
         id="nav_dropdown_collapse"
-        is-nav>
+        is-nav
+      >
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right>
-            <span slot="button-content"><font-awesome-icon :icon="userIcon" /> {{ userName }}</span>
-            <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+            <span
+              slot="button-content"
+            >
+              <font-awesome-icon :icon="userIcon" /> {{ userName }}
+            </span>
+            <b-dropdown-item @click="logout">
+              Logout
+            </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -32,20 +40,19 @@ export default {
 
   computed: {
     ...mapGetters(['userName', 'isAuthenticated']),
-    userIcon () { return faUser }
+    userIcon () {
+      return faUser
+    }
   },
 
   methods: {
     logout () {
-      this.$store.dispatch('logout', {})
-        .then(() => {
-          location.reload()
-        })
+      this.$store.dispatch('logout', {}).then(() => {
+        location.reload()
+      })
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

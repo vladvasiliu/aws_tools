@@ -4,8 +4,11 @@
       <font-awesome-icon
         :icon="icon"
         spin
-        class="display-4" />
-      <div class="text-secondary font-weight-light font-italic mt-3">{{ message }}</div>
+        class="display-4"
+      />
+      <div class="text-secondary font-weight-light font-italic mt-3">
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
@@ -18,7 +21,9 @@ export default {
   props: {
     message: {
       type: String,
-      default () { return 'Loading...' }
+      default () {
+        return 'Loading...'
+      }
     }
   },
   data () {
@@ -29,6 +34,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -2,7 +2,10 @@
   <div class="list-group list-group-flush justify-content-between">
     <div
       class="list-group-item list-group-item-action"
-      @click="socialLogin"> AzureAD </div>
+      @click="socialLogin"
+    >
+      AzureAD
+    </div>
   </div>
 </template>
 
@@ -11,9 +14,12 @@ export default {
   name: 'AccountLoginSSO',
   methods: {
     socialLogin () {
-      this.$store.dispatch('socialLogin')
-        .then(() => { this.$emit('login-ok') })
-        .catch((error) => {
+      this.$store
+        .dispatch('socialLogin')
+        .then(() => {
+          this.$emit('login-ok')
+        })
+        .catch(error => {
           console.log('Login failed. Reason:\n\t' + error)
           this.$emit('login-error', error.message)
         })
@@ -22,5 +28,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

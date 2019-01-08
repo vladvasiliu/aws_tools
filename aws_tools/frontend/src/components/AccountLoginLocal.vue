@@ -1,21 +1,25 @@
 <template>
   <b-form
     v-if="show"
-    @submit.prevent="login">
+    @submit.prevent="login"
+  >
     <label
       id="usernameGroup"
       for="usernameInput"
-      class="sr-only"/>
+      class="sr-only"
+    />
     <b-form-input
       id="usernameInput"
       v-model="form.username"
       type="text"
       required
-      placeholder="Username"/>
+      placeholder="Username"
+    />
     <label
       id="passwordGroup"
       for="passwordInput"
-      class="sr-only"/>
+      class="sr-only"
+    />
     <b-form-input
       id="passwordInput"
       v-model="form.password"
@@ -23,11 +27,15 @@
       title="password"
       required
       placeholder="Password"
-      class="mt-1"/>
+      class="mt-1"
+    />
     <b-button
       type="submit"
       variant="primary"
-      class="mt-3 w-100">Login</b-button>
+      class="mt-3 w-100"
+    >
+      Login
+    </b-button>
   </b-form>
 </template>
 
@@ -47,14 +55,13 @@ export default {
   methods: {
     login () {
       this.$store
-        .dispatch('login',
-          {user:
-              { username: this.form.username,
-                password: this.form.password}})
+        .dispatch('login', {
+          user: { username: this.form.username, password: this.form.password }
+        })
         .then(() => {
           this.$emit('login-ok')
         })
-        .catch((error) => {
+        .catch(error => {
           console.log('Login failed. Reason:\n\t' + error)
           this.$emit('login-error', error.message)
         })
@@ -63,5 +70,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

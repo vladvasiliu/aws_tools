@@ -1,11 +1,11 @@
 <template>
   <div>
-    <NavBar/>
+    <NavBar />
 
     <div class="container mt-3 mb-3">
       <div class="row">
         <div class="col-3">
-          <account-list/>
+          <account-list />
         </div>
         <div class="col">
           <instance-list />

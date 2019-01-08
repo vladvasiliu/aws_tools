@@ -6,16 +6,19 @@
         :key="volume.id"
         action
         class="d-flex justify-content-between align-items-center"
-        @click="showModal(volume)">
+        @click="showModal(volume);"
+      >
         {{ volume.name }}
         <span
           v-if="volume.latest_snapshot_date"
-          class="small font-weight-light font-italic ml-3" >
-          {{ volume.latest_snapshot_date | moment('calendar') }}
+          class="small font-weight-light font-italic ml-3"
+        >
+          {{ volume.latest_snapshot_date | moment("calendar") }}
         </span>
         <span
           v-else
-          class="small font-weight-light font-italic ml-3" >
+          class="small font-weight-light font-italic ml-3"
+        >
           No snapshots
         </span>
       </b-list-group-item>
@@ -29,11 +32,15 @@
       header-bg-variant="light"
       ok-only
       lazy
-      centered>
-      <template slot="modal-title">{{ modalVolume.name }}</template>
+      centered
+    >
+      <template slot="modal-title">
+        {{ modalVolume.name }}
+      </template>
       <volume-detail
         :volume="modalVolume"
-        :instance="instance" />
+        :instance="instance"
+      />
     </b-modal>
   </b-card>
 </template>
@@ -61,7 +68,9 @@ export default {
       // 'volumes_for_instance'
     ]),
     modalShow: {
-      get () { return !!this.modalVolume },
+      get () {
+        return !!this.modalVolume
+      },
       set (value) {
         if (!value) {
           this.modalVolume = null

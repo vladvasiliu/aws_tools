@@ -3,8 +3,13 @@
     <div class="col text-danger">
       <font-awesome-icon
         :icon="icon"
-        class="display-4" />
-      <div class="font-weight-light font-italic mt-3">{{ message }}</div>
+        class="display-4"
+      />
+      <div
+        class="font-weight-light font-italic mt-3"
+      >
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
