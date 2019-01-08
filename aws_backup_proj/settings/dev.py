@@ -29,3 +29,7 @@ CORS_ORIGIN_WHITELIST = (
 INTERNAL_IPS = (
     '127.0.0.1'
 )
+
+REST_AUTH = {
+    'CALLBACK_URL': 'http://127.0.0.1:8080/account/login/sso'
+}
