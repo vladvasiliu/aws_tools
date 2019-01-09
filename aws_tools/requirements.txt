@@ -6,8 +6,8 @@
 #
 amqp==2.3.2               # via kombu
 billiard==3.5.0.5         # via celery
-boto3==1.9.74
-botocore==1.12.74         # via boto3, s3transfer
+boto3==1.9.75
+botocore==1.12.75         # via boto3, s3transfer
 celery==4.2.1
 certifi==2018.11.29       # via requests
 chardet==3.0.4            # via requests
@@ -33,7 +33,8 @@ jmespath==0.9.3           # via boto3, botocore
 kombu==4.2.2.post1        # via celery
 markdown==3.0.1
 markupsafe==1.1.0         # via jinja2
-oauthlib==2.1.0           # via requests-oauthlib
+oauthlib==3.0.0           # via requests-oauthlib
+pygments==2.3.1
 python-crontab==2.3.6     # via django-celery-beat
 python-dateutil==2.7.5    # via botocore, python-crontab
 python3-openid==3.1.0     # via django-allauth

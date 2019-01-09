@@ -32,8 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'aws_tools.apps.AwsBackupConfig',
-    'bootstrap4',
-    'django_icons',
     'django_celery_beat',
     'rest_framework',
     'corsheaders',

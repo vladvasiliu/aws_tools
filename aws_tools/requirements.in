@@ -3,12 +3,11 @@ celery
 coreapi                 # For Django Rest Framework
 Django
 django-allauth
-django-bootstrap4
 django-celery-beat
 django-choices
 django-cors-headers
 django-filter
-django-icons
 djangorestframework
 django-rest-auth
 markdown
+pygments
