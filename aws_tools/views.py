@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import add_message
+from django.db.models import Max, Prefetch
 from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_auth.registration.views import SocialLoginView
@@ -70,7 +71,9 @@ class AWSAccountViewSet(viewsets.ModelViewSet):
 
 
 class InstanceViewSet(viewsets.ModelViewSet):
-    queryset = Instance.objects.filter(present=True).order_by('_name')
+    queryset = Instance.objects.filter(present=True).order_by('_name').prefetch_related(
+        Prefetch('ebsvolume_set',
+                 queryset=EBSVolume.objects.annotate(latest_snapshot_date=Max('ebssnapshot__created_at'))))
     serializer_class = InstanceSerializer
 
 

@@ -20,10 +20,7 @@ class EBSVolumeBriefSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name', 'latest_snapshot_date', 'id']
 
     def get_latest_snapshot_date(self, obj):
-        try:
-            return obj.ebssnapshot_set.latest().created_at
-        except EBSSnapshot.DoesNotExist:
-            return None
+        return obj.latest_snapshot_date
 
 
 class InstanceSerializer(serializers.HyperlinkedModelSerializer):
