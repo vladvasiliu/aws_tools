@@ -4,23 +4,45 @@
       <b-list-group-item
         v-for="volume in instance.ebsvolume_set"
         :key="volume.id"
-        action
-        class="d-flex justify-content-between align-items-center"
-        @click="showModal(volume);"
+        class="d-flex justify-content-between align-items-center volume"
       >
         {{ volume.name }}
-        <span
-          v-if="volume.latest_snapshot_date"
-          class="small font-weight-light font-italic ml-3"
-        >
-          {{ volume.latest_snapshot_date | moment("calendar") }}
-        </span>
-        <span
-          v-else
-          class="small font-weight-light font-italic ml-3"
-        >
-          No snapshots
-        </span>
+        <div class="small font-weight-light font-italic ml-3 snapshot">
+          <div class="non-hover">
+            <span v-if="volume.latest_snapshot_date">
+              {{ volume.latest_snapshot_date | moment("calendar") }}
+            </span>
+            <span v-else>
+              No snapshots
+            </span>
+          </div>
+          <div class="on-hover">
+            <b-link
+              v-b-tooltip.hover.left
+              title="Create snapshot"
+              class="ml-2 mr-2 text-primary create-snapshot"
+              href="#"
+              @click.prevent="createSnapshot(volume)"
+            >
+              <font-awesome-icon :icon="snapshotIcon" />
+            </b-link>
+            <span
+              v-b-tooltip.hover.right
+              :title="volume.latest_snapshot_date ? 'Show snapshots' : 'No snapshots'"
+              class="ml-2 p-0"
+            >
+              <b-link
+                class="text-info"
+                :class="volume.latest_snapshot_date ? 'text-info' : 'text-muted'"
+                :disabled="!volume.latest_snapshot_date"
+                href="#"
+                @click.prevent="showModal(volume)"
+              >
+                <font-awesome-icon :icon="infoIcon" />
+              </b-link>
+            </span>
+          </div>
+        </div>
       </b-list-group-item>
     </b-list-group>
     <b-modal
@@ -47,6 +69,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { faInfoCircle, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   components: {
@@ -60,7 +83,9 @@ export default {
   },
   data () {
     return {
-      modalVolume: null
+      modalVolume: null,
+      infoIcon: faInfoCircle,
+      snapshotIcon: faDownload
     }
   },
   computed: {
@@ -81,7 +106,34 @@ export default {
   methods: {
     showModal (volume) {
       this.modalVolume = volume
+    },
+    createSnapshot (volume) {
+      this.axios.post(volume.url + 'create_snapshot/')
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
 </script>
+
+<style scoped>
+  .volume:hover .on-hover {
+    display: inline-block;
+  }
+  .volume:hover .non-hover {
+    display: none;
+  }
+  .volume:hover a.disabled {
+    pointer-events: none;
+  }
+  .volume .on-hover {
+    display: none;
+  }
+  .volume .non-hover {
+    display: inline-block;
+  }
+</style>

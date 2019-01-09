@@ -43,7 +43,7 @@ class EBSVolumeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = EBSVolume
-        exclude = ["_name"]
+        exclude = ["_name", "present", "backup"]
 
 
 class EBSSnapshotSerializer(serializers.HyperlinkedModelSerializer):
