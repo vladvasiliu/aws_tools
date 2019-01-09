@@ -6,5 +6,8 @@
 
 <script>
 export default {
+  created () {
+    document.title = 'AWS Tools'
+  }
 }
 </script>
