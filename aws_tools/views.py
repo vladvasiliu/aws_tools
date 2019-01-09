@@ -9,10 +9,6 @@ from django.db.models.functions import Lower
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_auth.registration.views import SocialLoginView
 from rest_framework import viewsets
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer
 from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount
 from .tasks import snapshot_instance as snapshot_instance_task
@@ -85,25 +81,6 @@ class EBSVolumeViewSet(viewsets.ModelViewSet):
 class EBSSnapshotViewSet(viewsets.ModelViewSet):
     queryset = EBSSnapshot.objects.all().order_by('_name')
     serializer_class = EBSSnapshotSerializer
-
-
-class InstanceDetail(APIView):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    template_name = 'aws_tools/instance_detail.html'
-
-    def get(self, request, instance_id):
-        instance = get_object_or_404(Instance, pk=instance_id)
-        serializer = InstanceSerializer(instance, context={'request': request})
-        return Response({'serializer': serializer, 'instance': instance})
-
-    def post(self, request, instance_id):
-        instance = get_object_or_404(Instance, pk=instance_id)
-        serializer = InstanceSerializer(instance, data=request.data, context={'request': request})
-        if not serializer.is_valid():
-            return Response({'serializer': serializer, 'instance': instance})
-        serializer.save()
-        # return Response({'serializer': serializer, 'instance': instance})
-        return Response(data=serializer.data, status=200)
 
 
 class AzureLogin(SocialLoginView):

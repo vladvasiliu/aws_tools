@@ -13,14 +13,11 @@ class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EBSVolumeBriefSerializer(serializers.HyperlinkedModelSerializer):
-    latest_snapshot_date = serializers.SerializerMethodField()
+    latest_snapshot_date = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = EBSVolume
         fields = ['url', 'name', 'latest_snapshot_date', 'id']
-
-    def get_latest_snapshot_date(self, obj):
-        return obj.latest_snapshot_date
 
 
 class InstanceSerializer(serializers.HyperlinkedModelSerializer):
