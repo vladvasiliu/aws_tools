@@ -32,7 +32,7 @@ class EBSVolumeViewSet(viewsets.ModelViewSet):
         volume = self.get_object()
         user = request.user.username
         snapshot_name = "%s - %s" % (volume.name, user)
-        # volume.snapshot(snapshot_name=snapshot_name)
+        volume.snapshot(snapshot_name=snapshot_name)
         return Response({'snapshot': snapshot_name}, status=status.HTTP_200_OK)
 
 
