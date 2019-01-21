@@ -39,7 +39,8 @@ class AWSResource(AWSBaseModel):
     region_name = models.CharField(max_length=25,
                                    choices=AWSRegionChoice.choices,
                                    editable=False)
-    resource_kind = ''
+    resource_class = ''  # ec2, vpc, etc
+    resource_kind = ''   # instance, ebsvolume, etc
     id_filter = ''
 
     class Meta:
@@ -52,7 +53,7 @@ class AWSResource(AWSBaseModel):
 
     # Returns de corresponding AWS instance for this Python instance
     def _aws_resource(self):
-        ec2 = aws_resource('ec2', region_name=self.region_name, role_arn=self.aws_account.role_arn)
+        ec2 = aws_resource(self.resource_class, region_name=self.region_name, role_arn=self.aws_account.role_arn)
 
         try:
             resource = list(getattr(ec2, self.resource_kind).filter(Filters=[{'Name': self.id_filter,
@@ -65,7 +66,18 @@ class AWSResource(AWSBaseModel):
             return resource
 
 
-class Instance(AWSResource):
+class AWSOrganization(AWSResource):
+    pass
+
+
+class AWSEC2Resource(AWSResource):
+    resource_class = 'ec2'
+
+    class Meta:
+        abstract = True
+
+
+class Instance(AWSEC2Resource):
     resource_kind = "instances"
     id_filter = 'instance-id'
     backup_time = models.TimeField(default="03:00:00")
@@ -122,7 +134,7 @@ class Instance(AWSResource):
             logger.info("Starting snapshot of %s / %s" % (self.name, volume.name))
 
 
-class EBSVolume(AWSResource):
+class EBSVolume(AWSEC2Resource):
     instance = models.ForeignKey(Instance, blank=True, null=True, editable=False, on_delete=models.CASCADE)
     id_filter = 'volume-id'
     backup = models.BooleanField(default=False, editable=True)
@@ -157,7 +169,7 @@ class EBSVolume(AWSResource):
             EBSSnapshot.create_snapshot(snapshot, self)
 
 
-class EBSSnapshot(AWSResource):
+class EBSSnapshot(AWSEC2Resource):
     state = models.CharField(max_length=20)
     ebs_volume = models.ForeignKey(EBSVolume, blank=True, null=True, editable=False, on_delete=models.CASCADE)
     created_at = models.DateTimeField()
@@ -197,7 +209,7 @@ def delete_snapshot_on_aws(**kwargs):
             pass
 
 
-class SecurityGroup(AWSResource):
+class SecurityGroup(AWSEC2Resource):
     resource_kind = 'security_groups'
     id_filter = 'group-id'
     is_managed = models.BooleanField(default=False)
