@@ -12,7 +12,7 @@ from hashlib import md5
 from django.core.cache import cache
 from django.db.models import ObjectDoesNotExist, Max
 
-from .models import AWSAccount, Instance, EBSVolume
+from .models import AWSAccount, Instance, EBSVolume, AWSOrganization
 
 logger = get_task_logger(__name__)
 
@@ -33,9 +33,17 @@ def cache_lock(lock_id, oid):
 
 @shared_task
 def get_busy():
+    update_organizations()
     snapshot_volumes()
     update_instances()
     clean_snapshots()
+
+
+@shared_task
+def update_organizations():
+    for org in AWSOrganization.objects.all():
+        logger.info("Updating accounts for Org # %s (%s)." % (org.id, org.name))
+        org.update_accounts()
 
 
 @shared_task
