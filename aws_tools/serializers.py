@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot
+from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization
 
 
 class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
@@ -52,3 +52,8 @@ class EBSSnapshotSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = EBSSnapshot
         fields = '__all__'
+
+
+class AWSOrganizationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = AWSOrganization

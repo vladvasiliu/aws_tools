@@ -3,10 +3,11 @@ from rest_framework import routers
 from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
 
-from .views import AWSAccountViewSet, InstanceViewSet, EBSVolumeViewSet, EBSSnapshotViewSet, AzureLogin
+from .views import AWSOrganizationViewSet, AWSAccountViewSet, InstanceViewSet, EBSVolumeViewSet, EBSSnapshotViewSet, AzureLogin
 
 router = routers.DefaultRouter()
 router.register(r'AWSAccounts', AWSAccountViewSet)
+router.register(r'AWSOrganizations', AWSOrganizationViewSet)
 router.register(r'Instances', InstanceViewSet)
 router.register(r'Volumes', EBSVolumeViewSet)
 router.register(r'Snapshots', EBSSnapshotViewSet)

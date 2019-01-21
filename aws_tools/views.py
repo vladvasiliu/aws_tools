@@ -7,13 +7,19 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer
-from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount
+from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
+    AWSOrganizationSerializer
+from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization
 
 
 class AWSAccountViewSet(viewsets.ModelViewSet):
     queryset = AWSAccount.objects.all().order_by('_name')
     serializer_class = AWSAccountSerializer
+
+
+class AWSOrganizationViewSet(viewsets.ModelViewSet):
+    queryset = AWSOrganization.objects.all().order_by('_name')
+    serializer_class = AWSOrganizationSerializer
 
 
 class InstanceViewSet(viewsets.ModelViewSet):
