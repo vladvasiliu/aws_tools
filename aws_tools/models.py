@@ -6,7 +6,7 @@ from django.dispatch import receiver
 import logging
 
 from .exceptions import ResourceNotFoundException
-from .helpers import resource_name, aws_resource, is_managed
+from .helpers import resource_name, aws_resource, is_managed, aws_client
 from .constants import AWSRegionChoice, IPProtocol, AWSSecurityGroupRuleType
 from .managers import EBSVolumeManager
 
@@ -31,7 +31,12 @@ class AWSBaseModel(models.Model):
 
 
 class AWSAccount(AWSBaseModel):
-    role_arn = models.CharField(max_length=100)
+    _role_arn = models.CharField(max_length=100)
+    organization = models.ForeignKey('AWSOrganization', blank=True, null=True, editable=False, on_delete=models.CASCADE)
+
+    @property
+    def role_arn(self):
+        return self._role_arn or 'arn:aws:iam::%s:role/aws-tools' % self.id
 
 
 class AWSResource(AWSBaseModel):
@@ -40,7 +45,7 @@ class AWSResource(AWSBaseModel):
                                    choices=AWSRegionChoice.choices,
                                    editable=False)
     resource_class = ''  # ec2, vpc, etc
-    resource_kind = ''   # instance, ebsvolume, etc
+    resource_kind = ''  # instance, ebsvolume, etc
     id_filter = ''
 
     class Meta:
@@ -66,8 +71,44 @@ class AWSResource(AWSBaseModel):
             return resource
 
 
-class AWSOrganization(AWSResource):
-    pass
+class AWSClient(AWSBaseModel):
+    aws_account = models.ForeignKey(AWSAccount, editable=False, on_delete=models.CASCADE)
+    client_class = ''
+
+    class Meta:
+        abstract = True
+
+    @property
+    def aws_client(self):
+        return aws_client(self.client_class, role_arn=self.aws_account.role_arn)
+
+
+class AWSOrganization(AWSClient):
+    client_class = 'organizations'
+
+    def update_accounts(self):
+        client = self.aws_client
+        next_token = None
+
+        while True:
+            if next_token:
+                response = client.list_accounts(NextToken=next_token)
+            else:
+                response = client.list_accounts()
+
+            next_token = response.get('NextToken')
+
+            for account in response['Accounts']:
+                account, created = AWSAccount.objects.update_or_create(defaults={'organization': self,
+                                                                                 '_name': account.get('Name') or
+                                                                                          account.get('Id')},
+                                                                       id=account.get('Id'))
+                logger.info("Created account id %s (%s)." % (account.id, account.name)
+                            if created else
+                            "Account id %s (%s) already present." % (account.id, account.name))
+
+            if not next_token:
+                break
 
 
 class AWSEC2Resource(AWSResource):
