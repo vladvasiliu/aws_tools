@@ -1,4 +1,4 @@
-import axios_instance from '../../api/index'
+import axiosInstance from '../../api/index'
 
 const state = {
   aws_accounts: [],
@@ -6,7 +6,7 @@ const state = {
 }
 const actions = {
   LOAD_AWS_ACCOUNT_LIST: function ({ commit }) {
-    axios_instance.get('/AWSAccounts/').then((response) => {
+    axiosInstance.get('/AWSAccounts/').then((response) => {
       commit('SET_ACCOUNT_LIST', { list: response.data })
     }, (err) => {
       console.log(err)

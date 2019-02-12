@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
-import volume_list from './volume_list.vue'
-import instance_detail from './instance_detail.vue'
+import volumeList from './volume_list.vue'
+import instanceDetail from './instance_detail.vue'
 
 export default {
   computed: {
@@ -35,7 +35,7 @@ export default {
     this.$store.dispatch('LOAD_INSTANCE_LIST')
   },
   components: {
-    volume_list, instance_detail
+    volume_list: volumeList, instance_detail: instanceDetail
   }
 }
 </script>

@@ -1,12 +1,12 @@
-import axios_instance from '../../api/index'
+import axiosInstance from '../../api/index'
 
 const state = {
   volumes: []
 }
 const actions = {
   GET_ALL_VOLUMES: function ({ commit }) {
-    axios_instance.get('/Volumes/').then((response) => {
-      commit('UPDATE_VOLUME_LIST', { new_volume_list: response.data })
+    axiosInstance.get('/Volumes/').then((response) => {
+      commit('UPDATE_VOLUME_LIST', { newVolumeList: response.data })
     }, (err) => {
       console.log(err)
     })
@@ -14,8 +14,8 @@ const actions = {
 }
 
 const mutations = {
-  UPDATE_VOLUME_LIST: (state, { new_volume_list }) => {
-    state.volumes = new_volume_list
+  UPDATE_VOLUME_LIST: (state, { new_volume_list: newVolumeList }) => {
+    state.volumes = newVolumeList
   }
 }
 
