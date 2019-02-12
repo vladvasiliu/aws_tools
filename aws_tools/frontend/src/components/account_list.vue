@@ -8,29 +8,29 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-    export default {
+export default {
 //        computed: {
 //            accounts_list: function () { return this.$store.state.aws_accounts },
 //        },
-        computed: {
-            ...mapGetters([
-                'aws_accounts',
-                'aws_account_selected'
-            ]),
-        },
-        created () {
-            this.$store.dispatch('LOAD_AWS_ACCOUNT_LIST');
-        },
-        methods: {
-            select: function(account) {
-                if (account) {
-                    this.$store.commit('SET_SELECTED_ACCOUNT', {account: account})
-                } else {
-                    this.$store.commit('SET_SELECTED_ACCOUNT', {account: null})
-                }
-            }
-        }
+  computed: {
+    ...mapGetters([
+      'aws_accounts',
+      'aws_account_selected'
+    ])
+  },
+  created () {
+    this.$store.dispatch('LOAD_AWS_ACCOUNT_LIST')
+  },
+  methods: {
+    select: function (account) {
+      if (account) {
+        this.$store.commit('SET_SELECTED_ACCOUNT', { account: account })
+      } else {
+        this.$store.commit('SET_SELECTED_ACCOUNT', { account: null })
+      }
     }
+  }
+}
 </script>

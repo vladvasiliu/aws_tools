@@ -7,19 +7,19 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-    export default {
-        props: ['instance'],
+export default {
+  props: ['instance'],
 
-        computed: {
-            ...mapGetters([
-                'volumes_for_instance',
-            ]),
-        },
+  computed: {
+    ...mapGetters([
+      'volumes_for_instance'
+    ])
+  },
 
-        mounted () {
-            this.$store.dispatch('GET_ALL_VOLUMES');
-        },
-    };
+  mounted () {
+    this.$store.dispatch('GET_ALL_VOLUMES')
+  }
+}
 </script>

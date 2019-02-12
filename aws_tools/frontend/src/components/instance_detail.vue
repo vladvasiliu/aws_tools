@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    export default {
-        props: ['instance']
-    }
+export default {
+  props: ['instance']
+}
 </script>

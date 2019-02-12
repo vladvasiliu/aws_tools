@@ -20,22 +20,22 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-    import volume_list from './volume_list.vue'
-    import instance_detail from './instance_detail.vue'
+import volume_list from './volume_list.vue'
+import instance_detail from './instance_detail.vue'
 
-    export default {
-        computed: {
-            ...mapGetters([
-                'instances_for_selected_account',
-            ]),
-        },
-        created () {
-            this.$store.dispatch('LOAD_INSTANCE_LIST')
-        },
-        components: {
-            volume_list, instance_detail
-        }
-    }
+export default {
+  computed: {
+    ...mapGetters([
+      'instances_for_selected_account'
+    ])
+  },
+  created () {
+    this.$store.dispatch('LOAD_INSTANCE_LIST')
+  },
+  components: {
+    volume_list, instance_detail
+  }
+}
 </script>

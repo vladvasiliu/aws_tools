@@ -14,7 +14,7 @@
                     <account-list></account-list>
                 </div>
                 <div class="col">
-                    <instance-list></instance-list>                    
+                    <instance-list></instance-list>
                 </div>
             </div>
         </div>
@@ -22,11 +22,10 @@
 </template>
 
 <script>
-    import AccountList from './account_list.vue'
-    import InstanceList from './instance_list.vue'
+import AccountList from './account_list.vue'
+import InstanceList from './instance_list.vue'
 
-    export default {
-        components: {
-            AccountList, InstanceList }
-    }
+export default {
+  components: { AccountList, InstanceList }
+}
 </script>
