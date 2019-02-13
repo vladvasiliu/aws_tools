@@ -5,8 +5,7 @@
                                v-for="instance in instances_for_selected_account"
                                :key="instance.id"
                                v-b-toggle="instance.id"
-                               class="flex-column align-items-start"
-                               @click.self>
+                               class="flex-column align-items-start">
                 {{ instance._name }}
                 <b-collapse :id="instance.id" class="w-100 align-self-center">
                     <div class="d-flex m-3 justify-content-left" @click.stop>

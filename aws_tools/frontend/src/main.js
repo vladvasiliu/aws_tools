@@ -8,6 +8,7 @@ import store from './store'
 
 Vue.use(BootstrapVue)
 
+// eslint-disable-next-line
 new Vue({
   el: '#app',
   store,
