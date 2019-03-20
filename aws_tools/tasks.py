@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now, timedelta
 
+from botocore.exceptions import ClientError
 from celery import shared_task, task
 from celery.five import monotonic
 from celery.utils.log import get_task_logger
@@ -43,7 +44,10 @@ def get_busy():
 def update_organizations():
     for org in AWSOrganization.objects.all():
         logger.info("Updating accounts for Org # %s (%s)." % (org.id, org.name))
-        org.update_accounts()
+        try:
+            org.update_accounts()
+        except ClientError as e:
+            logger.error("Failed to update accounts for Org # %s (%s) : %s" % (org.id, org.name, e))
 
 
 @shared_task
@@ -64,7 +68,12 @@ def update_instances_for_account(self, aws_account_id):
                 logger.error("No AWS Account with id '%s' found.", aws_account_id)
             else:
                 logger.info("Updating instances for account %s (%s)" % (aws_account, aws_account_id))
-                Instance.update(aws_account)
+                try:
+                    Instance.update(aws_account)
+                except ClientError as e:
+                    logger.error("Failed to update instances for account %s (%s) : %s" % (aws_account,
+                                                                                          aws_account_id,
+                                                                                          e))
         else:
             logger.info("Instances for account %s are already being updated." % aws_account_id)
 
