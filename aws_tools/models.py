@@ -103,9 +103,10 @@ class AWSOrganization(AWSClient):
                                                                                  '_name': account.get('Name') or
                                                                                           account.get('Id')},
                                                                        id=account.get('Id'))
-                logger.info("Created account id %s (%s)." % (account.id, account.name)
-                            if created else
-                            "Account id %s (%s) already present." % (account.id, account.name))
+                if created:
+                    logger.info("Created account id %s (%s)." % (account.id, account.name))
+                else:
+                    logger.info("Account id %s (%s) already present." % (account.id, account.name))
 
             if not next_token:
                 break
