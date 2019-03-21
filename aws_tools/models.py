@@ -139,7 +139,8 @@ class Instance(AWSEC2Resource):
 
     @classmethod
     def update(cls, aws_account):
-        region_names = AWSRegionChoice.values.keys()
+        regions = aws_account.regions.all() or AWSRegion.objects.all()
+        region_names = [region.name for region in regions]
         updated_instances = []
         for region_name in region_names:
             ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
