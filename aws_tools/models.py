@@ -1,6 +1,7 @@
 from botocore.exceptions import ClientError
 from django.core.validators import MinValueValidator, MaxValueValidator, MaxLengthValidator, MinLengthValidator
 from django.db import models
+from django.db.models import ObjectDoesNotExist
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import logging
@@ -144,15 +145,10 @@ class Instance(AWSEC2Resource):
                 if aws_instance.state['Name'] == 'terminated':
                     defaults['present'] = False
                 instance, _ = Instance.objects.update_or_create(id=aws_instance.id, defaults=defaults)
-                instance.update_volumes()
+                # instance.update_volumes()
                 updated_instances.append(instance)
         cls._prune_resources(updated_instances, aws_account.id)
-
-    def update_volumes(self):
-        aws_instance = self._aws_resource()
-
-        for aws_volume in aws_instance.volumes.all():
-            EBSVolume.create_volume(aws_volume, self)
+        return updated_instances
 
     def start(self, wait_for_it=False):
         instance = self._aws_resource()
@@ -185,13 +181,26 @@ class EBSVolume(AWSEC2Resource):
     objects = EBSVolumeManager()
 
     @classmethod
-    def create_volume(cls, aws_volume, instance):
-        ebs_volume, _ = EBSVolume.objects.update_or_create(id=aws_volume.id,
-                                                           defaults={'_name': resource_name(aws_volume),
-                                                                     'instance': instance,
-                                                                     'region_name': instance.region_name,
-                                                                     'aws_account': instance.aws_account})
-        ebs_volume.update_snapshots()
+    def update_from_aws(cls, aws_account):
+        region_names = AWSRegionChoice.values.keys()
+        for region_name in region_names:
+            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+
+            for aws_volume in ec2.volumes.all():
+                instance = None
+                if aws_volume.attachments:
+                    attachment = aws_volume.attachments[0]
+                    if attachment['State'] in ('attached', 'attaching'):
+                        try:
+                            instance = Instance.objects.get(id=attachment['InstanceId'])
+                        except ObjectDoesNotExist:
+                            instance = None
+                ebs_volume, _ = EBSVolume.objects.update_or_create(id=aws_volume.id,
+                                                                   defaults={'_name': resource_name(aws_volume),
+                                                                             'instance': instance,
+                                                                             'region_name': region_name,
+                                                                             'aws_account': aws_account})
+                ebs_volume.update_snapshots()
 
     def update_snapshots(self):
         aws_volume = self._aws_resource()

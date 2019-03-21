@@ -69,13 +69,38 @@ def update_instances_for_account(self, aws_account_id):
             else:
                 logger.info("Updating instances for account %s (%s)" % (aws_account, aws_account_id))
                 try:
-                    Instance.update(aws_account)
+                    updated_instances = Instance.update(aws_account)
                 except ClientError as e:
                     logger.error("Failed to update instances for account %s (%s) : %s" % (aws_account,
                                                                                           aws_account_id,
                                                                                           e))
+                else:
+                    if updated_instances:
+                        update_volumes_for_account(aws_account_id)
         else:
             logger.info("Instances for account %s are already being updated." % aws_account_id)
+
+
+@shared_task(bind=True)
+def update_volumes_for_account(self, aws_account_id):
+    account_hexdigest = md5(aws_account_id.encode()).hexdigest()
+    lock_id = '{0}-lock-{1}'.format(self.name, account_hexdigest)
+    with cache_lock(lock_id, self.app.oid) as acquired:
+        if acquired:
+            try:
+                aws_account = AWSAccount.objects.get(id=aws_account_id)
+            except ObjectDoesNotExist:
+                logger.error("No AWS Account with id '%s' found.", aws_account_id)
+            else:
+                logger.info("Updating volumes for account %s (%s)" % (aws_account, aws_account_id))
+                try:
+                    EBSVolume.update_from_aws(aws_account)
+                except ClientError as e:
+                    logger.error("Failed to update volumes for account %s (%s) : %s" % (aws_account,
+                                                                                        aws_account_id,
+                                                                                        e))
+        else:
+            logger.info("Volumes for account %s are already being updated." % aws_account_id)
 
 
 @shared_task(bind=True)
