@@ -14,6 +14,13 @@ from .managers import EBSVolumeManager
 logger = logging.getLogger(__name__)
 
 
+class AWSRegion(models.Model):
+    name = models.CharField(max_length=25, choices=AWSRegionChoice.choices, unique=True)
+
+    def __str__(self):
+        return "%s - %s" % (self.get_name_display(), self.name)
+
+
 class AWSBaseModel(models.Model):
     class Meta:
         abstract = True
@@ -34,6 +41,7 @@ class AWSBaseModel(models.Model):
 class AWSAccount(AWSBaseModel):
     _role_arn = models.CharField(max_length=100)
     organization = models.ForeignKey('AWSOrganization', blank=True, null=True, editable=False, on_delete=models.CASCADE)
+    regions = models.ManyToManyField(to=AWSRegion)
 
     @property
     def role_arn(self):
