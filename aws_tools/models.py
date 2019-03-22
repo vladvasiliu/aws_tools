@@ -210,13 +210,6 @@ class EBSVolume(AWSEC2Resource):
                                                                              'instance': instance,
                                                                              'region_name': region_name,
                                                                              'aws_account': aws_account})
-                ebs_volume.update_snapshots()
-
-    def update_snapshots(self):
-        aws_volume = self._aws_resource()
-
-        for aws_snapshot in aws_volume.snapshots.all():
-            EBSSnapshot.create_snapshot(aws_snapshot, self)
 
     def snapshot(self, snapshot_name=None):
         snapshot_name = snapshot_name or '%s - auto' % self.name
@@ -241,6 +234,28 @@ class EBSSnapshot(AWSEC2Resource):
     class Meta:
         get_latest_by = 'created_at'
         ordering = ['-created_at']
+
+    @classmethod
+    def update_from_aws(cls, aws_account):
+        regions = aws_account.regions.all() or AWSRegion.objects.all()
+        region_names = [region.name for region in regions]
+        for region_name in region_names:
+            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+
+            for aws_snapshot in ec2.snapshots.filter(OwnerIds=[aws_account.id]):
+                volume = None
+                if aws_snapshot.volume_id:
+                    try:
+                        volume = EBSVolume.objects.get(id=aws_snapshot.volume_id)
+                    except EBSVolume.DoesNotExist:
+                        pass
+                defaults = {'_name': resource_name(aws_snapshot) or aws_snapshot.description,
+                            'ebs_volume': volume,
+                            'state': aws_snapshot.state,
+                            'created_at': aws_snapshot.start_time,
+                            'region_name': region_name,
+                            'aws_account': aws_account}
+                aws_snapshot, _ = EBSSnapshot.objects.update_or_create(id=aws_snapshot.id, defaults=defaults)
 
     @classmethod
     def create_snapshot(cls, aws_snapshot, volume):
