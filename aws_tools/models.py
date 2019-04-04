@@ -149,7 +149,8 @@ class Instance(AWSEC2Resource):
                 defaults = {
                     'aws_account': aws_account,
                     'region_name': region_name,
-                    '_name': resource_name(aws_instance)
+                    '_name': resource_name(aws_instance),
+                    'present': True
                 }
                 if aws_instance.state['Name'] == 'terminated':
                     defaults['present'] = False
