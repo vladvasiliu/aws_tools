@@ -19,6 +19,7 @@ django-celery-beat==1.4.0
 django-choices==1.6.2
 django-cors-headers==2.5.2
 django-filter==2.1.0
+django-netfields==0.10.0
 django-rest-auth==0.9.5
 django-timezone-field==3.0  # via django-celery-beat
 django==2.2
@@ -31,6 +32,7 @@ jmespath==0.9.4           # via boto3, botocore
 kombu==4.5.0              # via celery
 markdown==3.1
 markupsafe==1.1.1         # via jinja2
+netaddr==0.7.19           # via django-netfields
 oauthlib==3.0.1           # via requests-oauthlib
 pygments==2.3.1
 python-crontab==2.3.6     # via django-celery-beat

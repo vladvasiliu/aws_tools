@@ -5,6 +5,7 @@ from django.db.models import ObjectDoesNotExist
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 import logging
+from netfields import CidrAddressField, NetManager
 
 from .exceptions import ResourceNotFoundException
 from .helpers import resource_name, aws_resource, is_managed, aws_client
@@ -313,9 +314,6 @@ class SecurityGroup(AWSEC2Resource):
                 updated_groups.append(security_group)
         cls._prune_resources(updated_groups, aws_account.id)
 
-    # @staticmethod
-    # def _update_rules_from_aws_group(security_group, aws_security_group):
-
 
 class SecurityGroupRule(models.Model):
     security_group = models.ForeignKey(SecurityGroup, on_delete=models.CASCADE, related_name='rule')
@@ -327,12 +325,17 @@ class SecurityGroupRule(models.Model):
 
 class SecurityGroupRuleIPRange(models.Model):
     security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='ip_range')
-    cidr = models.GenericIPAddressField()
+    cidr = CidrAddressField()
     description = models.CharField(max_length=100, blank=True)
+
+    objects = NetManager()
 
 
 class SecurityGroupRuleUserGroupPair(models.Model):
     security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='user_group_pair')
     user_id = models.IntegerField(validators=[MaxLengthValidator(12), MinLengthValidator(12)])
     group_id = models.CharField(max_length=25)
+    vpc_id = models.CharField(max_length=25, blank=True)
+    vpc_peering_connection_id = models.CharField(max_length=25, blank=True)
+    peering_status = models.CharField(max_length=25, blank=True)
     description = models.CharField(max_length=100, blank=True)
