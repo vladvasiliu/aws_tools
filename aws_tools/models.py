@@ -319,11 +319,17 @@ class SecurityGroup(AWSEC2Resource):
     def update_rules(self):
         aws_sg = self._aws_resource()
         for rule in aws_sg.ip_permissions:
-            SecurityGroupRule.objects.create(security_group=self,
-                                             from_port=rule.setdefault('FromPort', -1),
-                                             to_port=rule.setdefault('ToPort', -1),
-                                             ip_protocol=rule['IpProtocol'],
-                                             type=AWSSecurityGroupRuleType.INGRESS)
+            sg_rule, _ = SecurityGroupRule.objects.update_or_create(security_group=self,
+                                                                    from_port=rule.setdefault('FromPort', -1),
+                                                                    to_port=rule.setdefault('ToPort', -1),
+                                                                    ip_protocol=rule['IpProtocol'],
+                                                                    type=AWSSecurityGroupRuleType.INGRESS)
+            for ip_range in rule['IpRanges']:
+                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIp'])
+                sg_ip_range.security_group_rule.add(sg_rule)
+            for ip_range in rule['Ipv6Ranges']:
+                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIpv6'])
+                sg_ip_range.security_group_rule.add(sg_rule)
 
 
 class SecurityGroupRule(models.Model):
@@ -332,6 +338,9 @@ class SecurityGroupRule(models.Model):
     to_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
     ip_protocol = models.CharField(max_length=10, choices=IPProtocol.choices)
     type = models.IntegerField(choices=AWSSecurityGroupRuleType.choices)
+
+    class Meta:
+        unique_together = [('security_group', 'from_port', 'to_port', 'ip_protocol', 'type')]
 
     def __str__(self):
         direction = "in" if self.type == AWSSecurityGroupRuleType.INGRESS else "out"
@@ -354,6 +363,9 @@ class SecurityGroupRuleIPRange(models.Model):
     extended_description = models.CharField(max_length=100, blank=True)
 
     objects = NetManager()
+
+    def __str__(self):
+        return self.cidr.compressed
 
 
 class SecurityGroupRuleUserGroupPair(models.Model):
