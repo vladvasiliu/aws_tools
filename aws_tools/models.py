@@ -291,10 +291,10 @@ class SecurityGroup(AWSEC2Resource):
     resource_kind = 'security_groups'
     id_filter = 'group-id'
     is_managed = models.BooleanField(default=False)
-    description = models.CharField(max_length=50, editable=False)
+    description = models.CharField(max_length=100, editable=False)
 
     @classmethod
-    def update(cls, aws_account):
+    def update(cls, aws_account: AWSAccount):
         regions = aws_account.regions.all() or AWSRegion.objects.all()
         region_names = [region.name for region in regions]
         updated_groups = []
@@ -308,25 +308,50 @@ class SecurityGroup(AWSEC2Resource):
                     '_name': aws_sg.group_name,
                     'description': aws_sg.description,
                     'is_managed': is_managed(aws_sg),
+                    'present': True
                 }
                 security_group, _ = SecurityGroup.objects.update_or_create(id=aws_sg.id, defaults=defaults)
 
                 updated_groups.append(security_group)
         cls._prune_resources(updated_groups, aws_account.id)
+        return updated_groups
+
+    def update_rules(self):
+        aws_sg = self._aws_resource()
+        for rule in aws_sg.ip_permissions:
+            SecurityGroupRule.objects.create(security_group=self,
+                                             from_port=rule.setdefault('FromPort', -1),
+                                             to_port=rule.setdefault('ToPort', -1),
+                                             ip_protocol=rule['IpProtocol'],
+                                             type=AWSSecurityGroupRuleType.INGRESS)
 
 
 class SecurityGroupRule(models.Model):
     security_group = models.ForeignKey(SecurityGroup, on_delete=models.CASCADE, related_name='rule')
     from_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
     to_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
-    ip_protocol = models.IntegerField(choices=IPProtocol.choices)
+    ip_protocol = models.CharField(max_length=10, choices=IPProtocol.choices)
     type = models.IntegerField(choices=AWSSecurityGroupRuleType.choices)
+
+    def __str__(self):
+        direction = "in" if self.type == AWSSecurityGroupRuleType.INGRESS else "out"
+        result = "%s - %s" % (direction, self.get_ip_protocol_display())
+        if self.ip_protocol != IPProtocol.ALL:
+            if self.from_port == -1:
+                result += " all"
+            else:
+                result += " %s" % self.from_port
+                if self.to_port != self.from_port:
+                    result += "-%s" % self.to_port
+
+        return result
 
 
 class SecurityGroupRuleIPRange(models.Model):
     security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='ip_range')
-    cidr = CidrAddressField()
+    cidr = CidrAddressField(unique=True)
     description = models.CharField(max_length=100, blank=True)
+    extended_description = models.CharField(max_length=100, blank=True)
 
     objects = NetManager()
 
@@ -339,3 +364,6 @@ class SecurityGroupRuleUserGroupPair(models.Model):
     vpc_peering_connection_id = models.CharField(max_length=25, blank=True)
     peering_status = models.CharField(max_length=25, blank=True)
     description = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        unique_together = [('user_id', 'group_id')]

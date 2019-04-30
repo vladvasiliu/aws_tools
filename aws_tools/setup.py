@@ -16,7 +16,6 @@ setup(
         'celery',
         'django-celery-beat',
         'boto3',
-        'django-bootstrap4',
         'django-cors-headers',
         'djangorestframework',
         'coreapi',
