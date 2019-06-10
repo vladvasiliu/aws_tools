@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.azure',
     'rest_framework.authtoken',
     'rest_auth',
+    'netfields',
 ]
 
 MIDDLEWARE = [
