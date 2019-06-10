@@ -21,7 +21,7 @@ django-cors-headers==2.5.2
 django-filter==2.1.0
 django-rest-auth==0.9.3
 django-timezone-field==3.0  # via django-celery-beat
-django==2.1.7
+django==2.1.9
 djangorestframework==3.9.2
 docutils==0.14            # via botocore
 idna==2.8                 # via requests
