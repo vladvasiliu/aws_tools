@@ -22,7 +22,7 @@ django-filter==2.1.0
 django-netfields==1.0.1
 django-rest-auth==0.9.5
 django-timezone-field==3.0  # via django-celery-beat
-django==2.2.3
+django==2.2.4
 djangorestframework==3.9.4
 docutils==0.14            # via botocore
 idna==2.8                 # via requests
