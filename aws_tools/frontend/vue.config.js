@@ -16,6 +16,10 @@ module.exports = {
       '/static/rest_framework': {
         target: 'http://localhost:8000',
         changeOrigin: true
+      },
+      '/oidc': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
       }
     }
   }
