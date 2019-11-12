@@ -16,11 +16,13 @@ setup(
         'celery',
         'django-celery-beat',
         'boto3',
+        'botocore',
         'django-cors-headers',
         'djangorestframework',
         'coreapi',
         'markdown',
         'django-filter',
+        'django-netfields',
     ],
     tests_require=['moto']
 )
