@@ -1,14 +1,9 @@
 boto3
 celery
-coreapi                 # For Django Rest Framework
 Django
-django-allauth
 django-celery-beat
 django-choices
-django-cors-headers
 django-netfields
 django-filter
 djangorestframework
-django-rest-auth
-markdown
-pygments
+mozilla-django-oidc

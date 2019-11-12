@@ -35,13 +35,9 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'rest_framework',
     'corsheaders',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.azure',
-    'rest_framework.authtoken',
     'rest_auth',
     'netfields',
+    'mozilla_django_oidc',
 ]
 
 MIDDLEWARE = [
@@ -96,7 +92,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
 )
 
 # Internationalization

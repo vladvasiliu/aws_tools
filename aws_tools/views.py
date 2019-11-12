@@ -1,8 +1,5 @@
-from allauth.socialaccount.providers.azure.views import AzureOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from django.conf import settings
 from django.db.models import Max, Prefetch
-from rest_auth.registration.views import SocialLoginView
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -45,9 +42,3 @@ class EBSVolumeViewSet(viewsets.ModelViewSet):
 class EBSSnapshotViewSet(viewsets.ModelViewSet):
     queryset = EBSSnapshot.objects.all().order_by('_name')
     serializer_class = EBSSnapshotSerializer
-
-
-class AzureLogin(SocialLoginView):
-    adapter_class = AzureOAuth2Adapter
-    client_class = OAuth2Client
-    callback_url = settings.REST_AUTH['CALLBACK_URL']
