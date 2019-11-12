@@ -23,7 +23,7 @@ import NavBar from './NavBar'
 export default {
   components: { AccountList, InstanceList, NavBar },
   mounted () {
-    this.$store.dispatch('getUser')
+    // this.$store.dispatch('getUser')
   }
 }
 </script>

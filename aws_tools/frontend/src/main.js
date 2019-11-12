@@ -18,7 +18,7 @@ Vue.use(require('vue-moment'))
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-axios.defaults.baseURL = window.location.origin
+axios.defaults.baseURL = window.location.origin + '/api'
 
 // eslint-disable-next-line no-new
 new Vue({

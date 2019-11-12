@@ -1,10 +1,13 @@
 <template>
   <b-card header="Accounts">
-    <b-list-group flush>
+    <b-list-group
+      v-if="Array.isArray(aws_accounts) && aws_accounts.length > 0"
+      flush
+    >
       <b-list-group-item
         :active="!aws_account_selected"
         action
-        @click="select();"
+        @click="select()"
       >
         <small>All</small>
       </b-list-group-item>
@@ -13,11 +16,17 @@
         :key="account.id"
         :active="aws_account_selected === account"
         action
-        @click="select(account);"
+        @click="select(account)"
       >
         <small>{{ account._name }}</small>
       </b-list-group-item>
     </b-list-group>
+    <b-card-body
+      v-else
+      class="text-danger"
+    >
+      No accounts available
+    </b-card-body>
   </b-card>
 </template>
 
