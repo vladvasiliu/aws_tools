@@ -1,7 +1,6 @@
-from django.conf import settings
 from django.db.models import Max, Prefetch
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
@@ -42,3 +41,9 @@ class EBSVolumeViewSet(viewsets.ModelViewSet):
 class EBSSnapshotViewSet(viewsets.ModelViewSet):
     queryset = EBSSnapshot.objects.all().order_by('_name')
     serializer_class = EBSSnapshotSerializer
+
+
+@api_view(['GET'])
+def current_user(request):
+    response = {'username': request.user.get_full_name() or request.user.get_username()}
+    return Response(response)

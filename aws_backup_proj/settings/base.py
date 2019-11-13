@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_auth',
     'netfields',
-    'mozilla_django_oidc',
+    # 'mozilla_django_oidc',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +92,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    # 'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
 )
 
 # Internationalization
