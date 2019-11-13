@@ -22,12 +22,12 @@
         <small>{{ account._name }}</small>
       </b-list-group-item>
     </b-list-group>
-    <b-card-body
+    <div
       v-else
-      class="text-danger "
+      class="text-danger"
     >
       None
-    </b-card-body>
+    </div>
   </b-card>
 </template>
 

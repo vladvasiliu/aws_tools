@@ -1,9 +1,11 @@
 <template>
   <b-card
-    v-if="Array.isArray(instances_for_selected_account) && instances_for_selected_account.length > 0"
     header="Instances"
   >
-    <b-list-group flush>
+    <b-list-group
+      v-if="Array.isArray(instances_for_selected_account) && instances_for_selected_account.length > 0"
+      flush
+    >
       <template v-for="instance in instances_for_selected_account">
         <b-list-group-item
           :key="instance.id"
@@ -39,10 +41,11 @@
         </b-collapse>
       </template>
     </b-list-group>
-  </b-card>
-  <b-card v-else>
-    <div class="text-center text-danger">
-      No instances
+    <div
+      v-else
+      class="text-center text-danger"
+    >
+      None
     </div>
   </b-card>
 </template>
