@@ -28,7 +28,7 @@ class AWSBaseModel(models.Model):
         ordering = ['_name']
 
     _name = models.CharField(max_length=100, blank=True)
-    id = models.CharField(max_length=25, primary_key=True, editable=False)
+    id = models.CharField(max_length=25, primary_key=True, editable=True)
     present = models.BooleanField(default=True)
 
     @property

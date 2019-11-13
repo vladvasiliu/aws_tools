@@ -1,11 +1,18 @@
 from rest_framework import serializers
 
-from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization
+from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization, AWSRegion
+
+
+class AWSRegionBriefSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = AWSRegion
+        fields = ['name']
 
 
 class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
     instance_set = serializers.HyperlinkedRelatedField(many=True, view_name='instance-detail', read_only=True)
     id = serializers.CharField(read_only=True)
+    regions = AWSRegionBriefSerializer(many=True, read_only=True)
 
     class Meta:
         model = AWSAccount
@@ -57,3 +64,4 @@ class EBSSnapshotSerializer(serializers.HyperlinkedModelSerializer):
 class AWSOrganizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = AWSOrganization
+        fields = "__all__"
