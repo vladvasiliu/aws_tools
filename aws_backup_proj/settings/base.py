@@ -138,3 +138,5 @@ LOGIN_REDIRECT_URL = '/'
 BOOTSTRAP4 = {
     # "theme_url": "https://tabler.io/tabler/assets/css/dashboard.css",
 }
+
+USE_X_FORWARDED_HOST = True

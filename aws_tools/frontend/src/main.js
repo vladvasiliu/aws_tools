@@ -19,6 +19,8 @@ Vue.use(require('vue-moment'))
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 axios.defaults.baseURL = window.location.origin + '/api'
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 // eslint-disable-next-line no-new
 new Vue({
