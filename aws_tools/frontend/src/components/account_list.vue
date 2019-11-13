@@ -5,6 +5,7 @@
       flush
     >
       <b-list-group-item
+        v-if="aws_accounts.length>1"
         :active="!aws_account_selected"
         action
         @click="select()"
@@ -14,7 +15,7 @@
       <b-list-group-item
         v-for="account in aws_accounts"
         :key="account.id"
-        :active="aws_account_selected === account"
+        :active="aws_account_selected === account || aws_accounts.length == 1"
         action
         @click="select(account)"
       >
@@ -23,9 +24,9 @@
     </b-list-group>
     <b-card-body
       v-else
-      class="text-danger"
+      class="text-danger "
     >
-      No accounts available
+      None
     </b-card-body>
   </b-card>
 </template>
