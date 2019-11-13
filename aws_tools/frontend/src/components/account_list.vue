@@ -15,7 +15,7 @@
       <b-list-group-item
         v-for="account in aws_accounts"
         :key="account.id"
-        :active="aws_account_selected === account || aws_accounts.length == 1"
+        :active="aws_account_selected === account || aws_accounts.length === 1"
         action
         @click="select(account)"
       >

@@ -4,7 +4,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
-    AWSOrganizationSerializer
+    AWSOrganizationSerializer, UserSerializer
 from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization
 
 
@@ -45,5 +45,5 @@ class EBSSnapshotViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def current_user(request):
-    response = {'username': request.user.get_full_name() or request.user.get_username()}
-    return Response(response)
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
