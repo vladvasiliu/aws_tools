@@ -45,7 +45,7 @@
       v-else
       class="text-center text-danger"
     >
-      None
+      <em>None</em>
     </div>
   </b-card>
 </template>

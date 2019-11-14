@@ -26,7 +26,7 @@
       v-else
       class="text-danger"
     >
-      None
+      <em>None</em>
     </div>
   </b-card>
 </template>
