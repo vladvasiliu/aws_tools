@@ -1,5 +1,8 @@
 <template>
-  <b-card header="Accounts">
+  <b-card
+    header="Accounts"
+    body-class="px-0"
+  >
     <b-list-group
       v-if="Array.isArray(aws_accounts) && aws_accounts.length > 0"
       flush
@@ -10,7 +13,7 @@
         action
         @click="select()"
       >
-        <small>All</small>
+        All
       </b-list-group-item>
       <b-list-group-item
         v-for="account in aws_accounts"
@@ -19,7 +22,7 @@
         action
         @click="select(account)"
       >
-        <small>{{ account._name }}</small>
+        {{ account._name }}
       </b-list-group-item>
     </b-list-group>
     <div
