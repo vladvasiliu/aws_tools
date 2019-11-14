@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from '../components/main'
+import HomeView from '../components/home'
+import InstanceView from '../components/instance_view'
 import PageNotFound from '../components/404'
 
 Vue.use(Router)
@@ -11,9 +12,16 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home,
-      meta: { requiresAuth: true }
+      name: 'HomeView',
+      component: HomeView,
+      children: [
+        {
+          path: '/instances',
+          name: 'InstanceView',
+          component: InstanceView
+          // meta: { requiresAuth: true }
+        }
+      ]
     },
     {
       path: '*',
