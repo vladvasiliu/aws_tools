@@ -10,11 +10,15 @@
 
 <script>
 import NavBar from './NavBar'
+import router from '../router'
 export default {
   name: 'Home',
   components: { NavBar },
   mounted () {
     this.$store.dispatch('getUser')
+  },
+  updated () {
+    router.push('/instances')
   }
 }
 </script>
