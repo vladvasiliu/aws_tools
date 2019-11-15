@@ -15,7 +15,7 @@
           <font-awesome-icon :icon="serverIcon" /> Instances
         </b-nav-item>
         <b-nav-item
-          to="/securityGroups"
+          :to="{ name: 'SecurityGroupView' }"
           active-class="active"
         >
           <font-awesome-icon :icon="securityIcon" /> Security groups

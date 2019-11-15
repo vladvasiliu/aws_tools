@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import HomeView from '../components/home'
-import InstanceView from '../components/TheInstanceView'
+import TheInstanceView from '../components/TheInstanceView'
+import TheSecurityGroupView from '../components/TheSecurityGroupView'
 import PageNotFound from '../components/404'
 
 Vue.use(Router)
@@ -18,8 +19,13 @@ const router = new Router({
     {
       path: '/instances',
       name: 'InstanceView',
-      component: InstanceView
+      component: TheInstanceView
       // meta: { requiresAuth: true }
+    },
+    {
+      path: '/security_groups',
+      name: 'SecurityGroupView',
+      component: TheSecurityGroupView
     },
     {
       path: '*',
