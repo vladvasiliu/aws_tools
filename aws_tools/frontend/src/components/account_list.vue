@@ -3,6 +3,20 @@
     header="Accounts"
     body-class="px-0"
   >
+    <div
+      v-if="aws_accounts == null && aws_accounts_error == null"
+      class="text-center"
+    >
+      <b-spinner />
+    </div>
+    <div
+      v-else-if="aws_accounts == null && aws_accounts_error != null"
+      v-b-tooltip.hover
+      class="text-center text-danger"
+      :title="aws_accounts_error"
+    >
+      <font-awesome-icon :icon="faExclamationTriangle" />
+    </div>
     <b-list-group
       v-if="Array.isArray(aws_accounts) && aws_accounts.length > 0"
       flush
@@ -26,7 +40,7 @@
       </b-list-group-item>
     </b-list-group>
     <div
-      v-else
+      v-else-if="Array.isArray(aws_accounts)"
       class="text-danger"
     >
       <em>None</em>
@@ -36,13 +50,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 export default {
-  //        computed: {
-  //            accounts_list: function () { return this.$store.state.aws_accounts },
-  //        },
   computed: {
-    ...mapGetters(['aws_accounts', 'aws_account_selected'])
+    ...mapGetters(['aws_accounts', 'aws_account_selected', 'aws_accounts_error']),
+    faExclamationTriangle () { return faExclamationTriangle }
   },
   created () {
     this.$store.dispatch('LOAD_AWS_ACCOUNT_LIST')

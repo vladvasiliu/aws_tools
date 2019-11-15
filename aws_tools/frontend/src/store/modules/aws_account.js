@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export default {
   state: {
-    aws_accounts: [],
+    aws_accounts: null,
+    aws_accounts_error: null,
     aws_account_selected: ''
   },
   actions: {
@@ -12,7 +13,8 @@ export default {
           commit('SET_ACCOUNT_LIST', { list: response.data })
         },
         err => {
-          console.log(err)
+          console.error(err)
+          commit('SET_ACCOUNTS_ERROR', { error: err })
         }
       )
     }
@@ -23,10 +25,14 @@ export default {
     },
     SET_SELECTED_ACCOUNT: (state, { account }) => {
       state.aws_account_selected = account
+    },
+    SET_ACCOUNTS_ERROR: (state, { error }) => {
+      state.aws_accounts_error = error.message
     }
   },
   getters: {
     aws_accounts: state => state.aws_accounts,
+    aws_accounts_error: state => state.aws_accounts_error,
     aws_account_selected: state => state.aws_account_selected
   }
 }
