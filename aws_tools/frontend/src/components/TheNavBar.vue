@@ -61,6 +61,10 @@ export default {
     }
   },
 
+  mounted () {
+    this.$store.dispatch('getUser')
+  },
+
   methods: {
     logout () {
       this.$store.dispatch('logout', {}).then(() => {
