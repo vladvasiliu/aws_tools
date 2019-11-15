@@ -18,7 +18,7 @@ export default {
     this.$store.dispatch('getUser')
   },
   updated () {
-    router.push('/instances')
+    router.push({ name: 'InstanceView' })
   }
 }
 </script>

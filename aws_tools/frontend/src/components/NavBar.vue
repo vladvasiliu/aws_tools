@@ -9,7 +9,7 @@
       </b-navbar-brand>
       <b-navbar-nav>
         <b-nav-item
-          to="/instances"
+          :to="{ name: 'InstanceView' }"
           active-class="active"
         >
           <font-awesome-icon :icon="serverIcon" /> Instances
