@@ -5,6 +5,7 @@ import HomeView from '../components/home'
 import TheInstanceView from '../components/TheInstanceView'
 import TheSecurityGroupView from '../components/TheSecurityGroupView'
 import PageNotFound from '../components/404'
+import Unauthorized from '../components/403'
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ const router = new Router({
       path: '/security_groups',
       name: 'SecurityGroupView',
       component: TheSecurityGroupView
+    },
+    {
+      path: '/403',
+      name: 'UnauthorizedView',
+      component: Unauthorized
     },
     {
       path: '*',

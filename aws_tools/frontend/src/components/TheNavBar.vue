@@ -61,9 +61,9 @@ export default {
     }
   },
 
-  mounted () {
-    this.$store.dispatch('getUser')
-  },
+  // mounted () {
+  //   this.$store.dispatch('getUser')
+  // },
 
   methods: {
     logout () {
