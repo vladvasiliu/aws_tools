@@ -8,19 +8,17 @@
     >
       <router-view />
     </div>
-    <Unauthorized v-else />
+    <unauthorized v-else />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import NavBar from './TheNavBar'
-import Unauthorized from './403'
 
 export default {
   components: {
-    NavBar,
-    Unauthorized
+    NavBar: () => import('./TheNavBar'),
+    Unauthorized: () => import('./403')
   },
   computed: {
     ...mapGetters(['userName'])

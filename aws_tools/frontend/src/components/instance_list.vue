@@ -28,10 +28,10 @@
           <b-list-group-item class="">
             <div class="row">
               <div class="col-auto">
-                <instanceDetail :instance="instance" />
+                <instance-detail :instance="instance" />
               </div>
               <div class="col">
-                <volumeList
+                <volume-list
                   :instance="instance"
                   class="h-100"
                 />
@@ -54,13 +54,10 @@
 import { mapGetters } from 'vuex'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
-import instanceDetail from './instanceDetail.vue'
-import volumeList from './volumeList'
-
 export default {
   components: {
-    instanceDetail,
-    volumeList
+    instanceDetail: () => import('./instanceDetail'),
+    volumeList: () => import('./volumeList')
   },
   data () {
     return {
