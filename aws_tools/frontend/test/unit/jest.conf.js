@@ -21,7 +21,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js,vue}',
     '!src/main.js',
-    '!src/router/auth.js',
+    '!src/index/auth.js',
     '!**/node_modules/**'
   ]
 }

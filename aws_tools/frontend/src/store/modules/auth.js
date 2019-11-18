@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
-// import router from '@/router/'
+// import index from '@/index/'
 
 Vue.use(VueAxios, axios)
 

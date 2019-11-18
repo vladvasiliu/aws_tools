@@ -7,7 +7,7 @@
       <b-navbar-brand to="/">
         AWS Tools
       </b-navbar-brand>
-      <b-navbar-nav>
+      <b-navbar-nav v-if="userName !== null">
         <b-nav-item
           :to="{ name: 'InstanceView' }"
           active-class="active"
@@ -21,7 +21,10 @@
           <font-awesome-icon :icon="securityIcon" /> Security groups
         </b-nav-item>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav
+        v-if="userName !== null"
+        class="ml-auto"
+      >
         <b-nav-item-dropdown right>
           <span
             slot="button-content"

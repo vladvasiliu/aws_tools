@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import auth from '../store'
+// import auth from '../store'
 
 import HomeView from '../components/home'
 import TheInstanceView from '../components/TheInstanceView'
@@ -11,7 +11,7 @@ import Unauthorized from '../components/403'
 
 Vue.use(Router)
 
-const router = new Router({
+const index = new Router({
   mode: 'history',
   routes: [
     {
@@ -43,12 +43,13 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'UnauthorizedView' && auth.getters.userName === null) {
-    next({ name: 'UnauthorizedView', replace: true })
-  } else {
-    next()
-  }
-})
+// index.beforeEach((to, from, next) => {
+//   console.log('to: ', to)
+//   if (to.name !== 'UnauthorizedView' && auth.getters.isAuthenticated() === null) {
+//     next({ name: 'UnauthorizedView', replace: true })
+//   } else {
+//     next()
+//   }
+// })
 
-export default router
+export default index
