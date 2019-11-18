@@ -31,22 +31,18 @@ export default {
 
   actions: {
     getUser (context) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get('/user/')
-          .then(response => {
-            context.commit('SET_USERNAME', { userName: userName(response) })
-            resolve(response)
-          })
-          .catch(error => {
-            if (error.response && error.response.status === 403) {
-              console.error('Unauthenticated')
-            } else {
-              console.error(error.request)
-            }
-            reject(error)
-          })
-      })
+      return axios
+        .get('/user/')
+        .then(response => {
+          context.commit('SET_USERNAME', { userName: userName(response) })
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 403) {
+            console.error('Unauthenticated')
+          } else {
+            console.error(error.request)
+          }
+        })
     }
   }
 }

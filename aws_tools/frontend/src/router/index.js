@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import auth from '../store'
+
 import HomeView from '../components/home'
 import TheInstanceView from '../components/TheInstanceView'
 import TheSecurityGroupView from '../components/TheSecurityGroupView'
@@ -42,7 +44,11 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  next()
+  if (to.name !== 'UnauthorizedView' && auth.getters.userName === null) {
+    next({ name: 'UnauthorizedView', replace: true })
+  } else {
+    next()
+  }
 })
 
 export default router

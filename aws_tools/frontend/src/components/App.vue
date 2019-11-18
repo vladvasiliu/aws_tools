@@ -16,12 +16,12 @@ export default {
   beforeCreate () {
     document.title = 'AWS Tools'
     this.$store.dispatch('getUser')
-      .then(() => {
-        this.$router.push({ name: 'InstanceView' })
-      })
-      .catch(() => {
-        this.$router.replace({ name: 'UnauthorizedView' })
-      })
+    // .then(() => {
+    //   this.$router.push({ name: 'InstanceView' })
+    // })
+    // .catch(() => {
+    //   this.$router.replace({ name: 'UnauthorizedView' })
+    // })
   }
 }
 </script>
