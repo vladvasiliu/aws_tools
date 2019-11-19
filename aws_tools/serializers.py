@@ -77,26 +77,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'first_name', 'last_name']
 
 
-class SecurityGroupRuleIPRangeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = SecurityGroupRuleIPRange
-        fields = '__all__'
-
-
 class SecurityGroupRuleIPRangeBriefSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SecurityGroupRuleIPRange
         fields = ['url', 'cidr', 'description', 'extended_description']
-
-
-class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.CharField(read_only=True)
-    rule_list = serializers.HyperlinkedIdentityField(view_name='securitygrouprule-list',
-                                                     lookup_url_kwarg='security_group_pk')
-
-    class Meta:
-        model = SecurityGroup
-        fields = '__all__'
 
 
 class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
@@ -109,3 +93,32 @@ class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
     class Meta:
         model = SecurityGroupRule
         fields = "__all__"
+
+
+class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.CharField(read_only=True)
+    rule_list = serializers.HyperlinkedIdentityField(view_name='securitygrouprule-list',
+                                                     lookup_url_kwarg='security_group_pk')
+
+    class Meta:
+        model = SecurityGroup
+        fields = '__all__'
+
+
+class SecurityGroupRuleBriefSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {
+        'security_group_pk': 'security_group__pk'
+    }
+    id = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = SecurityGroupRule
+        fields = "__all__"
+
+
+class SecurityGroupRuleIPRangeSerializer(serializers.HyperlinkedModelSerializer):
+    security_group_rule = SecurityGroupRuleBriefSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = SecurityGroupRuleIPRange
+        fields = '__all__'
