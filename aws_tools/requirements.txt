@@ -6,8 +6,8 @@
 #
 amqp==2.5.2               # via kombu
 billiard==3.6.1.0         # via celery
-boto3==1.10.15
-botocore==1.13.15         # via boto3, s3transfer
+boto3==1.10.20
+botocore==1.13.20         # via boto3, s3transfer
 celery==4.3.0
 certifi==2019.9.11        # via requests
 cffi==1.13.2              # via cryptography
@@ -21,6 +21,7 @@ django-timezone-field==3.1  # via django-celery-beat
 django==2.2.7
 djangorestframework==3.10.3
 docutils==0.15.2          # via botocore
+drf-nested-routers==0.91
 idna==2.8                 # via requests
 importlib-metadata==0.23  # via kombu
 jmespath==0.9.4           # via boto3, botocore
@@ -30,7 +31,7 @@ more-itertools==7.2.0     # via zipp
 mozilla-django-oidc==1.2.2
 netaddr==0.7.19           # via django-netfields
 pycparser==2.19           # via cffi
-pyopenssl==19.0.0         # via josepy
+pyopenssl==19.1.0         # via josepy
 python-crontab==2.4.0     # via django-celery-beat
 python-dateutil==2.8.0    # via botocore, python-crontab
 pytz==2019.3              # via celery, django, django-timezone-field

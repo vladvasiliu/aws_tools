@@ -6,4 +6,5 @@ django-choices
 django-netfields
 django-filter
 djangorestframework
+drf-nested-routers
 mozilla-django-oidc

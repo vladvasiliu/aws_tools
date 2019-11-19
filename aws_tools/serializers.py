@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework_nested.relations import NestedHyperlinkedRelatedField
+from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 
-from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization, AWSRegion
+from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization, AWSRegion, SecurityGroup, SecurityGroupRule
 
 
 class AWSRegionBriefSerializer(serializers.HyperlinkedModelSerializer):
@@ -72,3 +74,25 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name']
+
+
+class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.CharField(read_only=True)
+    rule_list = serializers.HyperlinkedIdentityField(view_name='securitygrouprule-list',
+                                                     lookup_url_kwarg='security_group_pk')
+
+    class Meta:
+        model = SecurityGroup
+        fields = '__all__'
+
+
+class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {
+        'security_group_pk': 'security_group__pk'
+    }
+    id = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = SecurityGroupRule
+        fields = "__all__"
+

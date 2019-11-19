@@ -1,11 +1,12 @@
 from django.db.models import Max, Prefetch
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
-    AWSOrganizationSerializer, UserSerializer
-from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization
+    AWSOrganizationSerializer, UserSerializer, SecurityGroupSerializer, SecurityGroupRuleSerializer
+from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization, SecurityGroup, SecurityGroupRule
 
 
 class AWSAccountViewSet(viewsets.ModelViewSet):
@@ -47,3 +48,17 @@ class EBSSnapshotViewSet(viewsets.ModelViewSet):
 def current_user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
+
+
+class SecurityGroupViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = SecurityGroup.objects.all()
+    serializer_class = SecurityGroupSerializer
+
+
+class SecurityGroupRuleViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = SecurityGroupRuleSerializer
+    # queryset = SecurityGroupRule.objects.all()
+
+    def get_queryset(self):
+        # security_group = get_object_or_404(SecurityGroup, self.kwargs['security_group_id'])
+        return SecurityGroupRule.objects.filter(security_group=self.kwargs['security_group_pk'])
