@@ -325,11 +325,27 @@ class SecurityGroup(AWSEC2Resource):
                                                                     ip_protocol=rule['IpProtocol'],
                                                                     type=AWSSecurityGroupRuleType.INGRESS)
             for ip_range in rule['IpRanges']:
-                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIp'])
+                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIp'],
+                                                                                   defaults={
+                                                                                       'description': ip_range.get('Description', '')
+                                                                                   })
                 sg_ip_range.security_group_rule.add(sg_rule)
             for ip_range in rule['Ipv6Ranges']:
-                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIpv6'])
+                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIpv6'],
+                                                                                   defaults = {
+                                                                                       'description': ip_range.get('Description', '')
+                                                                                   })
                 sg_ip_range.security_group_rule.add(sg_rule)
+            for user_group_pair in rule['UserIdGroupPairs']:
+                sg_ug_pair, _ = SecurityGroupRuleUserGroupPair.objects.update_or_create(group_id=user_group_pair['GroupId'],
+                                                                                        defaults={
+                                                                                            'vpc_id': user_group_pair.get('VpcId', ''),
+                                                                                            'user_id': user_group_pair.get('UserId', ''),
+                                                                                            'vpc_peering_connection_id': user_group_pair.get('VpcPeeringConnectionId', ''),
+                                                                                            'peering_status': user_group_pair.get('PeeringStatus', ''),
+                                                                                            'description': user_group_pair.get('Description', ''),
+                                                                                        })
+                sg_ug_pair.security_group_rule.add(sg_rule)
 
 
 class SecurityGroupRule(models.Model):
@@ -370,7 +386,7 @@ class SecurityGroupRuleIPRange(models.Model):
 
 class SecurityGroupRuleUserGroupPair(models.Model):
     security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='user_group_pair')
-    user_id = models.IntegerField(validators=[MaxLengthValidator(12), MinLengthValidator(12)])
+    user_id = models.CharField(max_length=25, blank=True)
     group_id = models.CharField(max_length=25)
     vpc_id = models.CharField(max_length=25, blank=True)
     vpc_peering_connection_id = models.CharField(max_length=25, blank=True)
