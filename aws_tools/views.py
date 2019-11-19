@@ -5,8 +5,10 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
-    AWSOrganizationSerializer, UserSerializer, SecurityGroupSerializer, SecurityGroupRuleSerializer
-from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization, SecurityGroup, SecurityGroupRule
+    AWSOrganizationSerializer, UserSerializer, SecurityGroupSerializer, SecurityGroupRuleSerializer, \
+    SecurityGroupRuleIPRangeSerializer
+from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization, SecurityGroup, SecurityGroupRule, \
+    SecurityGroupRuleIPRange
 
 
 class AWSAccountViewSet(viewsets.ModelViewSet):
@@ -62,3 +64,8 @@ class SecurityGroupRuleViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         # security_group = get_object_or_404(SecurityGroup, self.kwargs['security_group_id'])
         return SecurityGroupRule.objects.filter(security_group=self.kwargs['security_group_pk'])
+
+
+class SecurityGroupRuleIPRangeViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = SecurityGroupRuleIPRangeSerializer
+    queryset = SecurityGroupRuleIPRange.objects.all()

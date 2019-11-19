@@ -4,7 +4,7 @@ from rest_framework.schemas import get_schema_view
 from rest_framework_nested import routers
 
 from .views import AWSOrganizationViewSet, AWSAccountViewSet, InstanceViewSet, EBSVolumeViewSet, EBSSnapshotViewSet, \
-    current_user, SecurityGroupViewSet, SecurityGroupRuleViewSet
+    current_user, SecurityGroupViewSet, SecurityGroupRuleViewSet, SecurityGroupRuleIPRangeViewSet
 
 router = routers.SimpleRouter()
 router.register(r'AWSAccounts', AWSAccountViewSet)
@@ -13,10 +13,10 @@ router.register(r'Instances', InstanceViewSet)
 router.register(r'Volumes', EBSVolumeViewSet)
 router.register(r'Snapshots', EBSSnapshotViewSet)
 router.register(r'SecurityGroups', SecurityGroupViewSet)
-# router.register(r'SecurityGroupRules', SecurityGroupRuleViewSet, basename="security_group_rules")
+router.register(r'SecurityGroupIPRanges', SecurityGroupRuleIPRangeViewSet)
 
 security_group_router = routers.NestedSimpleRouter(router, r'SecurityGroups', lookup='security_group')
-security_group_router.register(r'SecurityGroupRules', SecurityGroupRuleViewSet, basename='securitygrouprule')
+security_group_router.register(r'Rules', SecurityGroupRuleViewSet, basename='securitygrouprule')
 
 schema_view = get_schema_view(title="AWS Tools API", authentication_classes=[], permission_classes=[])
 

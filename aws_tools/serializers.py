@@ -3,7 +3,8 @@ from rest_framework import serializers
 from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 
-from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization, AWSRegion, SecurityGroup, SecurityGroupRule
+from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization, AWSRegion, SecurityGroup, \
+    SecurityGroupRule, SecurityGroupRuleIPRange
 
 
 class AWSRegionBriefSerializer(serializers.HyperlinkedModelSerializer):
@@ -76,6 +77,18 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'first_name', 'last_name']
 
 
+class SecurityGroupRuleIPRangeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SecurityGroupRuleIPRange
+        fields = '__all__'
+
+
+class SecurityGroupRuleIPRangeBriefSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SecurityGroupRuleIPRange
+        fields = ['url', 'cidr', 'description', 'extended_description']
+
+
 class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.CharField(read_only=True)
     rule_list = serializers.HyperlinkedIdentityField(view_name='securitygrouprule-list',
@@ -91,8 +104,8 @@ class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
         'security_group_pk': 'security_group__pk'
     }
     id = serializers.CharField(read_only=True)
+    ip_range = SecurityGroupRuleIPRangeBriefSerializer(many=True, read_only=True)
 
     class Meta:
         model = SecurityGroupRule
         fields = "__all__"
-
