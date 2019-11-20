@@ -23,7 +23,7 @@
     >
       <b-list-group-item
         v-if="aws_accounts.length>1"
-        :active="!aws_account_selected"
+        :active="!selectedAccount"
         action
         @click="select()"
       >
@@ -32,7 +32,7 @@
       <b-list-group-item
         v-for="account in aws_accounts"
         :key="account.id"
-        :active="aws_account_selected === account || aws_accounts.length === 1"
+        :active="selectedAccount === account || aws_accounts.length === 1"
         action
         @click="select(account)"
       >
@@ -53,8 +53,11 @@ import { mapGetters } from 'vuex'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 export default {
+  props: {
+    selectedAccount: { type: Object, default: null }
+  },
   computed: {
-    ...mapGetters(['aws_accounts', 'aws_account_selected', 'aws_accounts_error']),
+    ...mapGetters(['aws_accounts', 'aws_accounts_error']),
     faExclamationTriangle () { return faExclamationTriangle }
   },
   created () {
@@ -63,9 +66,11 @@ export default {
   methods: {
     select: function (account) {
       if (account) {
-        this.$store.commit('SET_SELECTED_ACCOUNT', { account: account })
+        // this.$store.commit('SET_SELECTED_ACCOUNT', { account: account })
+        this.$emit('selectAccount', { account: account })
       } else {
-        this.$store.commit('SET_SELECTED_ACCOUNT', { account: null })
+        // this.$store.commit('SET_SELECTED_ACCOUNT', { account: null })
+        this.$emit('selectAccount', { account: null })
       }
     }
   }

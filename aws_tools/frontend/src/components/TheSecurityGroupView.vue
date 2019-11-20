@@ -1,6 +1,7 @@
 <template>
   <b-card
-    title="Card title"
+    title="Security groups"
+    border-variant="white"
     no-body
   >
     <b-card-header header-tag="nav">
@@ -24,7 +25,6 @@
         </b-nav-item>
       </b-nav>
     </b-card-header>
-
     <b-card-body>
       <router-view />
     </b-card-body>

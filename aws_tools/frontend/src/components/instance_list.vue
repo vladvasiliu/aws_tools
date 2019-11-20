@@ -3,10 +3,10 @@
     header="Instances"
   >
     <b-list-group
-      v-if="Array.isArray(instances_for_selected_account) && instances_for_selected_account.length > 0"
+      v-if="instanceList.length > 0"
       flush
     >
-      <template v-for="instance in instances_for_selected_account">
+      <template v-for="instance in instanceList">
         <b-list-group-item
           :key="instance.id"
           v-b-toggle="instance.id"
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
 export default {
@@ -59,13 +58,23 @@ export default {
     instanceDetail: () => import('./instanceDetail'),
     volumeList: () => import('./volumeList')
   },
+  props: {
+    selectedAccount: { type: Object, default: null }
+  },
   data () {
     return {
       collapseIcon: faCaretDown
+      // instanceList: []
     }
   },
   computed: {
-    ...mapGetters(['instances_for_selected_account'])
+    instanceList: function () {
+      let result = this.$store.state.instance.instances
+      if (this.selectedAccount !== null) {
+        return result.filter(instance => instance.aws_account === this.selectedAccount.url)
+      }
+      return result
+    }
   },
   created () {
     this.$store.dispatch('LOAD_INSTANCE_LIST').then(() => {})
