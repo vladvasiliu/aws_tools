@@ -5,7 +5,6 @@ import Router from 'vue-router'
 
 import HomeView from '../components/home'
 import TheInstanceView from '../components/TheInstanceView'
-import TheSecurityGroupView from '../components/TheSecurityGroupView'
 import PageNotFound from '../components/404'
 import Unauthorized from '../components/403'
 
@@ -28,7 +27,11 @@ const index = new Router({
     {
       path: '/security_groups',
       name: 'SecurityGroupView',
-      component: TheSecurityGroupView
+      component: () => import('../components/TheSecurityGroupView'),
+      children: [
+        { path: 'by_account', component: () => import('../components/TheSecurityGroupByAccount'), name: 'SecGroupByAccount' },
+        { path: 'by_source', component: () => import('../components/TheSecurityGroupBySource'), name: 'SecGroupBySource' }
+      ]
     },
     {
       path: '/403',
