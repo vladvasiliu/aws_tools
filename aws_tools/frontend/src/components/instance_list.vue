@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     instanceList: function () {
-      let result = this.$store.state.instance.instances
+      const result = this.$store.state.instance.instances
       if (this.selectedAccount !== null) {
         return result.filter(instance => instance.aws_account === this.selectedAccount.url)
       }

@@ -55,7 +55,7 @@ export default {
         return this.instance.backup
       },
       set (value) {
-        let newValue = {
+        const newValue = {
           instance: this.instance,
           changes: {
             backup: value
