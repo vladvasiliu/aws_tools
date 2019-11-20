@@ -30,7 +30,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['securityGroupList'])
+    ...mapGetters(['securityGroupList']),
+    filteredSecurityGroupList: function () {
+      let result = this.securityGroupList
+      if (this.selectedAccount !== null) {
+        result = result.filter(securityGroup => securityGroup.aws_account === this.selectedAccount.url)
+      }
+      return result
+    }
   },
 
   mounted () {
