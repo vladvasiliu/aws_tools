@@ -36,16 +36,7 @@ const mutations = {
 }
 
 const getters = {
-  instances: state => state.instances,
-  instances_for_selected_account: (state, getters) => {
-    if (getters.aws_account_selected) {
-      return state.instances.filter(
-        instance => instance.aws_account === getters.aws_account_selected.url
-      )
-    } else {
-      return state.instances
-    }
-  }
+  instances: state => state.instances
 }
 
 export default {
