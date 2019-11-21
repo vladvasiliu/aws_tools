@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     filteredObjectList: function () {
-      return this.objectList.filter(obj => obj.name.toLowerCase().includes(this.searchText.toLowerCase()))
+      return this.objectList.filter(obj => obj.name.toLowerCase().includes(this.searchText.toLowerCase()) || obj.id.toLowerCase().includes(this.searchText.toLowerCase()))
     }
   },
   methods: {
