@@ -26,7 +26,10 @@
           class="w-100 justify-content-left align-self-center mb-2"
         >
           <b-list-group-item class="">
-            <InstanceAccordion :instance="object" />
+            <slot
+              name="collapsedContent"
+              :object="object"
+            />
           </b-list-group-item>
         </b-collapse>
       </template>
@@ -39,13 +42,12 @@
     </div>
   </b-card>
 </template>
+
 <script>
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import InstanceAccordion from './InstanceAccordion'
 
 export default {
   name: 'AccordionView',
-  components: { InstanceAccordion },
   props: {
     objectList: { type: Array, default: () => { return [] } }
   },
@@ -56,6 +58,7 @@ export default {
   }
 }
 </script>
+
 <style>
   .object-name:hover .object-name-caret {
     opacity: inherit;

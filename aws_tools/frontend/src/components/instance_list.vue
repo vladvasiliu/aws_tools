@@ -1,13 +1,19 @@
 <template>
-  <AccordionView :object-list="instanceList" />
+  <AccordionView :object-list="instanceList">
+    <template v-slot:collapsedContent="slotProps">
+      <InstanceAccordion :instance="slotProps.object" />
+    </template>
+  </AccordionView>
 </template>
 
 <script>
 import AccordionView from './AccordionView'
+import InstanceAccordion from './InstanceAccordion'
 
 export default {
   components: {
-    AccordionView
+    AccordionView,
+    InstanceAccordion
   },
   props: {
     selectedAccount: { type: Object, default: null }
