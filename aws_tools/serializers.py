@@ -106,10 +106,11 @@ class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.CharField(read_only=True)
     rule_list = serializers.HyperlinkedIdentityField(view_name='securitygrouprule-list',
                                                      lookup_url_kwarg='security_group_pk')
+    name = serializers.CharField(read_only=True)
 
     class Meta:
         model = SecurityGroup
-        fields = '__all__'
+        exclude = ['_name']
 
 
 class SecurityGroupRuleBriefSerializer(NestedHyperlinkedModelSerializer):
