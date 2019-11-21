@@ -13,8 +13,7 @@
         <small><strong>Description:</strong></small> {{ securityGroup.description }}
       </div>
     </div>
-    <div class="row">
-    </div>
+    <div class="row" />
   </div>
 </template>
 

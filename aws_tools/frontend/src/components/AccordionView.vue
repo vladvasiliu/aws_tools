@@ -35,7 +35,7 @@
           action
           class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center object-name"
         >
-          {{ object.name }}
+          <span class="object-name-text">{{ object.name }}</span>
           <font-awesome-icon
             :icon="collapseIcon"
             class="object-name-caret"
@@ -104,6 +104,10 @@ export default {
 
   .object-name.collapsed .object-name-caret {
     transform: rotate(90deg);
+  }
+
+  .object-name:not(.collapsed) {
+    font-weight: bold;
   }
 
   .card .card-header .search-field {
