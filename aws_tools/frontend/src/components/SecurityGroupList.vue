@@ -1,19 +1,22 @@
 <template>
-  <div v-if="!api_status.busy && !api_status.error">
-    {{ securityGroupList }}
-  </div>
-  <loading v-else />
+  <AccordionView :object-list="filteredSecurityGroupList">
+    <template v-slot:collapsedContent="slotProps">
+      <SecurityGroupAccordion :security-group="slotProps.object" />
+    </template>
+  </AccordionView>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Loading from './loading'
+import AccordionView from './AccordionView'
+import SecurityGroupAccordion from './SecurityGroupAccordion'
 
 export default {
   name: 'SecurityGroupList',
 
   components: {
-    Loading
+    SecurityGroupAccordion,
+    AccordionView
   },
 
   props: {
