@@ -1,6 +1,6 @@
 <template>
   <b-card
-    header="Instances"
+    :header="cardTitle"
   >
     <b-list-group
       v-if="objectList.length > 0"
@@ -49,7 +49,8 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 export default {
   name: 'AccordionView',
   props: {
-    objectList: { type: Array, default: () => { return [] } }
+    objectList: { type: Array, default: () => { return [] }, required: true },
+    cardTitle: { type: String, default: null, required: true }
   },
   data () {
     return {

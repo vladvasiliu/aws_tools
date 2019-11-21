@@ -1,5 +1,8 @@
 <template>
-  <AccordionView :object-list="filteredSecurityGroupList">
+  <AccordionView
+    :object-list="filteredSecurityGroupList"
+    card-title="Security groups"
+  >
     <template v-slot:collapsedContent="slotProps">
       <SecurityGroupAccordion :security-group="slotProps.object" />
     </template>

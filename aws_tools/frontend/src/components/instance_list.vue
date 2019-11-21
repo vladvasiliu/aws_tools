@@ -1,5 +1,8 @@
 <template>
-  <AccordionView :object-list="instanceList">
+  <AccordionView
+    :object-list="instanceList"
+    card-title="Instances"
+  >
     <template v-slot:collapsedContent="slotProps">
       <InstanceAccordion :instance="slotProps.object" />
     </template>
