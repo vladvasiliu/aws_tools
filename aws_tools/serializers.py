@@ -85,8 +85,7 @@ class SecurityGroupRuleIPRangeBriefSerializer(serializers.HyperlinkedModelSerial
 class SecurityGroupRuleUserGroupPairBriefSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SecurityGroupRuleUserGroupPair
-        fields = ['url', 'user_id', 'group_id', 'vpc_id', 'vpc_peering_connection_id', 'description',
-                  'extended_description']
+        fields = ['url', 'user_id', 'group_id', 'vpc_id', 'vpc_peering_connection_id', 'description']
 
 
 class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
@@ -95,6 +94,7 @@ class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
     }
     id = serializers.CharField(read_only=True)
     ip_range = SecurityGroupRuleIPRangeBriefSerializer(many=True, read_only=True)
+    user_group_pair = SecurityGroupRuleUserGroupPairBriefSerializer(many=True, read_only=True)
 
     class Meta:
         model = SecurityGroupRule
