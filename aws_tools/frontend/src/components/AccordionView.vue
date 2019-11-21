@@ -1,12 +1,22 @@
 <template>
   <b-card
-    :header="cardTitle"
+    no-body
   >
+    <template v-slot:header>
+      <div class="d-flex justify-content-between align-items-center">
+        <strong>{{ cardTitle }}</strong>
+        <b-form-input
+          v-model="searchText"
+          placeholder="Search..."
+          class="w-50"
+        />
+      </div>
+    </template>
     <b-list-group
-      v-if="objectList.length > 0"
+      v-if="filteredObjectList.length > 0"
       flush
     >
-      <template v-for="object in objectList">
+      <template v-for="object in filteredObjectList">
         <b-list-group-item
           :key="object.id"
           v-b-toggle="object.id"
@@ -44,7 +54,7 @@
 </template>
 
 <script>
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   name: 'AccordionView',
@@ -54,7 +64,14 @@ export default {
   },
   data () {
     return {
-      collapseIcon: faCaretDown
+      collapseIcon: faCaretDown,
+      searchIcon: faSearch,
+      searchText: ''
+    }
+  },
+  computed: {
+    filteredObjectList: function () {
+      return this.objectList.filter(obj => obj.name.toLowerCase().includes(this.searchText.toLowerCase()))
     }
   }
 }
@@ -71,5 +88,11 @@ export default {
 
   .object-name.collapsed .object-name-caret {
     transform: rotate(90deg);
+  }
+
+  .card .card-header input {
+    /* for header spacing */
+    margin-bottom: -12px;
+    margin-top: -12px;
   }
 </style>

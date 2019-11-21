@@ -1,8 +1,10 @@
 <template>
   <b-card
-    header="Accounts"
-    body-class="px-0"
+    no-body
   >
+    <template v-slot:header>
+      <strong>Accounts</strong>
+    </template>
     <div
       v-if="aws_accounts == null && aws_accounts_error == null"
       class="text-center"
@@ -78,8 +80,4 @@ export default {
 </script>
 
 <style scoped>
-/* Workaround for broken modal display */
-.list-group-item.active {
-  z-index: 0;
-}
 </style>
