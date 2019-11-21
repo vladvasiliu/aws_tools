@@ -5,11 +5,23 @@
     <template v-slot:header>
       <div class="d-flex justify-content-between align-items-center">
         <strong>{{ cardTitle }}</strong>
-        <b-form-input
-          v-model="searchText"
-          placeholder="Search..."
-          class="w-50"
-        />
+        <b-input-group class="w-50 search-field">
+          <b-input-group-prepend>
+            <b-input-group-text><font-awesome-icon :icon="searchIcon" /></b-input-group-text>
+          </b-input-group-prepend>
+          <b-form-input
+            v-model="searchText"
+            placeholder="Search..."
+          />
+          <b-input-group-append>
+            <b-button
+              v-if="searchText"
+              @click="clearSearch"
+            >
+              <font-awesome-icon :icon="searchClearIcon" />
+            </b-button>
+          </b-input-group-append>
+        </b-input-group>
       </div>
     </template>
     <b-list-group
@@ -54,7 +66,7 @@
 </template>
 
 <script>
-import { faCaretDown, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   name: 'AccordionView',
@@ -66,6 +78,7 @@ export default {
     return {
       collapseIcon: faCaretDown,
       searchIcon: faSearch,
+      searchClearIcon: faTimes,
       searchText: ''
     }
   },
@@ -73,6 +86,9 @@ export default {
     filteredObjectList: function () {
       return this.objectList.filter(obj => obj.name.toLowerCase().includes(this.searchText.toLowerCase()))
     }
+  },
+  methods: {
+    clearSearch: function () { this.searchText = '' }
   }
 }
 </script>
@@ -90,7 +106,7 @@ export default {
     transform: rotate(90deg);
   }
 
-  .card .card-header input {
+  .card .card-header .search-field {
     /* for header spacing */
     margin-bottom: -12px;
     margin-top: -12px;
