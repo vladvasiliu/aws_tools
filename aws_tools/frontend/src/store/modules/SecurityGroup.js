@@ -26,12 +26,12 @@ export default {
     SET_SECURITY_GROUP_LIST: (state, { list }) => {
       Vue.set(state, 'securityGroupList', list)
     },
-    SET_SECURITY_GROUP_IP_RANGES: (state, { list }) => {
-      state.securityGroupIPRanges = list
-    },
-    SET_SECURITY_GROUP_USER_GROUP_PAIRS: (state, { list }) => {
-      state.securityGroupUserGroupPairs = list
-    },
+    // SET_SECURITY_GROUP_IP_RANGES: (state, { list }) => {
+    //   state.securityGroupIPRanges = list
+    // },
+    // SET_SECURITY_GROUP_USER_GROUP_PAIRS: (state, { list }) => {
+    //   state.securityGroupUserGroupPairs = list
+    // },
     ADD_SECURITY_GROUP_RULES: (state, { list }) => {
       state.securityGroupRules.push(...list)
     }
@@ -39,6 +39,9 @@ export default {
   getters: {
     securityGroupList: state => {
       return state.securityGroupList
+    },
+    securityGroupRules: state => {
+      return state.securityGroupRules
     }
   }
 }
