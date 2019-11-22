@@ -45,9 +45,11 @@
         <b-collapse
           :id="object.id"
           :key="object.id + 'detail'"
-          class="w-100 justify-content-left align-self-center mb-2"
+          class="w-100 justify-content-left align-self-center"
         >
-          <b-list-group-item class="">
+          <b-list-group-item
+            class="bg-light pb-4"
+          >
             <slot
               name="collapsedContent"
               :object="object"
