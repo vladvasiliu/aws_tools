@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+import django_saml2_auth.views
+
 
 urlpatterns = [
+    url(r'^saml2_auth/', include('django_saml2_auth.urls')),
+    url(r'^admin/login/$', django_saml2_auth.views.signin),
+    url(r'^accounts/login/$', django_saml2_auth.views.signin),
     url(r'^admin/', admin.site.urls),
-    url(r'^oidc/', include('mozilla_django_oidc.urls')),
     url(r'^', include('aws_tools.urls')),
 ]

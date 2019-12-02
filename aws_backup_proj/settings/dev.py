@@ -1,8 +1,6 @@
 from .base import *
 from .secrets import get_secret
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vto4v-mncswzcm*fynqqp+@wsj9#smof=nh09xnzjrgae0h9sj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -12,15 +10,18 @@ DEBUG = True
 
 secret_region = 'eu-west-3'
 
-db_secret = get_secret('aws-tools/dev/rds', secret_region)
+conf_secret = get_secret('aws-tools/dev/rds', secret_region)
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = conf_secret['secretKey']
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'aws-tools-dev',
-        'HOST': db_secret["host"],
-        'USER': db_secret["username"],
-        'PASSWORD': db_secret["password"],
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': conf_secret['dbName'],
+        'HOST': conf_secret["dbHost"],
+        'USER': conf_secret["dbUsername"],
+        'PASSWORD': conf_secret["dbPassword"],
     }
 }
 
@@ -36,6 +37,25 @@ INTERNAL_IPS = (
     '127.0.0.1'
 )
 
-REST_AUTH = {
-    'CALLBACK_URL': 'http://127.0.0.1:8080/account/login/sso'
+SAML2_AUTH = {
+    'METADATA_AUTO_CONF_URL': conf_secret['samlURL'],
+
+    'DEFAULT_NEXT_URL': '/',
+
+    'CREATE_USER': True,
+    'NEW_USER_PROFILE': {
+        'USER_GROUPS': [],
+        'ACTIVE_STATUS': False,
+        'STAFF_STATUS': False,
+        'SUPERUSER_STATUS': False,
+    },
+    'ATTRIBUTES_MAP': {
+        'email': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+        'username': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
+        'first_name': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname',
+        'last_name': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname',
+    },
+    'ENTITY_ID': 'http://localhost:8080/saml2_auth/acs/',
+    'USE_JWT': False,
 }
+

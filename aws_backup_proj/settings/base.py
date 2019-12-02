@@ -34,14 +34,11 @@ INSTALLED_APPS = [
     'aws_tools.apps.AwsBackupConfig',
     'django_celery_beat',
     'rest_framework',
-    'corsheaders',
-    'rest_auth',
     'netfields',
-    # 'mozilla_django_oidc',
+    'django_saml2_auth',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,7 +89,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    # 'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
 )
 
 # Internationalization
@@ -123,9 +119,6 @@ CACHES = {
 }
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.IsAdminUser',
