@@ -1,6 +1,6 @@
 boto3
 celery
-Django==2.2.8           # Netfields doesn't support Django 3
+Django
 django-celery-beat
 django-choices
 django-netfields
