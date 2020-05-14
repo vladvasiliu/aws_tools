@@ -1,10 +1,8 @@
 boto3
-celery
 Django
-django-celery-beat
 django-choices
 django-netfields
 django-filter
+psycopg2
 djangorestframework
 drf-nested-routers
-django_saml2_auth

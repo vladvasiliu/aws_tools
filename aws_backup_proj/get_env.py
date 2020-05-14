@@ -1,7 +1,17 @@
 import json
+import os
 
 import boto3
 from botocore.exceptions import ClientError
+from django.core.exceptions import ImproperlyConfigured
+
+
+def value_from_env(key: str) -> str:
+    """Gets a value from the environment or raises ImproperlyConfigured if it cannot be found"""
+    value = os.getenv(key)
+    if value is None:
+        raise ImproperlyConfigured(f"Failed to get {key} from environment")
+    return value
 
 
 # This comes from AWS Secrets Manager sample code
