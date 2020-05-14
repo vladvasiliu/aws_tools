@@ -48,7 +48,7 @@
           class="w-100 justify-content-left align-self-center"
         >
           <b-list-group-item
-            class="bg-light pb-4"
+            class="pb-4 border-bottom"
           >
             <slot
               name="collapsedContent"
@@ -95,7 +95,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  @import "~bootstrap/scss/bootstrap";
+  @import "~bootstrap-vue/dist/bootstrap-vue.css";
+
   .object-name:hover .object-name-caret {
     opacity: inherit;
   }
@@ -110,6 +113,9 @@ export default {
 
   .object-name:not(.collapsed) {
     font-weight: bold;
+    border: 1px ;
+    background: $secondary;
+    color: $light;
   }
 
   .card .card-header .search-field {

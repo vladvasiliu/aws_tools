@@ -18,7 +18,7 @@
     </div>
     <div class="row mt-2">
       <b-table-simple>
-        <b-thead head-variant="dark">
+        <b-thead head-variant="light">
           <b-tr>
             <b-th>Protocol</b-th>
             <b-th>Ports</b-th>
