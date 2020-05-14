@@ -5,10 +5,13 @@
   >
     <div class="row">
       <div class="col col-auto">
-        <small><strong>ID:</strong></small> {{ securityGroup.id }}
+        <small><strong>ID:</strong> {{ securityGroup.id }}</small>
       </div>
       <div class="col col-auto">
-        <small><strong>Region:</strong></small> {{ securityGroup.region_name }}
+        <small><strong>VPC:</strong> {{ securityGroup.vpc_id }}</small>
+      </div>
+      <div class="col col-auto">
+        <small><strong>Region:</strong> {{ securityGroup.region_name }}</small>
       </div>
     </div>
     <div class="row">
@@ -16,9 +19,9 @@
         <small><strong>Description:</strong></small> {{ securityGroup.description }}
       </div>
     </div>
-    <div class="row mt-2">
-      <b-table-simple>
-        <b-thead head-variant="light">
+    <div class="row mt-3">
+      <b-table-simple v-if="rules.length > 0">
+        <b-thead>
           <b-tr>
             <b-th>Protocol</b-th>
             <b-th>Ports</b-th>
@@ -48,6 +51,12 @@
           </b-tr>
         </b-tbody>
       </b-table-simple>
+      <div
+        v-else
+        class="text-center text-danger col col-auto"
+      >
+        <em>No rules</em>
+      </div>
     </div>
   </div>
 </template>

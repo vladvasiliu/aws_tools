@@ -130,6 +130,7 @@ class SecurityGroupRuleIPRangeSerializer(serializers.HyperlinkedModelSerializer)
         model = SecurityGroupRuleIPRange
         fields = '__all__'
 
+
 class SecurityGroupRuleUserGroupPairSerializer(serializers.HyperlinkedModelSerializer):
     security_group_rule = SecurityGroupRuleBriefSerializer(read_only=True, many=True)
 

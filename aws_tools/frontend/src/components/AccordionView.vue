@@ -33,7 +33,7 @@
           :key="object.id"
           v-b-toggle="object.id"
           action
-          class="border-top-1 border-bottom-0 m-0 d-flex justify-content-between align-items-center object-name"
+          class="m-0 d-flex justify-content-between align-items-center object-name"
         >
           <span class="object-name-text">{{ object.name }}</span>
           <font-awesome-icon
@@ -48,7 +48,7 @@
           class="w-100 justify-content-left align-self-center"
         >
           <b-list-group-item
-            class="pb-4 border-bottom"
+            class="pb-4"
           >
             <slot
               name="collapsedContent"
@@ -114,8 +114,12 @@ export default {
   .object-name:not(.collapsed) {
     font-weight: bold;
     border: 1px ;
-    background: $secondary;
-    color: $light;
+    background: $light;
+    // color: $light;
+  }
+
+  .object-name.collapsed {
+    border-bottom: $border-width solid transparent;
   }
 
   .card .card-header .search-field {

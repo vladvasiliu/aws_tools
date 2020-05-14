@@ -292,6 +292,7 @@ class SecurityGroup(AWSEC2Resource):
     id_filter = 'group-id'
     is_managed = models.BooleanField(default=False)
     description = models.CharField(max_length=100, editable=False)
+    vpc_id = models.CharField(max_length=21, editable=False)
 
     @classmethod
     def update(cls, aws_account: AWSAccount):
@@ -308,7 +309,8 @@ class SecurityGroup(AWSEC2Resource):
                     '_name': aws_sg.group_name,
                     'description': aws_sg.description,
                     'is_managed': is_managed(aws_sg),
-                    'present': True
+                    'present': True,
+                    'vpc_id': aws_sg.vpc_id
                 }
                 security_group, _ = SecurityGroup.objects.update_or_create(id=aws_sg.id, defaults=defaults)
 
