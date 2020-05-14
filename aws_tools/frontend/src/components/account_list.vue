@@ -79,5 +79,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "~bootstrap/scss/bootstrap";
+  @import "~bootstrap-vue/dist/bootstrap-vue.css";
+
+  .list-group-item.list-group-item-action {
+      border-bottom: $border-width solid transparent;
+  }
+
+  .list-group-item.list-group-item-action.active {
+    background: $light;
+    color: $dark;
+    border: $border-width solid transparent;
+    font-weight: $font-weight-bolder;
+  }
 </style>
