@@ -1,4 +1,8 @@
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 import boto3
+
+from constants import ScheduleAction
 
 
 def tags_dict(resource):
@@ -49,3 +53,14 @@ def aws_client(client_class, role_arn):
                           aws_secret_access_key=credentials['SecretAccessKey'],
                           aws_session_token=credentials['SessionToken'])
     return client
+
+
+def default_schedule() -> dict:
+    return {hour: ScheduleAction.NOTHING for hour in range(24)}
+
+
+def validate_day_schedule(value: dict):
+    if default_schedule().keys != value.keys():
+        raise ValidationError(_("should have 1 entry per hour of the day"))
+    if set(value.values()) <= set(ScheduleAction):
+        raise ValidationError(_("values should be a ScheduleAction"))
