@@ -5,9 +5,9 @@ from rest_framework.response import Response
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
     AWSOrganizationSerializer, UserSerializer, SecurityGroupSerializer, SecurityGroupRuleSerializer, \
-    SecurityGroupRuleIPRangeSerializer, SecurityGroupRuleUserGroupPairSerializer
+    SecurityGroupRuleIPRangeSerializer, SecurityGroupRuleUserGroupPairSerializer, InstanceScheduleSerializer
 from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization, SecurityGroup, SecurityGroupRule, \
-    SecurityGroupRuleIPRange, SecurityGroupRuleUserGroupPair
+    SecurityGroupRuleIPRange, SecurityGroupRuleUserGroupPair, InstanceSchedule
 
 
 class AWSAccountViewSet(viewsets.ModelViewSet):
@@ -73,3 +73,8 @@ class SecurityGroupRuleIPRangeViewSet(viewsets.ReadOnlyModelViewSet):
 class SecurityGroupRuleUserGroupPairViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SecurityGroupRuleUserGroupPairSerializer
     queryset = SecurityGroupRuleUserGroupPair.objects.all()
+
+
+class InstanceScheduleViewSet(viewsets.ModelViewSet):
+    serializer_class = InstanceScheduleSerializer
+    queryset = InstanceSchedule.objects.all()

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 
 from .models import AWSAccount, Instance, EBSVolume, EBSSnapshot, AWSOrganization, AWSRegion, SecurityGroup, \
-    SecurityGroupRule, SecurityGroupRuleIPRange, SecurityGroupRuleUserGroupPair
+    SecurityGroupRule, SecurityGroupRuleIPRange, SecurityGroupRuleUserGroupPair, InstanceSchedule
 
 
 class AWSRegionBriefSerializer(serializers.HyperlinkedModelSerializer):
@@ -136,4 +136,12 @@ class SecurityGroupRuleUserGroupPairSerializer(serializers.HyperlinkedModelSeria
 
     class Meta:
         model = SecurityGroupRuleUserGroupPair
+        fields = '__all__'
+
+
+class InstanceScheduleSerializer(serializers.HyperlinkedModelSerializer):
+    # schedule = serializers.JSONField()
+
+    class Meta:
+        model = InstanceSchedule
         fields = '__all__'

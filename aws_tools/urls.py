@@ -5,7 +5,7 @@ from rest_framework_nested import routers
 
 from .views import AWSOrganizationViewSet, AWSAccountViewSet, InstanceViewSet, EBSVolumeViewSet, EBSSnapshotViewSet, \
     current_user, SecurityGroupViewSet, SecurityGroupRuleViewSet, SecurityGroupRuleIPRangeViewSet, \
-    SecurityGroupRuleUserGroupPairViewSet
+    SecurityGroupRuleUserGroupPairViewSet, InstanceScheduleViewSet
 
 router = routers.DefaultRouter()
 router.register(r'AWSAccounts', AWSAccountViewSet)
@@ -16,6 +16,7 @@ router.register(r'Snapshots', EBSSnapshotViewSet)
 router.register(r'SecurityGroups', SecurityGroupViewSet)
 router.register(r'SecurityGroupIPRanges', SecurityGroupRuleIPRangeViewSet)
 router.register(r'SecurityGroupUserGroupPairs', SecurityGroupRuleUserGroupPairViewSet)
+router.register(r'InstanceScheduleViewSet', InstanceScheduleViewSet)
 
 security_group_router = routers.NestedDefaultRouter(router, r'SecurityGroups', lookup='security_group')
 security_group_router.register(r'Rules', SecurityGroupRuleViewSet, basename='securitygrouprule')

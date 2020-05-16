@@ -1,4 +1,4 @@
-from enum import Enum, unique
+from enum import unique, IntEnum
 from djchoices import DjangoChoices, ChoiceItem
 
 
@@ -32,14 +32,14 @@ class IPProtocol(DjangoChoices):
     UDP = ChoiceItem('udp', label="UDP")
 
 
-class Day(DjangoChoices):
-    MONDAY = ChoiceItem(1, label="Monday")
-    TUESDAY = ChoiceItem(2, label="Tuesday")
-    WEDNESDAY = ChoiceItem(3, label="Wednesday")
-    THURSDAY = ChoiceItem(4, label="Thursday")
-    FRIDAY = ChoiceItem(5, label="Friday")
-    SATURDAY = ChoiceItem(6, label="Saturday")
-    SUNDAY = ChoiceItem(7, label="Sunday")
+# class Day(DjangoChoices):
+#     MONDAY = ChoiceItem(1, label="Monday")
+#     TUESDAY = ChoiceItem(2, label="Tuesday")
+#     WEDNESDAY = ChoiceItem(3, label="Wednesday")
+#     THURSDAY = ChoiceItem(4, label="Thursday")
+#     FRIDAY = ChoiceItem(5, label="Friday")
+#     SATURDAY = ChoiceItem(6, label="Saturday")
+#     SUNDAY = ChoiceItem(7, label="Sunday")
 
 
 # class ScheduleAction(DjangoChoices):
@@ -48,7 +48,17 @@ class Day(DjangoChoices):
 #     ENSURE_OFF = ChoiceItem(2, label="ensure off")
 
 @unique
-class ScheduleAction(Enum):
+class ScheduleAction(IntEnum):
     NOTHING = 0
     TURN_ON = 1
     TURN_OFF = 2
+
+
+class Day(IntEnum):
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
