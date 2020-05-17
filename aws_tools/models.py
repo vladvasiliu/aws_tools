@@ -1,9 +1,7 @@
 from datetime import datetime
-from typing import Optional
 
 from botocore.exceptions import ClientError
-from django.contrib.postgres.fields import JSONField
-from django.core.serializers.json import DjangoJSONEncoder
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import ObjectDoesNotExist
@@ -14,10 +12,10 @@ import logging
 from django.utils import timezone
 from netfields import CidrAddressField, NetManager
 
-from helpers import default_schedule, validate_day_schedule
+from helpers import default_schedule, validate_schedule
 from .exceptions import ResourceNotFoundException
 from .helpers import resource_name, aws_resource, is_managed, aws_client
-from .constants import AWSRegionChoice, IPProtocol, AWSSecurityGroupRuleType, Day, ScheduleAction
+from .constants import AWSRegionChoice, IPProtocol, AWSSecurityGroupRuleType, ScheduleAction
 from .managers import EBSVolumeManager
 
 logger = logging.getLogger(__name__)
@@ -143,48 +141,23 @@ class InstanceSchedule(models.Model):
     Day 0 and 7 is Sunday, Day 1 is Monday
     """
     name = models.CharField(max_length=100)
-    schedule = JSONField(default=default_schedule, blank=False, null=False, validators=[validate_day_schedule], encoder=DjangoJSONEncoder)
+    schedule = ArrayField(base_field=models.PositiveSmallIntegerField(choices=ScheduleAction.choices),
+                          default=default_schedule, size=7*24, validators=[validate_schedule])
 
     def __str__(self):
         return f"{self.name}"
 
     def compute_action(self, current_time: datetime = None):
+        """Returns the scheduled action for the current time
+
+        The time is considered time zone aware. If it isn't, it will used as UTC.
+        If blank, the current time will be used
+        """
         current_time = current_time or timezone.now()
-        return self.schedule[str(current_time.isoweekday())][str(current_time.hour)]
-    #
-    # @property
-    # def schedule(self):
-    #     return {sd.day: sd.day_schedule for sd in self.scheduleday_set.all()}
+        week_hour = current_time.weekday() * 24 + current_time.hour
+        return self.schedule[week_hour]
 
 
-# class ScheduleDay(models.Model):
-#     """ The schedule for a given day of the week *IN UTC*
-#
-#     The `day_schedule` field contains the actual schedule. It is a json whose keys are hours and values are the action.
-#     The schedule is represented as twenty-four one-hour blocks.
-#     The `day` field represents the day of the week. Day 1 is Monday, Day 7 is Sunday.
-#     """
-#     day = models.SmallIntegerField(choices=Day.choices)
-#     schedule = models.ForeignKey(InstanceSchedule, on_delete=models.CASCADE, editable=False)
-#     day_schedule = JSONField(default=default_schedule, validators=[validate_day_schedule])
-#
-#     class Meta:
-#         unique_together = [("day", "schedule")]
-#
-#     def compute_action(self, current_time: datetime = None) -> Optional[ScheduleAction]:
-#         """What action to do as of `current_time`.
-#
-#         :param current_time: a datetime with a timezone, set to now if omitted
-#         :return: None if the current_time is not the right day otherwise an action
-#         """
-#         current_time = current_time or timezone.now()
-#
-#         if self.day != current_time.isoweekday():
-#             return None
-#
-#         return self.day_schedule[str(current_time.hour)]
-#
-#
 class Instance(AWSEC2Resource):
     resource_kind = "instances"
     id_filter = 'instance-id'

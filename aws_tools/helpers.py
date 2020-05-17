@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import boto3
@@ -55,14 +57,16 @@ def aws_client(client_class, role_arn):
     return client
 
 
-def default_schedule() -> dict:
-    return {day: {hour: ScheduleAction.NOTHING for hour in range(24)} for day in Day}
+def default_schedule() -> list:
+    return [ScheduleAction.NOTHING for _ in range(7*24)]
 
 
-def validate_day_schedule(value: dict):
-    if default_schedule().keys != value.keys():
-        print(f"Value: {value.keys()}")
-        print(f"Default: {default_schedule().keys()}")
-        raise ValidationError(_("should have 1 entry per hour of the day"))
-    if set(value.values()) <= set(ScheduleAction):
+def validate_schedule(value: dict):
+    if len(value) != 168:  # 7 days x 24 hours a day
+        raise ValidationError(_("there should be 168 entries, one for each hour of the week"))
+    if set(value) <= set(ScheduleAction):
         raise ValidationError(_("values should be a ScheduleAction"))
+
+
+def validate_day_schedule(value):
+    pass

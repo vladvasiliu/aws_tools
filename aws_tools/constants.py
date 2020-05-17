@@ -42,16 +42,16 @@ class IPProtocol(DjangoChoices):
 #     SUNDAY = ChoiceItem(7, label="Sunday")
 
 
-# class ScheduleAction(DjangoChoices):
-#     NOTHING = ChoiceItem(0, label="nothing")
-#     ENSURE_ON = ChoiceItem(1, label="ensure on")
-#     ENSURE_OFF = ChoiceItem(2, label="ensure off")
+class ScheduleAction(DjangoChoices):
+    NOTHING = ChoiceItem(0, label="nothing")
+    TURN_ON = ChoiceItem(1, label="turn on")
+    TURN_OFF = ChoiceItem(2, label="turn off")
 
-@unique
-class ScheduleAction(IntEnum):
-    NOTHING = 0
-    TURN_ON = 1
-    TURN_OFF = 2
+# @unique
+# class ScheduleAction(IntEnum):
+#     NOTHING = 0
+#     TURN_ON = 1
+#     TURN_OFF = 2
 
 
 class Day(IntEnum):
