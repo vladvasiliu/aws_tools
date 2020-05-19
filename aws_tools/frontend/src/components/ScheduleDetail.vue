@@ -1,15 +1,13 @@
 <template>
   <b-card v-if="schedule">
-    <template
-      v-slot:header
-    >
+    <template v-slot:header>
       <strong>{{ schedule.name }}</strong>
     </template>
     <div class="row">
       <div class="col col-auto">
         <strong>Status: </strong>
         <b-form-checkbox
-          v-model="schedule_status"
+          :checked="schedule_status"
           name="status-button"
           inline
           switch
@@ -35,13 +33,8 @@ export default {
     schedule: { type: Object, default: null, required: false }
   },
   computed: {
-    schedule_status: {
-      get () {
-        return this.schedule.active
-      },
-      set (value) {
-        // this.$emit('scheduleStatusChange', value)
-      }
+    schedule_status: function () {
+      return this.schedule.active
     }
   },
   methods: {
