@@ -52,10 +52,9 @@ export default {
       const newValue = {
         schedule: this.selectedSchedule,
         changes: {
-          active: value,
+          active: value
         }
       }
-      console.log(newValue)
       this.$store.dispatch('UPDATE_SCHEDULE', newValue)
     }
   }

@@ -7,13 +7,15 @@
     </template>
     <div class="row">
       <div class="col col-auto">
-        <strong>Status:</strong>
+        <strong>Status: </strong>
         <b-form-checkbox
           v-model="schedule_status"
           name="status-button"
+          inline
           switch
+          @change="updateScheduleStatus"
         >
-          {{ schedule_status ? "Active" : "Disabled" }}
+          {{ schedule.active ? "Active" : "Disabled" }}
         </b-form-checkbox>
       </div>
     </div>
@@ -38,8 +40,13 @@ export default {
         return this.schedule.active
       },
       set (value) {
-        this.$emit('scheduleStatusChange', value)
+        // this.$emit('scheduleStatusChange', value)
       }
+    }
+  },
+  methods: {
+    updateScheduleStatus: function (value) {
+      this.$emit('scheduleStatusChange', value)
     }
   }
 }

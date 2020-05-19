@@ -33,7 +33,7 @@ export default {
     UPDATE_SCHEDULE: (state, { newSchedule }) => {
       state.schedules = state.schedules.map(schedule => {
         if (schedule.url === newSchedule.url) {
-          return Object.assign({}, schedule, newSchedule)
+          return Object.assign(schedule, newSchedule)
         }
         return schedule
       })

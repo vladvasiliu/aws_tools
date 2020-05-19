@@ -15,7 +15,7 @@ const actions = {
     )
   },
   UPDATE_INSTANCE: function ({ commit }, newValue) {
-    axios.put(newValue.instance.url, newValue.changes).then(response => {
+    axios.patch(newValue.instance.url, newValue.changes).then(response => {
       commit('UPDATE_INSTANCE', { newInstance: response.data })
     })
   }
@@ -28,7 +28,7 @@ const mutations = {
   UPDATE_INSTANCE: (state, { newInstance }) => {
     state.instances = state.instances.map(instance => {
       if (instance.id === newInstance.id) {
-        return Object.assign({}, instance, newInstance)
+        return Object.assign(instance, newInstance)
       }
       return instance
     })
