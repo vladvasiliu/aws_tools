@@ -20,6 +20,12 @@
         >
           <font-awesome-icon :icon="securityIcon" /> Security groups
         </b-nav-item>
+        <b-nav-item
+          :to="{ name: 'ScheduleView' }"
+          active-class="active"
+        >
+          <font-awesome-icon :icon="scheduleIcon" /> Schedules
+        </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav
         v-if="userName !== null"
@@ -43,25 +49,20 @@
 <script>
 import { mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser } from '@fortawesome/free-regular-svg-icons'
+import { faUser, faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
 import { faUserSlash, faShieldAlt, faServer } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUser, faUserSlash, faServer, faShieldAlt)
+library.add(faUser, faUserSlash, faServer, faShieldAlt, faCalendarAlt)
 
 export default {
   name: 'NavBar',
 
   computed: {
     ...mapGetters(['userName']),
-    userIcon () {
-      return faUser
-    },
-    serverIcon () {
-      return faServer
-    },
-    securityIcon () {
-      return faShieldAlt
-    }
+    userIcon () { return faUser },
+    serverIcon () { return faServer },
+    securityIcon () { return faShieldAlt },
+    scheduleIcon () { return faCalendarAlt }
   },
 
   // mounted () {

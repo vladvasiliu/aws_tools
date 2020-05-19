@@ -143,6 +143,7 @@ class InstanceSchedule(models.Model):
     name = models.CharField(max_length=100)
     schedule = ArrayField(base_field=models.PositiveSmallIntegerField(choices=ScheduleAction.choices),
                           default=default_schedule, size=7*24, validators=[validate_schedule])
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.name}"

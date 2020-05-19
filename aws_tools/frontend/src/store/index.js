@@ -5,6 +5,7 @@ import awsAccount from './modules/aws_account'
 import instance from './modules/instance'
 import auth from './modules/auth'
 import securityGroup from './modules/SecurityGroup'
+import schedule from './modules/schedule'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     aws_account: awsAccount,
     instance,
     auth,
-    securityGroup
+    securityGroup,
+    schedule
   }
 })

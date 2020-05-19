@@ -34,6 +34,11 @@ const index = new Router({
       ]
     },
     {
+      path: '/schedules',
+      name: 'ScheduleView',
+      component: () => import('../components/TheScheduleView')
+    },
+    {
       path: '/403',
       name: 'UnauthorizedView',
       component: Unauthorized

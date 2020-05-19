@@ -16,7 +16,7 @@ router.register(r'Snapshots', EBSSnapshotViewSet)
 router.register(r'SecurityGroups', SecurityGroupViewSet)
 router.register(r'SecurityGroupIPRanges', SecurityGroupRuleIPRangeViewSet)
 router.register(r'SecurityGroupUserGroupPairs', SecurityGroupRuleUserGroupPairViewSet)
-router.register(r'InstanceScheduleViewSet', InstanceScheduleViewSet)
+router.register(r'Schedules', InstanceScheduleViewSet)
 
 security_group_router = routers.NestedDefaultRouter(router, r'SecurityGroups', lookup='security_group')
 security_group_router.register(r'Rules', SecurityGroupRuleViewSet, basename='securitygrouprule')

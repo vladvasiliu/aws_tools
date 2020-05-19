@@ -57,10 +57,10 @@ export default {
   name: 'ObjectListGroupCard',
   props: {
     showAll: { type: Boolean, default: () => { return false }, required: false },
-    objectList: { type: Array, default: () => { return [] }, required: true },
-    objectError: { type: Object, default: null, required: true },
-    selectedObject: { type: Object, default: null, required: true },
-    cardTitle: { type: String, default: null, required: true }
+    objectList: { type: Array, default: null },
+    objectError: { type: Object, default: null },
+    selectedObject: { type: Object, default: null },
+    cardTitle: { type: String, default: 'Object list', required: true }
   },
   computed: {
     faExclamationTriangle () { return faExclamationTriangle }
