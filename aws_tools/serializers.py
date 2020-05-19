@@ -16,10 +16,11 @@ class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
     instance_set = serializers.HyperlinkedRelatedField(many=True, view_name='instance-detail', read_only=True)
     id = serializers.CharField(read_only=True)
     regions = AWSRegionBriefSerializer(many=True, read_only=True)
+    name = serializers.CharField(read_only=True)
 
     class Meta:
         model = AWSAccount
-        fields = '__all__'
+        exclude = ["_name"]
 
 
 class EBSVolumeBriefSerializer(serializers.HyperlinkedModelSerializer):

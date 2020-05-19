@@ -1,0 +1,90 @@
+<template>
+  <b-card
+    no-body
+  >
+    <template v-slot:header>
+      <strong>{{ cardTitle }}</strong>
+    </template>
+    <div
+      v-if="objectList == null && objectError == null"
+      class="text-center"
+    >
+      <b-spinner />
+    </div>
+    <div
+      v-else-if="objectList == null && objectError != null"
+      v-b-tooltip.hover
+      class="text-center text-danger"
+      :title="objectError"
+    >
+      <font-awesome-icon :icon="faExclamationTriangle" />
+    </div>
+    <b-list-group
+      v-if="Array.isArray(objectList) && objectList.length > 0"
+      flush
+    >
+      <b-list-group-item
+        v-if="objectList.length>1 && showAll"
+        :active="!selectedObject"
+        action
+        @click="select()"
+      >
+        All
+      </b-list-group-item>
+      <b-list-group-item
+        v-for="object in objectList"
+        :key="object.id"
+        :active="selectedObject === object || objectList.length === 1"
+        action
+        @click="select(object)"
+      >
+        {{ object.name }}
+      </b-list-group-item>
+    </b-list-group>
+    <div
+      v-else-if="Array.isArray(objectList)"
+      class="text-danger"
+    >
+      <em>None</em>
+    </div>
+  </b-card>
+</template>
+
+<script>
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+
+export default {
+  name: 'ObjectListGroupCard',
+  props: {
+    showAll: { type: Boolean, default: () => { return false }, required: false },
+    objectList: { type: Array, default: () => { return [] }, required: true },
+    objectError: { type: Object, default: null, required: true },
+    selectedObject: { type: Object, default: null, required: true },
+    cardTitle: { type: String, default: null, required: true }
+  },
+  computed: {
+    faExclamationTriangle () { return faExclamationTriangle }
+  },
+  methods: {
+    select: function (object) {
+      this.$emit('selectObject', object)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  @import "~bootstrap/scss/bootstrap";
+  @import "~bootstrap-vue/dist/bootstrap-vue.css";
+
+  .list-group-item.list-group-item-action {
+    border-bottom: $border-width solid transparent;
+  }
+
+  .list-group-item.list-group-item-action.active {
+    background: $light;
+    color: $dark;
+    border: $border-width solid transparent;
+    font-weight: $font-weight-bolder;
+  }
+</style>
