@@ -15,17 +15,34 @@
         </b-col>
         <b-col
           align-self="end"
-          md="auto"
-          class="mt-n1 mb-n1"
+          md="4"
         >
-          <b-button
-            class="align-right"
-            size="sm"
-            :disabled="!isLocalModified"
-            :variant="isLocalModified ? 'primary' : 'outline-secondary'"
+          <b-row
+            class="mt-n1 mb-n1"
           >
-            Save
-          </b-button>
+            <b-col>
+              <b-button
+                size="sm"
+                :disabled="!isLocalModified"
+                :variant="isLocalModified ? 'outline-primary' : 'outline-secondary'"
+                block
+                @click="cancelChanges"
+              >
+                Cancel
+              </b-button>
+            </b-col>
+            <b-col>
+              <b-button
+                size="sm"
+                :disabled="!isLocalModified"
+                :variant="isLocalModified ? 'primary' : 'outline-secondary'"
+                block
+                @click="saveChanges"
+              >
+                Save
+              </b-button>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
     </template>
@@ -148,7 +165,13 @@ export default {
       console.log(day, hour)
     },
     dayRange: () => range(7),
-    hourRange: () => range(24)
+    hourRange: () => range(24),
+    cancelChanges: function () {
+      this.local_schedule = Object.assign({}, this.schedule)
+    },
+    saveChanges: function () {
+      this.$emit('scheduleChange', this.local_schedule)
+    }
   }
 }
 </script>

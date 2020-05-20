@@ -13,7 +13,7 @@
     <div class="col">
       <ScheduleDetail
         :schedule="selectedSchedule"
-        @scheduleStatusChange="scheduleStatusChange"
+        @scheduleChange="scheduleChange"
       />
     </div>
   </div>
@@ -48,11 +48,12 @@ export default {
       this.selectedSchedule = object
     },
 
-    scheduleStatusChange: function (value) {
+    scheduleChange: function (newSchedule) {
       const newValue = {
         schedule: this.selectedSchedule,
         changes: {
-          active: value
+          active: newSchedule.active,
+          schedule: newSchedule.schedule
         }
       }
       this.$store.dispatch('UPDATE_SCHEDULE', newValue)
