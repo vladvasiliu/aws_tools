@@ -85,12 +85,12 @@
               <b-th>{{ hour }}:00</b-th>
               <b-td
                 v-for="day in dayRange()"
-                :key="day * 24 + hour"
-                :variant="schedule.schedule[day * 24 + hour] | state_to_variant"
+                :key="interval(day, hour)"
+                :variant="local_schedule.schedule[interval(day, hour)] | state_to_variant"
                 class="text-center"
                 @click="updateScheduleAction(day, hour)"
               >
-                {{ schedule.schedule[day * 24 + hour] | state_to_text }}
+                {{ local_schedule.schedule[interval(day, hour)] | state_to_text }}
               </b-td>
             </b-tr>
           </b-tbody>
@@ -109,8 +109,12 @@
 <script>
 import { _ } from 'vue-underscore'
 
-function range (size) {
-  return [...Array(size).keys()]
+function localScheduleFromSelected (selectedSchedule) {
+  if (selectedSchedule === null) { return null }
+  return {
+    active: selectedSchedule.active,
+    schedule: [...selectedSchedule.schedule]
+  }
 }
 
 export default {
@@ -146,26 +150,28 @@ export default {
   },
   data: function () {
     return {
-      local_schedule: { ...this.schedule }
+      local_schedule: localScheduleFromSelected(this.schedule)
     }
   },
   computed: {
     isLocalModified: function () {
-      return !_.isEqual(this.local_schedule, this.schedule)
+      return !(_.isEqual(this.local_schedule.schedule, this.schedule.schedule) && _.isEqual(this.local_schedule.active, this.schedule.active))
     }
   },
   watch: {
     schedule: function (newVal) {
-      // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-      this.local_schedule = { ...newVal }
+      this.local_schedule = localScheduleFromSelected(newVal)
     }
   },
   methods: {
     updateScheduleAction: function (day, hour) {
-      console.log(day, hour)
+      const interval = this.interval(day, hour)
+      const oldVal = this.local_schedule.schedule[interval]
+      this.$set(this.local_schedule.schedule, interval, (oldVal + 1) % 3)
     },
-    dayRange: () => range(7),
-    hourRange: () => range(24),
+    dayRange: () => _.range(7),
+    hourRange: () => _.range(24),
+    interval: (day, hour) => day * 24 + hour,
     cancelChanges: function () {
       this.local_schedule = Object.assign({}, this.schedule)
     },
