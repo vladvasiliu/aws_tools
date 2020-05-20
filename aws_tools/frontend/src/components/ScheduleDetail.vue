@@ -1,19 +1,44 @@
 <template>
   <b-card v-if="schedule">
     <template v-slot:header>
-      <strong>{{ schedule.name }}</strong>
+      <b-row>
+        <b-col>
+          <strong>{{ schedule.name }}</strong>
+          <b-badge
+            v-if="isLocalModified"
+            class="ml-3"
+            variant="warning"
+            pill
+          >
+            Modified
+          </b-badge>
+        </b-col>
+        <b-col
+          align-self="end"
+          md="auto"
+          class="mt-n1 mb-n1"
+        >
+          <b-button
+            class="align-right"
+            size="sm"
+            :disabled="!isLocalModified"
+            :variant="isLocalModified ? 'primary' : 'outline-secondary'"
+          >
+            Save
+          </b-button>
+        </b-col>
+      </b-row>
     </template>
     <div class="row mb-3">
       <div class="col col-auto">
         <strong>Status: </strong>
         <b-form-checkbox
-          :checked="schedule_status"
+          v-model="local_schedule.active"
           name="status-button"
           inline
           switch
-          @change="updateScheduleStatus"
         >
-          {{ schedule.active ? "Active" : "Disabled" }}
+          {{ local_schedule.active ? "Active" : "Disabled" }}
         </b-form-checkbox>
       </div>
     </div>
@@ -37,17 +62,18 @@
           </b-thead>
           <b-tbody>
             <b-tr
-              v-for="hour in 24"
+              v-for="hour in hourRange()"
               :key="hour"
             >
-              <b-th>{{ hour - 1 }}:00</b-th>
+              <b-th>{{ hour }}:00</b-th>
               <b-td
-                v-for="day in 7"
-                :key="(day-1) * 24 + hour - 1"
-                :variant="schedule.schedule[(day-1) * 24 + hour-1] | state_to_variant"
+                v-for="day in dayRange()"
+                :key="day * 24 + hour"
+                :variant="schedule.schedule[day * 24 + hour] | state_to_variant"
                 class="text-center"
+                @click="updateScheduleAction(day, hour)"
               >
-                {{ schedule.schedule[(day-1) * 24 + hour-1] | state_to_text }}
+                {{ schedule.schedule[day * 24 + hour] | state_to_text }}
               </b-td>
             </b-tr>
           </b-tbody>
@@ -64,6 +90,12 @@
 </template>
 
 <script>
+import { _ } from 'vue-underscore'
+
+function range (size) {
+  return [...Array(size).keys()]
+}
+
 export default {
   name: 'ScheduleDetail',
   filters: {
@@ -95,15 +127,28 @@ export default {
   props: {
     schedule: { type: Object, default: null, required: false }
   },
+  data: function () {
+    return {
+      local_schedule: { ...this.schedule }
+    }
+  },
   computed: {
-    schedule_status: function () {
-      return this.schedule.active
+    isLocalModified: function () {
+      return !_.isEqual(this.local_schedule, this.schedule)
+    }
+  },
+  watch: {
+    schedule: function (newVal) {
+      // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      this.local_schedule = { ...newVal }
     }
   },
   methods: {
-    updateScheduleStatus: function (value) {
-      this.$emit('scheduleStatusChange', value)
-    }
+    updateScheduleAction: function (day, hour) {
+      console.log(day, hour)
+    },
+    dayRange: () => range(7),
+    hourRange: () => range(24)
   }
 }
 </script>
