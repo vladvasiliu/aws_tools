@@ -12,30 +12,35 @@
     @shown="getData"
     @hidden="clearData"
   >
-    <Loading
-      v-if="loading"
-      message="Loading instances..."
-    />
-    <Error
-      v-else-if="error"
-      :message="error.message"
-    />
-    <AccordionView
-      v-else
-      card-title="Instances"
-      :object-list="instance_list"
+    <transition
+      name="loading-fade"
+      mode="out-in"
     >
-      <template v-slot:collapsedContent="slotProps">
-        <b-list-group flush>
-          <b-list-group-item
-            v-for="instance in slotProps.object.instance_set"
-            :key="instance.id"
-          >
-            {{ instance.name }}
-          </b-list-group-item>
-        </b-list-group>
-      </template>
-    </AccordionView>
+      <Loading
+        v-if="loading"
+        message="Loading instances..."
+      />
+      <Error
+        v-else-if="error"
+        :message="error.message"
+      />
+      <AccordionView
+        v-else
+        card-title="Instances"
+        :object-list="instance_list"
+      >
+        <template v-slot:collapsedContent="slotProps">
+          <b-list-group flush>
+            <b-list-group-item
+              v-for="instance in slotProps.object.instance_set"
+              :key="instance.id"
+            >
+              {{ instance.name }}
+            </b-list-group-item>
+          </b-list-group>
+        </template>
+      </AccordionView>
+    </transition>
   </b-modal>
 </template>
 
@@ -91,5 +96,18 @@ export default {
 </script>
 
 <style scoped>
+  /*.loading-fade-enter-active {*/
+  /*  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
+  /*}*/
+  /*.loading-fade-leave-active {*/
+  /*  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
+  /*}*/
+  .loading-fade-enter, .loading-fade-leave-to {
+  transform: scale(0.1);
+  transition: all .2s ease-in-out;
+  opacity: 0;
+  height: auto;
+  flex-shrink: 1;
+}
 
 </style>
