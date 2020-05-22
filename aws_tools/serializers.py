@@ -143,7 +143,27 @@ class SecurityGroupRuleUserGroupPairSerializer(serializers.HyperlinkedModelSeria
 class InstanceScheduleSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     instance_count = serializers.ReadOnlyField()
+    instance_list = serializers.HyperlinkedIdentityField(view_name='schedule-list',
+                                                         lookup_url_kwarg='schedule_pk')
 
     class Meta:
         model = InstanceSchedule
         fields = '__all__'
+
+
+class AWSAccountBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AWSAccount
+        fields = ['name']
+
+
+class InstanceScheduleInstanceSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {'schedule_pk': 'schedule__pk'}
+    id = serializers.ReadOnlyField()
+    name = serializers.ReadOnlyField()
+    # url = serializers.HyperlinkedIdentityField(view_name="instance-detail")
+    aws_account = serializers.SlugRelatedField('name', read_only=True)
+
+    class Meta:
+        model = Instance
+        fields = ['name', 'id', 'region_name', 'aws_account']

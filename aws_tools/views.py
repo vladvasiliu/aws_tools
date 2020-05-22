@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from .serializers import AWSAccountSerializer, InstanceSerializer, EBSVolumeSerializer, EBSSnapshotSerializer, \
     AWSOrganizationSerializer, UserSerializer, SecurityGroupSerializer, SecurityGroupRuleSerializer, \
-    SecurityGroupRuleIPRangeSerializer, SecurityGroupRuleUserGroupPairSerializer, InstanceScheduleSerializer
+    SecurityGroupRuleIPRangeSerializer, SecurityGroupRuleUserGroupPairSerializer, InstanceScheduleSerializer, \
+    InstanceScheduleInstanceSerializer
 from .models import Instance, EBSVolume, EBSSnapshot, AWSAccount, AWSOrganization, SecurityGroup, SecurityGroupRule, \
     SecurityGroupRuleIPRange, SecurityGroupRuleUserGroupPair, InstanceSchedule
 
@@ -78,3 +79,10 @@ class SecurityGroupRuleUserGroupPairViewSet(viewsets.ReadOnlyModelViewSet):
 class InstanceScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = InstanceScheduleSerializer
     queryset = InstanceSchedule.objects.order_by("name").annotate(instance_count=Count("instance"))
+
+
+class InstanceScheduleInstanceListViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = InstanceScheduleInstanceSerializer
+
+    def get_queryset(self):
+        return Instance.objects.filter(schedule=self.kwargs['schedule_pk'], present=True).select_related('aws_account')
