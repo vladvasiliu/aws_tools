@@ -85,4 +85,4 @@ class InstanceScheduleInstanceListViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InstanceScheduleInstanceSerializer
 
     def get_queryset(self):
-        return Instance.objects.filter(schedule=self.kwargs['schedule_pk'], present=True).select_related('aws_account')
+        return AWSAccount.objects.filter(instance__schedule=self.kwargs['schedule_pk'], instance__present=True).prefetch_related('instance_set').distinct()

@@ -73,8 +73,8 @@ import { faCaretDown, faSearch, faTimes } from '@fortawesome/free-solid-svg-icon
 export default {
   name: 'AccordionView',
   props: {
-    objectList: { type: Array, default: () => { return [] }, required: true },
-    cardTitle: { type: String, default: null, required: true }
+    objectList: { type: Array, required: true },
+    cardTitle: { type: String, required: true }
   },
   data () {
     return {

@@ -151,19 +151,19 @@ class InstanceScheduleSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class AWSAccountBriefSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AWSAccount
-        fields = ['name']
-
-
-class InstanceScheduleInstanceSerializer(NestedHyperlinkedModelSerializer):
-    parent_lookup_kwargs = {'schedule_pk': 'schedule__pk'}
-    id = serializers.ReadOnlyField()
-    name = serializers.ReadOnlyField()
-    # url = serializers.HyperlinkedIdentityField(view_name="instance-detail")
-    aws_account = serializers.SlugRelatedField('name', read_only=True)
-
+class InstanceScheduleInstanceBriefSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instance
-        fields = ['name', 'id', 'region_name', 'aws_account']
+        fields = ['name', 'region_name', 'id']
+
+
+class InstanceScheduleInstanceSerializer(serializers.HyperlinkedModelSerializer):
+    # parent_lookup_kwargs = {'schedule_pk': 'schedule__pk'}
+    name = serializers.ReadOnlyField()
+    instance_set = InstanceScheduleInstanceBriefSerializer(many=True, read_only=True)
+    # url = serializers.HyperlinkedIdentityField(view_name="instance-detail")
+
+    class Meta:
+        model = AWSAccount
+        # fields = ['name', 'id', 'region_name', 'aws_account']
+        fields = ['name', 'instance_set', 'id']

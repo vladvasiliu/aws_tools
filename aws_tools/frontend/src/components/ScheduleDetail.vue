@@ -55,11 +55,12 @@
         <b-table-simple
           borderless
           small
+          fixed
         >
           <b-tbody>
             <b-tr>
               <b-th>Status</b-th>
-              <b-td>
+              <b-td class="text-left">
                 <b-form-checkbox
                   v-model="local_schedule.active"
                   name="status-button"
@@ -72,7 +73,16 @@
             </b-tr>
             <b-tr>
               <b-th>Instances</b-th>
-              <b-td>{{ local_schedule.instance_count }}</b-td>
+              <b-td>
+                {{ local_schedule.instance_count }}
+                <b-link v-b-modal.instance_modal_id>
+                  List
+                </b-link>
+                <instance-list-modal
+                  modal-id="instance_modal_id"
+                  :schedule="schedule"
+                />
+              </b-td>
             </b-tr>
           </b-tbody>
         </b-table-simple>
@@ -137,6 +147,9 @@ function localScheduleFromSelected (selectedSchedule) {
 
 export default {
   name: 'ScheduleDetail',
+  components: {
+    'instance-list-modal': () => import('./ScheduleDetailModal')
+  },
   filters: {
     state_to_variant: function (value) {
       switch (value) {
@@ -201,5 +214,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
