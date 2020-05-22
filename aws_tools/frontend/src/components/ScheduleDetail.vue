@@ -14,11 +14,13 @@
           </b-badge>
         </b-col>
         <b-col
-          align-self="end"
-          md="4"
+          sm="4"
         >
           <b-row
             class="mt-n1 mb-n1"
+            cols-sm="1"
+            cols-md="1"
+            cols-lg="2"
           >
             <b-col>
               <b-button
