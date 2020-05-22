@@ -5,7 +5,7 @@
     <template v-slot:header>
       <div class="d-flex justify-content-between align-items-center">
         <strong>{{ cardTitle }}</strong>
-        <b-input-group class="w-50 search-field">
+        <b-input-group class="w-50 search-field mt-n2 mb-n2">
           <b-input-group-prepend>
             <b-input-group-text><font-awesome-icon :icon="searchIcon" /></b-input-group-text>
           </b-input-group-prepend>
@@ -120,11 +120,5 @@ export default {
 
   .object-name.collapsed {
     border-bottom: $border-width solid transparent;
-  }
-
-  .card .card-header .search-field {
-    /* for header spacing */
-    margin-bottom: -12px;
-    margin-top: -12px;
   }
 </style>
