@@ -75,7 +75,11 @@
               <b-th>Instances</b-th>
               <b-td>
                 {{ local_schedule.instance_count }}
-                <b-link v-b-modal.instance_modal_id>
+                <b-link
+                  v-show="local_schedule.instance_count"
+                  v-b-modal.instance_modal_id
+                  :disabled="!local_schedule.instance_count"
+                >
                   List
                 </b-link>
                 <instance-list-modal
