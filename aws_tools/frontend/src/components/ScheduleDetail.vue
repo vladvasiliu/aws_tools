@@ -13,9 +13,7 @@
             Modified
           </b-badge>
         </b-col>
-        <b-col
-          sm="4"
-        >
+        <b-col sm="4">
           <b-row
             class="mt-n1 mb-n1"
             cols-sm="1"
@@ -48,10 +46,9 @@
         </b-col>
       </b-row>
     </template>
-    <b-row>
+    <b-row
+    >
       <b-col
-        sm="5"
-        md="5"
         lg="4"
       >
         <b-table-simple
@@ -94,11 +91,12 @@
         </b-table-simple>
       </b-col>
       <b-col
-        sm="auto"
+        lg="8"
       >
         <b-table-simple
           hover
           small
+          class="text-center"
         >
           <b-thead>
             <b-tr>
@@ -117,7 +115,9 @@
               v-for="hour in hourRange()"
               :key="hour"
             >
-              <b-th>{{ hour }}:00</b-th>
+              <b-th class="text-right">
+                {{ hour }}:00
+              </b-th>
               <b-td
                 v-for="day in dayRange()"
                 :key="interval(day, hour)"
