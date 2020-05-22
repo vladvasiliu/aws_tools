@@ -141,7 +141,8 @@ class SecurityGroupRuleUserGroupPairSerializer(serializers.HyperlinkedModelSeria
 
 
 class InstanceScheduleSerializer(serializers.HyperlinkedModelSerializer):
-    # schedule = serializers.JSONField()
+    id = serializers.ReadOnlyField()
+    instance_count = serializers.ReadOnlyField()
 
     class Meta:
         model = InstanceSchedule

@@ -46,21 +46,40 @@
         </b-col>
       </b-row>
     </template>
-    <div class="row mb-3">
-      <div class="col col-auto">
-        <strong>Status: </strong>
-        <b-form-checkbox
-          v-model="local_schedule.active"
-          name="status-button"
-          inline
-          switch
+    <b-row>
+      <b-col
+        sm="5"
+        md="5"
+        lg="4"
+      >
+        <b-table-simple
+          borderless
+          small
         >
-          {{ local_schedule.active ? "Active" : "Disabled" }}
-        </b-form-checkbox>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col col-auto">
+          <b-tbody>
+            <b-tr>
+              <b-th>Status</b-th>
+              <b-td>
+                <b-form-checkbox
+                  v-model="local_schedule.active"
+                  name="status-button"
+                  inline
+                  switch
+                >
+                  {{ local_schedule.active ? "Active" : "Disabled" }}
+                </b-form-checkbox>
+              </b-td>
+            </b-tr>
+            <b-tr>
+              <b-th>Instances</b-th>
+              <b-td>{{ local_schedule.instance_count }}</b-td>
+            </b-tr>
+          </b-tbody>
+        </b-table-simple>
+      </b-col>
+      <b-col
+        sm="auto"
+      >
         <b-table-simple
           hover
           small
@@ -95,8 +114,8 @@
             </b-tr>
           </b-tbody>
         </b-table-simple>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
   </b-card>
   <div
     v-else
@@ -111,10 +130,9 @@ import { _ } from 'vue-underscore'
 
 function localScheduleFromSelected (selectedSchedule) {
   if (selectedSchedule === null) { return null }
-  return {
-    active: selectedSchedule.active,
-    schedule: [...selectedSchedule.schedule]
-  }
+  const result = _.clone(selectedSchedule)
+  result.schedule = [...selectedSchedule.schedule]
+  return result
 }
 
 export default {

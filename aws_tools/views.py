@@ -1,4 +1,4 @@
-from django.db.models import Max, Prefetch
+from django.db.models import Max, Prefetch, Count
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -77,4 +77,4 @@ class SecurityGroupRuleUserGroupPairViewSet(viewsets.ReadOnlyModelViewSet):
 
 class InstanceScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = InstanceScheduleSerializer
-    queryset = InstanceSchedule.objects.all()
+    queryset = InstanceSchedule.objects.order_by("name").annotate(instance_count=Count("instance"))
