@@ -33,7 +33,7 @@ export default {
       return result
     },
     scheduleList: function () {
-      return this.$store.state.schedule.schedules.map((schedule) => { return { value: schedule.url, text: schedule.name } })
+      return [{ value: null, text: 'None' }, ...this.$store.state.schedule.schedules.map((schedule) => { return { value: schedule.url, text: schedule.name } })]
     }
   },
   created () {
