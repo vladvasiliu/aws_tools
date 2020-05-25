@@ -1,15 +1,22 @@
 <template>
-  <div class="row">
-    <div class="col-auto">
-      <instance-detail :instance="instance" />
-    </div>
-    <div class="col">
-      <volume-list
-        :instance="instance"
-        class="h-100"
-      />
-    </div>
-  </div>
+  <b-container>
+    <b-row class="mb-3">
+      <b-col>
+        <instance-detail
+          :instance="instance"
+          :schedule-list="scheduleList"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <div class="col">
+        <volume-list
+          :instance="instance"
+          class="h-100"
+        />
+      </div>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -23,7 +30,8 @@ export default {
     VolumeList
   },
   props: {
-    instance: { type: Object, default: null }
+    instance: { type: Object, default: null },
+    scheduleList: { type: Array, required: true }
   }
 }
 </script>

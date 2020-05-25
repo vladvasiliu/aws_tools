@@ -46,8 +46,7 @@
         </b-col>
       </b-row>
     </template>
-    <b-row
-    >
+    <b-row>
       <b-col
         lg="4"
       >

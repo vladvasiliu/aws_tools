@@ -69,7 +69,6 @@ export default {
       this.axios
         .get(this.schedule.instance_list)
         .then(response => {
-          console.log(response.data)
           this.instance_list = response.data
           if (!this.instance_list.length) {
             this.error = { message: 'No instances found.' }

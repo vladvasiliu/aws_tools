@@ -1,50 +1,56 @@
 <template>
-  <b-card header="Details">
-    <table class="table">
-      <tbody>
-        <tr>
-          <td class="text-right border-top-0">
-            ID
-          </td>
-          <td class="border-top-0">
-            {{ instance.id }}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-right">
-            Region
-          </td>
-          <td>{{ instance.region_name }}</td>
-        </tr>
-        <tr>
-          <td class="text-right">
-            Backup
-          </td>
-          <td>
-            <b-form-checkbox v-model="backup">
-              <b-badge
-                :variant="variant(instance.backup)"
-                class="align-middle"
-              >
-                {{
-                  instance.backup ? `At ${instance.backup_time}` : "Disabled"
-                }}
-              </b-badge>
-            </b-form-checkbox>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </b-card>
+  <b-container>
+    <b-row
+      cols-sm="1"
+      cols-xl="3"
+    >
+      <b-col sm="auto">
+        <strong>ID: </strong>{{ instance.id }}
+      </b-col>
+      <b-col sm="auto">
+        <strong>Region: </strong>{{ instance.region_name }}
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col cols="3">
+        <strong>Backup: </strong>
+      </b-col>
+      <b-col cols="9">
+        <b-form-checkbox
+          v-model="backup"
+          inline
+          switch
+        >
+          <b-badge
+            :variant="variant(instance.backup)"
+            class="align-middle"
+          >
+            {{ instance.backup ? `At ${instance.backup_time}` : "Disabled" }}
+          </b-badge>
+        </b-form-checkbox>
+      </b-col>
+      <b-col
+        cols="3"
+        align-self="center"
+      >
+        <strong>Schedule:</strong>
+      </b-col>
+      <b-col cols="9">
+        <b-select
+          v-model="schedule"
+          :options="scheduleList"
+          inline
+        />
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
 export default {
   props: {
-    instance: {
-      type: Object,
-      default: function () {}
-    }
+    instance: { type: Object, required: true },
+    scheduleList: { type: Array, required: true }
   },
   computed: {
     variant: () => value => {
@@ -59,6 +65,20 @@ export default {
           instance: this.instance,
           changes: {
             backup: value
+          }
+        }
+        this.$store.dispatch('UPDATE_INSTANCE', newValue)
+      }
+    },
+    schedule: {
+      get () {
+        return this.instance.schedule
+      },
+      set (value) {
+        const newValue = {
+          instance: this.instance,
+          changes: {
+            schedule: value
           }
         }
         this.$store.dispatch('UPDATE_INSTANCE', newValue)

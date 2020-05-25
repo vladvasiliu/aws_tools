@@ -4,7 +4,10 @@
     card-title="Instances"
   >
     <template v-slot:collapsedContent="slotProps">
-      <InstanceAccordion :instance="slotProps.object" />
+      <InstanceAccordion
+        :instance="slotProps.object"
+        :schedule-list="scheduleList"
+      />
     </template>
   </AccordionView>
 </template>
@@ -28,10 +31,14 @@ export default {
         return result.filter(instance => instance.aws_account === this.selectedAccount.url)
       }
       return result
+    },
+    scheduleList: function () {
+      return this.$store.state.schedule.schedules.map((schedule) => { return { value: schedule.url, text: schedule.name } })
     }
   },
   created () {
     this.$store.dispatch('LOAD_INSTANCE_LIST').then(() => {})
+    this.$store.dispatch('LOAD_SCHEDULE_LIST').then(() => {})
   }
 }
 </script>

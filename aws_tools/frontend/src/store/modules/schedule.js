@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default {
   state: {
-    schedules: null,
+    schedules: [],
     schedules_error: null
   },
   actions: {
