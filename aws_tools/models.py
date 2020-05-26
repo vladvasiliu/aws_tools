@@ -12,9 +12,8 @@ import logging
 from django.utils import timezone
 from netfields import CidrAddressField, NetManager
 
-from helpers import default_schedule, validate_schedule
 from .exceptions import ResourceNotFoundException
-from .helpers import resource_name, aws_resource, is_managed, aws_client
+from .helpers import resource_name, aws_resource, is_managed, aws_client, default_schedule, validate_schedule
 from .constants import AWSRegionChoice, IPProtocol, AWSSecurityGroupRuleType, ScheduleAction
 from .managers import EBSVolumeManager
 
@@ -167,6 +166,8 @@ class InstanceSchedule(models.Model):
         The time is considered time zone aware. If it isn't, it will used as UTC.
         If blank, the current time will be used
         """
+        if not self.active:
+            return ScheduleAction.NOTHING
         current_time = current_time or timezone.now()
         week_hour = current_time.weekday() * 24 + current_time.hour
         return self.schedule[week_hour]

@@ -1,4 +1,5 @@
 boto3
+celery[redis]
 Django
 django-choices
 django-netfields

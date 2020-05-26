@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'aws_tools.apps.AwsToolsConfig',
     'rest_framework',
     'netfields',
-    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -223,14 +222,5 @@ LOGGING = {
     },
 }
 
-Q_CLUSTER = {
-    'name': 'DjangORM',
-    'workers': 2,
-    'timeout': 180,
-    'retry': 240,
-    'queue_limit': 50,
-    'bulk': 10,
-    'orm': 'default',
-    'ack_failures': True,
-    'catch_up': False,
-}
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+

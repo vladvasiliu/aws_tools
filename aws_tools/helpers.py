@@ -1,12 +1,10 @@
 from logging import getLogger
-from typing import Callable, Mapping, Sequence
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import boto3
-import botocore.exceptions
 
-from constants import ScheduleAction
+from .constants import ScheduleAction
 
 
 logger = getLogger(__name__)
@@ -75,33 +73,3 @@ def validate_schedule(value: dict):
         raise ValidationError(_("there should be 168 entries, one for each hour of the week"))
     if set(value) <= set(ScheduleAction):
         raise ValidationError(_("values should be a ScheduleAction"))
-
-
-def run_bulk_operation(operation: Callable, obj_list: list, param_name: str):
-    """Calls a bulk operation and in case of failure calls it on each object
-
-    :param operation: The operation to be done
-    :param param_name: The name of the parameter
-    :param obj_list: The argument to the operation
-    :return: a dictionary containing successes and failures. The key represents the ErrorCode as a str. 'OK' is success
-    """
-
-    op_name = operation.__name__
-    try:
-        logger.info(f"Running {op_name} on full list ({len(obj_list)} items)...")
-        kwargs = {param_name: obj_list}
-        operation(**kwargs)
-    except botocore.exceptions.ClientError:
-        logger.warning(f"Failed. Will try again on each object...")
-        for obj in obj_list:
-            try:
-                kwargs = {param_name: [obj]}
-                operation(**kwargs)
-            except Exception as e:
-                logger.error(f"Failed to run {op_name} on {obj}: {e}")
-            else:
-                logger.info(f"Successfully ran {op_name} for {obj}")
-    except Exception as e:
-        logger.error(f"Failed: {e}")
-    else:
-        logger.info("Done")

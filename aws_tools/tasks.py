@@ -1,156 +1,187 @@
 from __future__ import absolute_import, unicode_literals
-from logging import getLogger
+
+from typing import Callable
 
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now, timedelta
 
 from botocore.exceptions import ClientError
-# from celery import shared_task, task
-# from celery.five import monotonic
-# from celery.utils.log import get_task_logger
+from celery import shared_task
+from celery.five import monotonic
+from celery.utils.log import get_task_logger
 from contextlib import contextmanager
 from hashlib import md5
 
 from django.core.cache import cache
 from django.db.models import ObjectDoesNotExist, Max
 
-from constants import ScheduleAction
+from aws_tools.constants import ScheduleAction
 from aws_tools.models import AWSAccount, Instance, EBSVolume, AWSOrganization, InstanceSchedule
-from helpers import run_bulk_operation
 
-logger = getLogger(__name__)
+
+logger = get_task_logger(__name__)
 
 LOCK_EXPIRE = 60 * 10  # Lock expires in 10 minutes
 
 
-# @contextmanager
-# def cache_lock(lock_id, oid):
-#     timeout_at = monotonic() + LOCK_EXPIRE - 3
-#     # cache.add fails if the key already exists
-#     status = cache.add(lock_id, oid, LOCK_EXPIRE)
-#     try:
-#         yield status
-#     finally:
-#         if monotonic() < timeout_at:
-#             cache.delete(lock_id)
-#
-#
-# @shared_task
-# def get_busy():
-#     update_organizations()
-#     snapshot_volumes()
-#     update_instances()
-#     clean_snapshots()
-#
-#
-# @shared_task
-# def update_organizations():
-#     for org in AWSOrganization.objects.all():
-#         logger.info("Updating accounts for Org # %s (%s)." % (org.id, org.name))
-#         try:
-#             org.update_accounts()
-#         except ClientError as e:
-#             logger.error("Failed to update accounts for Org # %s (%s) : %s" % (org.id, org.name, e))
-#
-#
-# @shared_task
-# def update_instances():
-#     for aws_account_id, in AWSAccount.objects.all().values_list('id'):
-#         update_instances_for_account(aws_account_id)
-#
-#
-# @shared_task(bind=True)
-# def update_instances_for_account(self, aws_account_id):
-#     account_hexdigest = md5(aws_account_id.encode()).hexdigest()
-#     lock_id = '{0}-lock-{1}'.format(self.name, account_hexdigest)
-#     with cache_lock(lock_id, self.app.oid) as acquired:
-#         if acquired:
-#             try:
-#                 aws_account = AWSAccount.objects.get(id=aws_account_id)
-#             except ObjectDoesNotExist:
-#                 logger.error("No AWS Account with id '%s' found.", aws_account_id)
-#             else:
-#                 logger.info("Updating instances for account %s (%s)" % (aws_account, aws_account_id))
-#                 try:
-#                     updated_instances = Instance.update(aws_account)
-#                 except ClientError as e:
-#                     logger.error("Failed to update instances for account %s (%s) : %s" % (aws_account,
-#                                                                                           aws_account_id,
-#                                                                                           e))
-#                 else:
-#                     if updated_instances:
-#                         update_volumes_for_account(aws_account_id)
-#         else:
-#             logger.info("Instances for account %s are already being updated." % aws_account_id)
-#
-#
-# @shared_task(bind=True)
-# def update_volumes_for_account(self, aws_account_id):
-#     account_hexdigest = md5(aws_account_id.encode()).hexdigest()
-#     lock_id = '{0}-lock-{1}'.format(self.name, account_hexdigest)
-#     with cache_lock(lock_id, self.app.oid) as acquired:
-#         if acquired:
-#             try:
-#                 aws_account = AWSAccount.objects.get(id=aws_account_id)
-#             except ObjectDoesNotExist:
-#                 logger.error("No AWS Account with id '%s' found.", aws_account_id)
-#             else:
-#                 logger.info("Updating volumes for account %s (%s)" % (aws_account, aws_account_id))
-#                 try:
-#                     EBSVolume.update_from_aws(aws_account)
-#                 except ClientError as e:
-#                     logger.error("Failed to update volumes for account %s (%s) : %s" % (aws_account,
-#                                                                                         aws_account_id,
-#                                                                                         e))
-#         else:
-#             logger.info("Volumes for account %s are already being updated." % aws_account_id)
-#
-#
-# @shared_task(bind=True)
-# def snapshot_volumes(self, volumes=None):
-#     if volumes:
-#         volumes = EBSVolume.objects.filter(id__in=volumes, present=True)
-#     else:
-#         volumes = EBSVolume.objects.to_snapshot()
-#
-#     for vol in volumes:
-#         vol_hexdigest = md5(vol.id.encode()).hexdigest()
-#         lock_id = '{0}-lock-{1}'.format(self.name, vol_hexdigest)
-#         with cache_lock(lock_id, self.app.oid) as acquired:
-#             if acquired:
-#                 logger.info("Snapshooting volume %s (Instance: %s, Account: %s)" % (vol, vol.instance, vol.aws_account))
-#                 vol.snapshot()
-#             else:
-#                 logger.info("Volume %s (Instance: %s, Account: %s) is already being snapshot" % (vol,
-#                                                                                                  vol.instance,
-#                                                                                                  vol.aws_account))
-#
-#
-# @shared_task(bind=True)
-# def snapshot_instance(self, instance_id):
-#     volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
-#     self.snapshot_volumes(volumes)
-#
-#
-# @shared_task
-# def clean_snapshots(days=30):
-#     """Keep snapshots for the last 30 days and the last of each month"""
-#     volumes = EBSVolume.objects.filter(present=True)
-#
-#     for vol in volumes:
-#         logger.info("cleaning up snapshots for %s" % vol)
-#         last_per_month = vol.ebssnapshot_set.annotate(month=TruncMonth('created_at')).values(
-#             'month').annotate(last_snapshot=Max('created_at')).values_list('last_snapshot')
-#         to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month).filter(present=True).filter(
-#             created_at__date__lt=now().date() - timedelta(days=days))
-#         to_delete.delete()
+@contextmanager
+def cache_lock(lock_id, oid):
+    timeout_at = monotonic() + LOCK_EXPIRE - 3
+    # cache.add fails if the key already exists
+    status = cache.add(lock_id, oid, LOCK_EXPIRE)
+    try:
+        yield status
+    finally:
+        if monotonic() < timeout_at:
+            cache.delete(lock_id)
+
+
+@shared_task
+def get_busy():
+    update_organizations()
+    snapshot_volumes()
+    update_instances()
+    clean_snapshots()
+
+
+@shared_task
+def update_organizations():
+    for org in AWSOrganization.objects.all():
+        logger.info("Updating accounts for Org # %s (%s)." % (org.id, org.name))
+        try:
+            org.update_accounts()
+        except ClientError as e:
+            logger.error("Failed to update accounts for Org # %s (%s) : %s" % (org.id, org.name, e))
+
+
+@shared_task
+def update_instances():
+    for aws_account_id, in AWSAccount.objects.all().values_list('id'):
+        update_instances_for_account(aws_account_id)
+
+
+@shared_task(bind=True)
+def update_instances_for_account(self, aws_account_id):
+    account_hexdigest = md5(aws_account_id.encode()).hexdigest()
+    lock_id = '{0}-lock-{1}'.format(self.name, account_hexdigest)
+    with cache_lock(lock_id, self.app.oid) as acquired:
+        if acquired:
+            try:
+                aws_account = AWSAccount.objects.get(id=aws_account_id)
+            except ObjectDoesNotExist:
+                logger.error("No AWS Account with id '%s' found.", aws_account_id)
+            else:
+                logger.info("Updating instances for account %s (%s)" % (aws_account, aws_account_id))
+                try:
+                    updated_instances = Instance.update(aws_account)
+                except ClientError as e:
+                    logger.error("Failed to update instances for account %s (%s) : %s" % (aws_account,
+                                                                                          aws_account_id,
+                                                                                          e))
+                else:
+                    if updated_instances:
+                        update_volumes_for_account(aws_account_id)
+        else:
+            logger.info("Instances for account %s are already being updated." % aws_account_id)
+
+
+@shared_task(bind=True)
+def update_volumes_for_account(self, aws_account_id):
+    account_hexdigest = md5(aws_account_id.encode()).hexdigest()
+    lock_id = '{0}-lock-{1}'.format(self.name, account_hexdigest)
+    with cache_lock(lock_id, self.app.oid) as acquired:
+        if acquired:
+            try:
+                aws_account = AWSAccount.objects.get(id=aws_account_id)
+            except ObjectDoesNotExist:
+                logger.error("No AWS Account with id '%s' found.", aws_account_id)
+            else:
+                logger.info("Updating volumes for account %s (%s)" % (aws_account, aws_account_id))
+                try:
+                    EBSVolume.update_from_aws(aws_account)
+                except ClientError as e:
+                    logger.error("Failed to update volumes for account %s (%s) : %s" % (aws_account,
+                                                                                        aws_account_id,
+                                                                                        e))
+        else:
+            logger.info("Volumes for account %s are already being updated." % aws_account_id)
+
+
+@shared_task(bind=True)
+def snapshot_volumes(self, volumes=None):
+    if volumes:
+        volumes = EBSVolume.objects.filter(id__in=volumes, present=True)
+    else:
+        volumes = EBSVolume.objects.to_snapshot()
+
+    for vol in volumes:
+        vol_hexdigest = md5(vol.id.encode()).hexdigest()
+        lock_id = '{0}-lock-{1}'.format(self.name, vol_hexdigest)
+        with cache_lock(lock_id, self.app.oid) as acquired:
+            if acquired:
+                logger.info("Snapshooting volume %s (Instance: %s, Account: %s)" % (vol, vol.instance, vol.aws_account))
+                vol.snapshot()
+            else:
+                logger.info("Volume %s (Instance: %s, Account: %s) is already being snapshot" % (vol,
+                                                                                                 vol.instance,
+                                                                                                 vol.aws_account))
+
+
+@shared_task(bind=True)
+def snapshot_instance(self, instance_id):
+    volumes = [volume for volume, in EBSVolume.objects.filter(instance_id=instance_id).values_list('id')]
+    self.snapshot_volumes(volumes)
+
+
+@shared_task
+def clean_snapshots(days=30):
+    """Keep snapshots for the last 30 days and the last of each month"""
+    volumes = EBSVolume.objects.filter(present=True)
+
+    for vol in volumes:
+        logger.info("cleaning up snapshots for %s" % vol)
+        last_per_month = vol.ebssnapshot_set.annotate(month=TruncMonth('created_at')).values(
+            'month').annotate(last_snapshot=Max('created_at')).values_list('last_snapshot')
+        to_delete = vol.ebssnapshot_set.exclude(created_at__in=last_per_month).filter(present=True).filter(
+            created_at__date__lt=now().date() - timedelta(days=days))
+        to_delete.delete()
+
+
+def run_bulk_operation(operation: Callable, obj_list: list, param_name: str):
+    """Calls a bulk operation and in case of failure calls it on each object
+
+    :param operation: The operation to be done
+    :param param_name: The name of the parameter
+    :param obj_list: The argument to the operation
+    :return: a dictionary containing successes and failures. The key represents the ErrorCode as a str. 'OK' is success
+    """
+
+    op_name = operation.__name__
+    try:
+        logger.info(f"Running '{op_name}' on full list ({len(obj_list)} items)...")
+        kwargs = {param_name: obj_list}
+        operation(**kwargs)
+    except ClientError:
+        logger.warning(f"Failed. Will try again on each object...")
+        for obj in obj_list:
+            try:
+                kwargs = {param_name: [obj]}
+                operation(**kwargs)
+            except Exception as e:
+                logger.error(f"Failed to run '{op_name}' on '{obj}': {e}")
+            else:
+                logger.info(f"Successfully ran '{op_name}' on '{obj}'")
+    except Exception as e:
+        logger.error(f"Failed: {e}")
+    else:
+        logger.info("Done")
 
 
 def _execute_schedule(schedule: InstanceSchedule):
     schedule_action = schedule.compute_action()
 
     if schedule_action == ScheduleAction.NOTHING:
-        logger.info(f"Nothing to do for schedule {schedule}")
+        logger.info(f"Nothing to do for schedule '{schedule}'")
         return
 
     instance_list = schedule.instance_set.select_related('aws_account')
@@ -166,8 +197,7 @@ def _execute_schedule(schedule: InstanceSchedule):
     elif schedule_action == ScheduleAction.TURN_ON:
         action = 'start_instances'
     else:
-        logger.warning(f"Got unknown action '{schedule_action}' for schedule {schedule}.")
-        return
+        raise Exception(f"unknown action '{schedule_action}'.")
 
     logger.info(f"Running '{action}' for schedule '{schedule}'")
     for account, account_dict in instance_grouping.items():
@@ -181,6 +211,7 @@ def _execute_schedule(schedule: InstanceSchedule):
                 run_bulk_operation(operation, obj_list=instance_list, param_name='InstanceIds')
 
 
+@shared_task
 def run_schedules():
     for schedule in InstanceSchedule.objects.all():
         try:
