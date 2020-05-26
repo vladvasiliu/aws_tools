@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('day', models.SmallIntegerField(choices=[(1, 'Monday'), (2, 'Tuesday'), (3, 'Wednesday'), (4, 'Thursday'), (5, 'Friday'), (6, 'Saturday'), (7, 'Sunday')])),
-                ('day_schedule', django.contrib.postgres.fields.jsonb.JSONField(default=helpers.default_schedule, validators=[helpers.validate_day_schedule])),
+                ('day_schedule', django.contrib.postgres.fields.jsonb.JSONField(default=helpers.default_schedule)),
                 ('schedule', models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.InstanceSchedule')),
             ],
             options={

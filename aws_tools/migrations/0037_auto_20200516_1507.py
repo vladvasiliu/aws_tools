@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='instanceschedule',
             name='days',
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=helpers.default_schedule, validators=[helpers.validate_day_schedule]),
+            field=django.contrib.postgres.fields.jsonb.JSONField(default=helpers.default_schedule),
         ),
         migrations.DeleteModel(
             name='ScheduleDay',

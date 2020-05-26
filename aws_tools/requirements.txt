@@ -5,35 +5,21 @@
 #    pip-compile
 #
 asgiref==3.2.7            # via django
-boto3==1.13.9             # via -r requirements.in
-botocore==1.16.9          # via boto3, s3transfer
-certifi==2020.4.5.1       # via requests
-cffi==1.14.0              # via cryptography
-chardet==3.0.4            # via requests
-cryptography==2.9.2       # via pyopenssl, pysaml2
-defusedxml==0.6.0         # via pysaml2
+boto3==1.13.16            # via -r requirements.in
+botocore==1.16.16         # via boto3, s3transfer
 django-choices==1.7.1     # via -r requirements.in
 django-filter==2.2.0      # via -r requirements.in
 django-netfields==1.2.2   # via -r requirements.in
-django-rest-auth==0.9.5   # via django-saml2-auth
-django-saml2-auth==2.2.1  # via -r requirements.in
-django==3.0.6             # via -r requirements.in, django-choices, django-filter, django-netfields, django-rest-auth, djangorestframework, drf-nested-routers
-djangorestframework-jwt==1.11.0  # via django-saml2-auth
-djangorestframework==3.11.0  # via -r requirements.in, django-rest-auth, drf-nested-routers
+django==3.0.6             # via -r requirements.in, django-choices, django-filter, django-netfields, djangorestframework, drf-nested-routers
+djangorestframework==3.11.0  # via -r requirements.in, drf-nested-routers
 docutils==0.15.2          # via botocore
 drf-nested-routers==0.91  # via -r requirements.in
-idna==2.9                 # via requests
 jmespath==0.10.0          # via boto3, botocore
 netaddr==0.7.19           # via django-netfields
 psycopg2==2.8.5           # via -r requirements.in
-pycparser==2.20           # via cffi
-pyjwt==1.7.1              # via djangorestframework-jwt
-pyopenssl==19.1.0         # via pysaml2
-pysaml2==5.0.0            # via django-saml2-auth
-python-dateutil==2.8.1    # via botocore, pysaml2
-pytz==2020.1              # via django, pysaml2
-requests==2.23.0          # via pysaml2
+python-dateutil==2.8.1    # via botocore
+pytz==2020.1              # via django
 s3transfer==0.3.3         # via boto3
-six==1.14.0               # via cryptography, django-choices, django-netfields, django-rest-auth, pyopenssl, pysaml2, python-dateutil
+six==1.15.0               # via django-choices, django-netfields, python-dateutil
 sqlparse==0.3.1           # via django
-urllib3==1.25.9           # via botocore, requests
+urllib3==1.25.9           # via botocore

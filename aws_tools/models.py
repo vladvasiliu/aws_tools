@@ -86,6 +86,10 @@ class AWSResource(AWSBaseModel):
         else:
             return resource
 
+    @classmethod
+    def aws_client(cls, role_arn, region_name):
+        return aws_client(cls.resource_class, role_arn, region_name)
+
 
 class AWSClient(AWSBaseModel):
     aws_account = models.ForeignKey(AWSAccount, editable=False, on_delete=models.CASCADE)
