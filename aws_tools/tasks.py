@@ -171,6 +171,10 @@ def execute_schedule(schedule: InstanceSchedule):
 
     for account, account_dict in instance_grouping.items():
         for region_name, instance_list in account_dict.items():
-            aws_client = Instance.aws_client(account.role_arn, region_name)
-            operation = getattr(aws_client, action)
-            run_bulk_operation(operation, obj_list=instance_list, param_name='InstanceIds')
+            try:
+                aws_client = Instance.aws_client(account.role_arn, region_name)
+            except Exception as e:
+                logger.error(f"Failed to get aws_client for account '{AWSAccount}' and region '{region_name}': {e}")
+            else:
+                operation = getattr(aws_client, action)
+                run_bulk_operation(operation, obj_list=instance_list, param_name='InstanceIds')
