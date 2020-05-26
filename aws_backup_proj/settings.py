@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'aws_tools.apps.AwsToolsConfig',
     'rest_framework',
     'netfields',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +139,7 @@ STATIC_URL = '/static/'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'my_cache_table',
+        'LOCATION': 'aws_tools_cache_table',
     }
 }
 
@@ -220,4 +221,16 @@ LOGGING = {
         'handlers': ['console'],
         'level': 'INFO',
     },
+}
+
+Q_CLUSTER = {
+    'name': 'DjangORM',
+    'workers': 2,
+    'timeout': 180,
+    'retry': 240,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default',
+    'ack_failures': True,
+    'catch_up': False,
 }

@@ -4,22 +4,27 @@
 #
 #    pip-compile
 #
+arrow==0.15.6             # via django-q
 asgiref==3.2.7            # via django
+blessed==1.17.6           # via django-q
 boto3==1.13.16            # via -r requirements.in
 botocore==1.16.16         # via boto3, s3transfer
 django-choices==1.7.1     # via -r requirements.in
 django-filter==2.2.0      # via -r requirements.in
 django-netfields==1.2.2   # via -r requirements.in
-django==3.0.6             # via -r requirements.in, django-choices, django-filter, django-netfields, djangorestframework, drf-nested-routers
+django-picklefield==2.1.1  # via django-q
+django-q==1.2.1           # via -r requirements.in
+django==3.0.6             # via -r requirements.in, django-choices, django-filter, django-netfields, django-picklefield, django-q, djangorestframework, drf-nested-routers
 djangorestframework==3.11.0  # via -r requirements.in, drf-nested-routers
 docutils==0.15.2          # via botocore
 drf-nested-routers==0.91  # via -r requirements.in
 jmespath==0.10.0          # via boto3, botocore
 netaddr==0.7.19           # via django-netfields
 psycopg2==2.8.5           # via -r requirements.in
-python-dateutil==2.8.1    # via botocore
+python-dateutil==2.8.1    # via arrow, botocore
 pytz==2020.1              # via django
 s3transfer==0.3.3         # via boto3
-six==1.15.0               # via django-choices, django-netfields, python-dateutil
+six==1.15.0               # via blessed, django-choices, django-netfields, python-dateutil
 sqlparse==0.3.1           # via django
 urllib3==1.25.9           # via botocore
+wcwidth==0.1.9            # via blessed

@@ -146,7 +146,7 @@ LOCK_EXPIRE = 60 * 10  # Lock expires in 10 minutes
 #         to_delete.delete()
 
 
-def execute_schedule(schedule: InstanceSchedule):
+def _execute_schedule(schedule: InstanceSchedule):
     schedule_action = schedule.compute_action()
 
     if schedule_action == ScheduleAction.NOTHING:
@@ -169,12 +169,21 @@ def execute_schedule(schedule: InstanceSchedule):
         logger.warning(f"Got unknown action '{schedule_action}' for schedule {schedule}.")
         return
 
+    logger.info(f"Running '{action}' for schedule '{schedule}'")
     for account, account_dict in instance_grouping.items():
         for region_name, instance_list in account_dict.items():
             try:
                 aws_client = Instance.aws_client(account.role_arn, region_name)
             except Exception as e:
-                logger.error(f"Failed to get aws_client for account '{AWSAccount}' and region '{region_name}': {e}")
+                logger.error(f"Failed to get aws_client for account '{account}' and region '{region_name}': {e}")
             else:
                 operation = getattr(aws_client, action)
                 run_bulk_operation(operation, obj_list=instance_list, param_name='InstanceIds')
+
+
+def run_schedules():
+    for schedule in InstanceSchedule.objects.all():
+        try:
+            _execute_schedule(schedule)
+        except Exception as e:
+            logger.error(f"Failed to execute schedule '{schedule}': {e}")

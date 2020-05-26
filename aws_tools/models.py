@@ -27,6 +27,9 @@ class AWSRegion(models.Model):
     def __str__(self):
         return "%s - %s" % (self.get_name_display(), self.name)
 
+    class Meta:
+        verbose_name = 'AWS Region'
+
 
 class AWSBaseModel(models.Model):
     class Meta:
@@ -53,6 +56,9 @@ class AWSAccount(AWSBaseModel):
     @property
     def role_arn(self):
         return self._role_arn or 'arn:aws:iam::%s:role/aws-tools' % self.id
+
+    class Meta:
+        verbose_name = 'AWS Account'
 
 
 class AWSResource(AWSBaseModel):
@@ -105,6 +111,9 @@ class AWSClient(AWSBaseModel):
 
 class AWSOrganization(AWSClient):
     client_class = 'organizations'
+
+    class Meta:
+        verbose_name = 'AWS Organization'
 
     def update_accounts(self):
         client = self.aws_client
@@ -259,6 +268,9 @@ class EBSVolume(AWSEC2Resource):
             snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
             EBSSnapshot.create_snapshot(snapshot, self)
 
+    class Meta:
+        verbose_name = 'EBS Volume'
+
 
 class EBSSnapshot(AWSEC2Resource):
     state = models.CharField(max_length=20)
@@ -271,6 +283,7 @@ class EBSSnapshot(AWSEC2Resource):
     class Meta:
         get_latest_by = 'created_at'
         ordering = ['-created_at']
+        verbose_name = 'EBS Snapshot'
 
     @classmethod
     def update_from_aws(cls, aws_account):
