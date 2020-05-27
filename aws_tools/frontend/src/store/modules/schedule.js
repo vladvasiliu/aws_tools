@@ -41,6 +41,9 @@ export default {
   },
   getters: {
     schedules: state => state.schedules,
-    schedules_error: state => state.schedules_error
+    schedules_error: state => state.schedules_error,
+    getScheduleById: (state) => (id) => {
+      return state.schedules.find(schedule => schedule.id === id)
+    }
   }
 }

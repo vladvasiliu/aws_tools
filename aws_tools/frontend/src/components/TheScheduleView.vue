@@ -11,10 +11,7 @@
       />
     </div>
     <div class="col">
-      <ScheduleDetail
-        :schedule="selectedSchedule"
-        @scheduleChange="scheduleChange"
-      />
+      <router-view />
     </div>
   </div>
 </template>
@@ -23,13 +20,11 @@
 import { mapGetters } from 'vuex'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import ObjectListGroupCard from './ObjectListGroupCard'
-import ScheduleDetail from './ScheduleDetail'
 
 export default {
   name: 'TheScheduleView',
   components: {
-    ObjectListGroupCard,
-    ScheduleDetail
+    ObjectListGroupCard
   },
   data: function () {
     return {

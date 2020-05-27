@@ -36,12 +36,15 @@ const index = new Router({
     {
       path: '/schedules',
       name: 'ScheduleView',
-      component: () => import('../components/TheScheduleView')
-    },
-    {
-      path: '/schedules/:id',
-      name: 'ScheduleViewID',
-      component: () => import('../components/TheScheduleView')
+      component: () => import('../components/TheScheduleView'),
+      children: [
+        {
+          path: '/schedules/:id',
+          name: 'ScheduleViewID',
+          component: () => import('../components/ScheduleDetail'),
+          props: (route) => ({ selectedScheduleID: parseInt(route.params.id) })
+        }
+      ]
     },
     {
       path: '/403',

@@ -144,7 +144,7 @@
 import { _ } from 'vue-underscore'
 
 function localScheduleFromSelected (selectedSchedule) {
-  if (selectedSchedule === null) { return null }
+  if (selectedSchedule === undefined) { return null }
   const result = _.clone(selectedSchedule)
   result.schedule = [...selectedSchedule.schedule]
   return result
@@ -182,14 +182,19 @@ export default {
     }
   },
   props: {
-    schedule: { type: Object, default: null, required: false }
+  //   schedule: { type: Object, default: null, required: false }
+    selectedScheduleID: { type: Number, default: 0, required: true }
   },
   data: function () {
+    const selectedSchedule = this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
     return {
-      local_schedule: localScheduleFromSelected(this.schedule)
+      local_schedule: localScheduleFromSelected(selectedSchedule)
     }
   },
   computed: {
+    schedule: function () {
+      return this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
+    },
     isLocalModified: function () {
       return !(_.isEqual(this.local_schedule.schedule, this.schedule.schedule) && _.isEqual(this.local_schedule.active, this.schedule.active))
     }
