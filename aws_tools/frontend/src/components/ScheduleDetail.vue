@@ -102,7 +102,7 @@
               <b-th />
               <b-th>Mon</b-th>
               <b-th>Tue</b-th>
-              <b-th>Web</b-th>
+              <b-th>Wed</b-th>
               <b-th>Thu</b-th>
               <b-th>Fri</b-th>
               <b-th>Sat</b-th>
