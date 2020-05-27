@@ -8,12 +8,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0013_auto_20170310_1542'),
+        ("aws_tools", "0013_auto_20170310_1542"),
     ]
 
     operations = [
-        migrations.AlterOrderWithRespectTo(
-            name='ebssnapshot',
-            order_with_respect_to=None,
-        ),
+        migrations.AlterOrderWithRespectTo(name="ebssnapshot", order_with_respect_to=None,),
     ]

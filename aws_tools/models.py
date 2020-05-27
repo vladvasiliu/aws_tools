@@ -27,13 +27,13 @@ class AWSRegion(models.Model):
         return "%s - %s" % (self.get_name_display(), self.name)
 
     class Meta:
-        verbose_name = 'AWS Region'
+        verbose_name = "AWS Region"
 
 
 class AWSBaseModel(models.Model):
     class Meta:
         abstract = True
-        ordering = ['_name']
+        ordering = ["_name"]
 
     _name = models.CharField(max_length=100, blank=True)
     id = models.CharField(max_length=25, primary_key=True, editable=True)
@@ -49,25 +49,23 @@ class AWSBaseModel(models.Model):
 
 class AWSAccount(AWSBaseModel):
     _role_arn = models.CharField(max_length=100)
-    organization = models.ForeignKey('AWSOrganization', blank=True, null=True, editable=False, on_delete=models.CASCADE)
+    organization = models.ForeignKey("AWSOrganization", blank=True, null=True, editable=False, on_delete=models.CASCADE)
     regions = models.ManyToManyField(to=AWSRegion)
 
     @property
     def role_arn(self):
-        return self._role_arn or 'arn:aws:iam::%s:role/aws-tools' % self.id
+        return self._role_arn or "arn:aws:iam::%s:role/aws-tools" % self.id
 
     class Meta:
-        verbose_name = 'AWS Account'
+        verbose_name = "AWS Account"
 
 
 class AWSResource(AWSBaseModel):
     aws_account = models.ForeignKey(AWSAccount, editable=False, on_delete=models.CASCADE)
-    region_name = models.CharField(max_length=25,
-                                   choices=AWSRegionChoice.choices,
-                                   editable=False)
-    resource_class = ''  # ec2, vpc, etc
-    resource_kind = ''  # instance, ebsvolume, etc
-    id_filter = ''
+    region_name = models.CharField(max_length=25, choices=AWSRegionChoice.choices, editable=False)
+    resource_class = ""  # ec2, vpc, etc
+    resource_kind = ""  # instance, ebsvolume, etc
+    id_filter = ""
 
     class Meta:
         abstract = True
@@ -75,15 +73,17 @@ class AWSResource(AWSBaseModel):
     @classmethod
     def _prune_resources(cls, created_resources, aws_account_id):
         cls.objects.exclude(id__in=[x.id for x in created_resources]).filter(aws_account_id=aws_account_id).update(
-            present=False)
+            present=False
+        )
 
     # Returns de corresponding AWS instance for this Python instance
     def _aws_resource(self):
         ec2 = aws_resource(self.resource_class, region_name=self.region_name, role_arn=self.aws_account.role_arn)
 
         try:
-            resource = list(getattr(ec2, self.resource_kind).filter(Filters=[{'Name': self.id_filter,
-                                                                              'Values': [self.id]}]))[0]
+            resource = list(
+                getattr(ec2, self.resource_kind).filter(Filters=[{"Name": self.id_filter, "Values": [self.id]}])
+            )[0]
         except IndexError:
             self.present = False
             self.save()
@@ -98,7 +98,7 @@ class AWSResource(AWSBaseModel):
 
 class AWSClient(AWSBaseModel):
     aws_account = models.ForeignKey(AWSAccount, editable=False, on_delete=models.CASCADE)
-    client_class = ''
+    client_class = ""
 
     class Meta:
         abstract = True
@@ -109,10 +109,10 @@ class AWSClient(AWSBaseModel):
 
 
 class AWSOrganization(AWSClient):
-    client_class = 'organizations'
+    client_class = "organizations"
 
     class Meta:
-        verbose_name = 'AWS Organization'
+        verbose_name = "AWS Organization"
 
     def update_accounts(self):
         client = self.aws_client
@@ -124,13 +124,13 @@ class AWSOrganization(AWSClient):
             else:
                 response = client.list_accounts()
 
-            next_token = response.get('NextToken')
+            next_token = response.get("NextToken")
 
-            for account in response['Accounts']:
-                account, created = AWSAccount.objects.update_or_create(defaults={'organization': self,
-                                                                                 '_name': account.get('Name') or
-                                                                                          account.get('Id')},
-                                                                       id=account.get('Id'))
+            for account in response["Accounts"]:
+                account, created = AWSAccount.objects.update_or_create(
+                    defaults={"organization": self, "_name": account.get("Name") or account.get("Id")},
+                    id=account.get("Id"),
+                )
                 if created:
                     logger.info("Created account id %s (%s)." % (account.id, account.name))
                 else:
@@ -141,7 +141,7 @@ class AWSOrganization(AWSClient):
 
 
 class AWSEC2Resource(AWSResource):
-    resource_class = 'ec2'
+    resource_class = "ec2"
 
     class Meta:
         abstract = True
@@ -152,9 +152,14 @@ class InstanceSchedule(models.Model):
 
     Day 0 and 7 is Sunday, Day 1 is Monday
     """
+
     name = models.CharField(max_length=100)
-    schedule = ArrayField(base_field=models.PositiveSmallIntegerField(choices=ScheduleAction.choices),
-                          default=default_schedule, size=7*24, validators=[validate_schedule])
+    schedule = ArrayField(
+        base_field=models.PositiveSmallIntegerField(choices=ScheduleAction.choices),
+        default=default_schedule,
+        size=7 * 24,
+        validators=[validate_schedule],
+    )
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -175,13 +180,13 @@ class InstanceSchedule(models.Model):
 
 class Instance(AWSEC2Resource):
     resource_kind = "instances"
-    id_filter = 'instance-id'
+    id_filter = "instance-id"
     backup_time = models.TimeField(default="03:00:00")
     backup = models.BooleanField(default=False, editable=True)
     schedule = models.ForeignKey(InstanceSchedule, blank=True, null=True, on_delete=models.SET_DEFAULT, default=None)
 
     class Meta:
-        ordering = ['_name']
+        ordering = ["_name"]
 
     @classmethod
     def update(cls, aws_account):
@@ -189,17 +194,17 @@ class Instance(AWSEC2Resource):
         region_names = [region.name for region in regions]
         updated_instances = []
         for region_name in region_names:
-            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+            ec2 = aws_resource("ec2", region_name=region_name, role_arn=aws_account.role_arn)
 
             for aws_instance in ec2.instances.all():
                 defaults = {
-                    'aws_account': aws_account,
-                    'region_name': region_name,
-                    '_name': resource_name(aws_instance),
-                    'present': True
+                    "aws_account": aws_account,
+                    "region_name": region_name,
+                    "_name": resource_name(aws_instance),
+                    "present": True,
                 }
-                if aws_instance.state['Name'] == 'terminated':
-                    defaults['present'] = False
+                if aws_instance.state["Name"] == "terminated":
+                    defaults["present"] = False
                 instance, _ = Instance.objects.update_or_create(id=aws_instance.id, defaults=defaults)
                 # instance.update_volumes()
                 updated_instances.append(instance)
@@ -220,7 +225,7 @@ class Instance(AWSEC2Resource):
 
     def status(self):
         instance = self._aws_resource()
-        return instance.state['Name']
+        return instance.state["Name"]
 
     def snapshot(self):
         for volume in self.ebsvolume_set.filter(backup=True):
@@ -230,7 +235,7 @@ class Instance(AWSEC2Resource):
 
 class EBSVolume(AWSEC2Resource):
     instance = models.ForeignKey(Instance, blank=True, null=True, editable=False, on_delete=models.CASCADE)
-    id_filter = 'volume-id'
+    id_filter = "volume-id"
     backup = models.BooleanField(default=False, editable=True)
 
     resource_kind = "volumes"
@@ -241,36 +246,40 @@ class EBSVolume(AWSEC2Resource):
         regions = aws_account.regions.all() or AWSRegion.objects.all()
         region_names = [region.name for region in regions]
         for region_name in region_names:
-            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+            ec2 = aws_resource("ec2", region_name=region_name, role_arn=aws_account.role_arn)
 
             for aws_volume in ec2.volumes.all():
                 instance = None
                 if aws_volume.attachments:
                     attachment = aws_volume.attachments[0]
-                    if attachment['State'] in ('attached', 'attaching'):
+                    if attachment["State"] in ("attached", "attaching"):
                         try:
-                            instance = Instance.objects.get(id=attachment['InstanceId'])
+                            instance = Instance.objects.get(id=attachment["InstanceId"])
                         except ObjectDoesNotExist:
                             instance = None
-                ebs_volume, _ = EBSVolume.objects.update_or_create(id=aws_volume.id,
-                                                                   defaults={'_name': resource_name(aws_volume),
-                                                                             'instance': instance,
-                                                                             'region_name': region_name,
-                                                                             'aws_account': aws_account})
+                ebs_volume, _ = EBSVolume.objects.update_or_create(
+                    id=aws_volume.id,
+                    defaults={
+                        "_name": resource_name(aws_volume),
+                        "instance": instance,
+                        "region_name": region_name,
+                        "aws_account": aws_account,
+                    },
+                )
 
     def snapshot(self, snapshot_name=None):
-        snapshot_name = snapshot_name or '%s - auto' % self.name
+        snapshot_name = snapshot_name or "%s - auto" % self.name
         try:
             aws_vol = self._aws_resource()
         except ResourceNotFoundException:
             pass
         else:
             snapshot = aws_vol.create_snapshot(Description=snapshot_name)
-            snapshot.create_tags(Tags=[{'Key': 'Managed', 'Value': 'True'}])
+            snapshot.create_tags(Tags=[{"Key": "Managed", "Value": "True"}])
             EBSSnapshot.create_snapshot(snapshot, self)
 
     class Meta:
-        verbose_name = 'EBS Volume'
+        verbose_name = "EBS Volume"
 
 
 class EBSSnapshot(AWSEC2Resource):
@@ -279,19 +288,19 @@ class EBSSnapshot(AWSEC2Resource):
     created_at = models.DateTimeField()
 
     resource_kind = "snapshots"
-    id_filter = 'snapshot-id'
+    id_filter = "snapshot-id"
 
     class Meta:
-        get_latest_by = 'created_at'
-        ordering = ['-created_at']
-        verbose_name = 'EBS Snapshot'
+        get_latest_by = "created_at"
+        ordering = ["-created_at"]
+        verbose_name = "EBS Snapshot"
 
     @classmethod
     def update_from_aws(cls, aws_account):
         regions = aws_account.regions.all() or AWSRegion.objects.all()
         region_names = [region.name for region in regions]
         for region_name in region_names:
-            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+            ec2 = aws_resource("ec2", region_name=region_name, role_arn=aws_account.role_arn)
 
             for aws_snapshot in ec2.snapshots.filter(OwnerIds=[aws_account.id]):
                 volume = None
@@ -300,29 +309,35 @@ class EBSSnapshot(AWSEC2Resource):
                         volume = EBSVolume.objects.get(id=aws_snapshot.volume_id)
                     except EBSVolume.DoesNotExist:
                         pass
-                defaults = {'_name': resource_name(aws_snapshot) or aws_snapshot.description,
-                            'ebs_volume': volume,
-                            'state': aws_snapshot.state,
-                            'created_at': aws_snapshot.start_time,
-                            'region_name': region_name,
-                            'aws_account': aws_account}
+                defaults = {
+                    "_name": resource_name(aws_snapshot) or aws_snapshot.description,
+                    "ebs_volume": volume,
+                    "state": aws_snapshot.state,
+                    "created_at": aws_snapshot.start_time,
+                    "region_name": region_name,
+                    "aws_account": aws_account,
+                }
                 aws_snapshot, _ = EBSSnapshot.objects.update_or_create(id=aws_snapshot.id, defaults=defaults)
 
     @classmethod
     def create_snapshot(cls, aws_snapshot, volume):
-        EBSSnapshot.objects.update_or_create(id=aws_snapshot.id,
-                                             defaults={'_name': resource_name(aws_snapshot) or aws_snapshot.description,
-                                                       'ebs_volume': volume,
-                                                       'state': aws_snapshot.state,
-                                                       'created_at': aws_snapshot.start_time,
-                                                       'region_name': volume.region_name,
-                                                       'aws_account': volume.aws_account})
+        EBSSnapshot.objects.update_or_create(
+            id=aws_snapshot.id,
+            defaults={
+                "_name": resource_name(aws_snapshot) or aws_snapshot.description,
+                "ebs_volume": volume,
+                "state": aws_snapshot.state,
+                "created_at": aws_snapshot.start_time,
+                "region_name": volume.region_name,
+                "aws_account": volume.aws_account,
+            },
+        )
 
 
 @receiver(pre_delete, sender=EBSSnapshot, weak=False)
 def delete_snapshot_on_aws(**kwargs):
     try:
-        aws_ebs_snapshot = kwargs['instance']._aws_resource()
+        aws_ebs_snapshot = kwargs["instance"]._aws_resource()
     except ResourceNotFoundException:
         pass
     except ClientError as e:
@@ -337,8 +352,8 @@ def delete_snapshot_on_aws(**kwargs):
 
 
 class SecurityGroup(AWSEC2Resource):
-    resource_kind = 'security_groups'
-    id_filter = 'group-id'
+    resource_kind = "security_groups"
+    id_filter = "group-id"
     is_managed = models.BooleanField(default=False)
     description = models.CharField(max_length=100, editable=False)
     vpc_id = models.CharField(max_length=21, editable=False)
@@ -349,17 +364,17 @@ class SecurityGroup(AWSEC2Resource):
         region_names = [region.name for region in regions]
         updated_groups = []
         for region_name in region_names:
-            ec2 = aws_resource('ec2', region_name=region_name, role_arn=aws_account.role_arn)
+            ec2 = aws_resource("ec2", region_name=region_name, role_arn=aws_account.role_arn)
 
             for aws_sg in ec2.security_groups.all():
                 defaults = {
-                    'aws_account': aws_account,
-                    'region_name': region_name,
-                    '_name': aws_sg.group_name,
-                    'description': aws_sg.description,
-                    'is_managed': is_managed(aws_sg),
-                    'present': True,
-                    'vpc_id': aws_sg.vpc_id
+                    "aws_account": aws_account,
+                    "region_name": region_name,
+                    "_name": aws_sg.group_name,
+                    "description": aws_sg.description,
+                    "is_managed": is_managed(aws_sg),
+                    "present": True,
+                    "vpc_id": aws_sg.vpc_id,
                 }
                 security_group, _ = SecurityGroup.objects.update_or_create(id=aws_sg.id, defaults=defaults)
 
@@ -370,44 +385,46 @@ class SecurityGroup(AWSEC2Resource):
     def update_rules(self):
         aws_sg = self._aws_resource()
         for rule in aws_sg.ip_permissions:
-            sg_rule, _ = SecurityGroupRule.objects.update_or_create(security_group=self,
-                                                                    from_port=rule.setdefault('FromPort', -1),
-                                                                    to_port=rule.setdefault('ToPort', -1),
-                                                                    ip_protocol=rule['IpProtocol'],
-                                                                    type=AWSSecurityGroupRuleType.INGRESS)
-            for ip_range in rule['IpRanges']:
-                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIp'],
-                                                                                   defaults={
-                                                                                       'description': ip_range.get('Description', '')
-                                                                                   })
+            sg_rule, _ = SecurityGroupRule.objects.update_or_create(
+                security_group=self,
+                from_port=rule.setdefault("FromPort", -1),
+                to_port=rule.setdefault("ToPort", -1),
+                ip_protocol=rule["IpProtocol"],
+                type=AWSSecurityGroupRuleType.INGRESS,
+            )
+            for ip_range in rule["IpRanges"]:
+                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(
+                    cidr=ip_range["CidrIp"], defaults={"description": ip_range.get("Description", "")}
+                )
                 sg_ip_range.security_group_rule.add(sg_rule)
-            for ip_range in rule['Ipv6Ranges']:
-                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(cidr=ip_range['CidrIpv6'],
-                                                                                   defaults = {
-                                                                                       'description': ip_range.get('Description', '')
-                                                                                   })
+            for ip_range in rule["Ipv6Ranges"]:
+                sg_ip_range, _ = SecurityGroupRuleIPRange.objects.update_or_create(
+                    cidr=ip_range["CidrIpv6"], defaults={"description": ip_range.get("Description", "")}
+                )
                 sg_ip_range.security_group_rule.add(sg_rule)
-            for user_group_pair in rule['UserIdGroupPairs']:
-                sg_ug_pair, _ = SecurityGroupRuleUserGroupPair.objects.update_or_create(group_id=user_group_pair['GroupId'],
-                                                                                        defaults={
-                                                                                            'vpc_id': user_group_pair.get('VpcId', ''),
-                                                                                            'user_id': user_group_pair.get('UserId', ''),
-                                                                                            'vpc_peering_connection_id': user_group_pair.get('VpcPeeringConnectionId', ''),
-                                                                                            'peering_status': user_group_pair.get('PeeringStatus', ''),
-                                                                                            'description': user_group_pair.get('Description', ''),
-                                                                                        })
+            for user_group_pair in rule["UserIdGroupPairs"]:
+                sg_ug_pair, _ = SecurityGroupRuleUserGroupPair.objects.update_or_create(
+                    group_id=user_group_pair["GroupId"],
+                    defaults={
+                        "vpc_id": user_group_pair.get("VpcId", ""),
+                        "user_id": user_group_pair.get("UserId", ""),
+                        "vpc_peering_connection_id": user_group_pair.get("VpcPeeringConnectionId", ""),
+                        "peering_status": user_group_pair.get("PeeringStatus", ""),
+                        "description": user_group_pair.get("Description", ""),
+                    },
+                )
                 sg_ug_pair.security_group_rule.add(sg_rule)
 
 
 class SecurityGroupRule(models.Model):
-    security_group = models.ForeignKey(SecurityGroup, on_delete=models.CASCADE, related_name='rule')
+    security_group = models.ForeignKey(SecurityGroup, on_delete=models.CASCADE, related_name="rule")
     from_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
     to_port = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(65535)])
     ip_protocol = models.CharField(max_length=10, choices=IPProtocol.choices)
     type = models.IntegerField(choices=AWSSecurityGroupRuleType.choices)
 
     class Meta:
-        unique_together = [('security_group', 'from_port', 'to_port', 'ip_protocol', 'type')]
+        unique_together = [("security_group", "from_port", "to_port", "ip_protocol", "type")]
 
     def __str__(self):
         direction = "in" if self.type == AWSSecurityGroupRuleType.INGRESS else "out"
@@ -424,7 +441,7 @@ class SecurityGroupRule(models.Model):
 
 
 class SecurityGroupRuleIPRange(models.Model):
-    security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='ip_range')
+    security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name="ip_range")
     cidr = CidrAddressField(unique=True)
     description = models.CharField(max_length=100, blank=True)
     extended_description = models.CharField(max_length=100, blank=True)
@@ -436,7 +453,7 @@ class SecurityGroupRuleIPRange(models.Model):
 
 
 class SecurityGroupRuleUserGroupPair(models.Model):
-    security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name='user_group_pair')
+    security_group_rule = models.ManyToManyField(SecurityGroupRule, related_name="user_group_pair")
     user_id = models.CharField(max_length=25, blank=True)
     group_id = models.CharField(max_length=25)
     vpc_id = models.CharField(max_length=25, blank=True)
@@ -445,4 +462,4 @@ class SecurityGroupRuleUserGroupPair(models.Model):
     description = models.CharField(max_length=100, blank=True)
 
     class Meta:
-        unique_together = [('user_id', 'group_id')]
+        unique_together = [("user_id", "group_id")]

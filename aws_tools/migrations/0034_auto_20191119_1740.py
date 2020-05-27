@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0033_auto_20191119_1736'),
+        ("aws_tools", "0033_auto_20191119_1736"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='securitygroupruleusergrouppair',
-            name='user_id',
-            field=models.CharField(blank=True, default='', max_length=25),
+            model_name="securitygroupruleusergrouppair",
+            name="user_id",
+            field=models.CharField(blank=True, default="", max_length=25),
             preserve_default=False,
         ),
     ]

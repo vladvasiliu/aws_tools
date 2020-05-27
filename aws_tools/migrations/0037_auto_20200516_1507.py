@@ -8,16 +8,14 @@ from aws_tools.helpers import default_schedule
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0036_auto_20200516_1236'),
+        ("aws_tools", "0036_auto_20200516_1236"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='instanceschedule',
-            name='days',
+            model_name="instanceschedule",
+            name="days",
             field=django.contrib.postgres.fields.jsonb.JSONField(default=default_schedule),
         ),
-        migrations.DeleteModel(
-            name='ScheduleDay',
-        ),
+        migrations.DeleteModel(name="ScheduleDay",),
     ]

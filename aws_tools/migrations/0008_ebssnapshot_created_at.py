@@ -9,13 +9,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0007_ebsvolume_backup'),
+        ("aws_tools", "0007_ebsvolume_backup"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ebssnapshot',
-            name='created_at',
+            model_name="ebssnapshot",
+            name="created_at",
             field=models.DateTimeField(default=django.utils.timezone.now),
             preserve_default=False,
         ),

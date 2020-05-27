@@ -9,58 +9,74 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0002_auto_20161203_2230'),
+        ("aws_tools", "0002_auto_20161203_2230"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='awsaccount',
-            name='id',
+            model_name="awsaccount",
+            name="id",
             field=models.CharField(editable=False, max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='ebssnapshot',
-            name='aws_account',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.AWSAccount'),
+            model_name="ebssnapshot",
+            name="aws_account",
+            field=models.ForeignKey(
+                editable=False, on_delete=django.db.models.deletion.CASCADE, to="aws_tools.AWSAccount"
+            ),
         ),
         migrations.AlterField(
-            model_name='ebssnapshot',
-            name='ebs_volume',
-            field=models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.EBSVolume'),
+            model_name="ebssnapshot",
+            name="ebs_volume",
+            field=models.ForeignKey(
+                blank=True,
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="aws_tools.EBSVolume",
+            ),
         ),
         migrations.AlterField(
-            model_name='ebssnapshot',
-            name='id',
+            model_name="ebssnapshot",
+            name="id",
             field=models.CharField(editable=False, max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='ebsvolume',
-            name='aws_account',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.AWSAccount'),
+            model_name="ebsvolume",
+            name="aws_account",
+            field=models.ForeignKey(
+                editable=False, on_delete=django.db.models.deletion.CASCADE, to="aws_tools.AWSAccount"
+            ),
         ),
         migrations.AlterField(
-            model_name='ebsvolume',
-            name='id',
+            model_name="ebsvolume",
+            name="id",
             field=models.CharField(editable=False, max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='ebsvolume',
-            name='instance',
-            field=models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.Instance'),
+            model_name="ebsvolume",
+            name="instance",
+            field=models.ForeignKey(
+                blank=True,
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="aws_tools.Instance",
+            ),
         ),
         migrations.AlterField(
-            model_name='ebsvolume',
-            name='present',
-            field=models.BooleanField(default=True, editable=False),
+            model_name="ebsvolume", name="present", field=models.BooleanField(default=True, editable=False),
         ),
         migrations.AlterField(
-            model_name='instance',
-            name='aws_account',
-            field=models.ForeignKey(editable=False, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.AWSAccount'),
+            model_name="instance",
+            name="aws_account",
+            field=models.ForeignKey(
+                editable=False, on_delete=django.db.models.deletion.CASCADE, to="aws_tools.AWSAccount"
+            ),
         ),
         migrations.AlterField(
-            model_name='instance',
-            name='id',
+            model_name="instance",
+            name="id",
             field=models.CharField(editable=False, max_length=25, primary_key=True, serialize=False),
         ),
     ]

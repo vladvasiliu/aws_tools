@@ -8,29 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0010_auto_20161221_0856'),
+        ("aws_tools", "0010_auto_20161221_0856"),
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='awsaccount',
-            options={'ordering': ['_name']},
-        ),
-        migrations.AlterModelOptions(
-            name='ebssnapshot',
-            options={'get_latest_by': 'created_at'},
-        ),
-        migrations.AlterModelOptions(
-            name='instance',
-            options={'ordering': ['_name']},
-        ),
-        migrations.RemoveField(
-            model_name='instance',
-            name='backup',
-        ),
-        migrations.AlterField(
-            model_name='ebsvolume',
-            name='backup',
-            field=models.BooleanField(default=False),
-        ),
+        migrations.AlterModelOptions(name="awsaccount", options={"ordering": ["_name"]},),
+        migrations.AlterModelOptions(name="ebssnapshot", options={"get_latest_by": "created_at"},),
+        migrations.AlterModelOptions(name="instance", options={"ordering": ["_name"]},),
+        migrations.RemoveField(model_name="instance", name="backup",),
+        migrations.AlterField(model_name="ebsvolume", name="backup", field=models.BooleanField(default=False),),
     ]

@@ -6,12 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0018_awsorganization'),
+        ("aws_tools", "0018_awsorganization"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='awsorganization',
-            name='region_name',
-        ),
+        migrations.RemoveField(model_name="awsorganization", name="region_name",),
     ]

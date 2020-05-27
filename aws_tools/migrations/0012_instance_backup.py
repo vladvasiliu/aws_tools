@@ -8,13 +8,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0011_auto_20170306_1657'),
+        ("aws_tools", "0011_auto_20170306_1657"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='instance',
-            name='backup',
-            field=models.BooleanField(default=False),
-        ),
+        migrations.AddField(model_name="instance", name="backup", field=models.BooleanField(default=False),),
     ]

@@ -8,13 +8,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0008_ebssnapshot_created_at'),
+        ("aws_tools", "0008_ebssnapshot_created_at"),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='ebsvolume',
-            name='present',
-            field=models.BooleanField(default=True),
-        ),
+        migrations.AlterField(model_name="ebsvolume", name="present", field=models.BooleanField(default=True),),
     ]

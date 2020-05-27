@@ -1,5 +1,7 @@
 -r requirements.txt
 
-moto  # mock aws server
+black
 coverage
+moto  # mock aws server
 pip-tools
+pre-commit

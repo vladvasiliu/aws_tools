@@ -8,14 +8,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0004_auto_20161205_1903'),
+        ("aws_tools", "0004_auto_20161205_1903"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ebssnapshot',
-            name='state',
-            field=models.CharField(default='none', max_length=20),
+            model_name="ebssnapshot",
+            name="state",
+            field=models.CharField(default="none", max_length=20),
             preserve_default=False,
         ),
     ]

@@ -7,43 +7,45 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0032_auto_20190430_1732'),
+        ("aws_tools", "0032_auto_20190430_1732"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='awsaccount',
-            name='id',
+            model_name="awsaccount",
+            name="id",
             field=models.CharField(max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='awsorganization',
-            name='id',
+            model_name="awsorganization",
+            name="id",
             field=models.CharField(max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='ebssnapshot',
-            name='id',
+            model_name="ebssnapshot",
+            name="id",
             field=models.CharField(max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='ebsvolume',
-            name='id',
+            model_name="ebsvolume", name="id", field=models.CharField(max_length=25, primary_key=True, serialize=False),
+        ),
+        migrations.AlterField(
+            model_name="instance", name="id", field=models.CharField(max_length=25, primary_key=True, serialize=False),
+        ),
+        migrations.AlterField(
+            model_name="securitygroup",
+            name="id",
             field=models.CharField(max_length=25, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
-            model_name='instance',
-            name='id',
-            field=models.CharField(max_length=25, primary_key=True, serialize=False),
-        ),
-        migrations.AlterField(
-            model_name='securitygroup',
-            name='id',
-            field=models.CharField(max_length=25, primary_key=True, serialize=False),
-        ),
-        migrations.AlterField(
-            model_name='securitygroupruleusergrouppair',
-            name='user_id',
-            field=models.IntegerField(null=True, validators=[django.core.validators.MaxLengthValidator(12), django.core.validators.MinLengthValidator(12)]),
+            model_name="securitygroupruleusergrouppair",
+            name="user_id",
+            field=models.IntegerField(
+                null=True,
+                validators=[
+                    django.core.validators.MaxLengthValidator(12),
+                    django.core.validators.MinLengthValidator(12),
+                ],
+            ),
         ),
     ]

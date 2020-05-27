@@ -6,13 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0019_remove_awsorganization_region_name'),
+        ("aws_tools", "0019_remove_awsorganization_region_name"),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='awsaccount',
-            old_name='role_arn',
-            new_name='_role_arn',
-        ),
+        migrations.RenameField(model_name="awsaccount", old_name="role_arn", new_name="_role_arn",),
     ]

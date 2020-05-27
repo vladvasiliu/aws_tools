@@ -6,12 +6,11 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0016_securitygrouprule_securitygroupruleiprange_securitygroupruleusergrouppair'),
+        ("aws_tools", "0016_securitygrouprule_securitygroupruleiprange_securitygroupruleusergrouppair"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='ebssnapshot',
-            options={'get_latest_by': 'created_at', 'ordering': ['-created_at']},
+            name="ebssnapshot", options={"get_latest_by": "created_at", "ordering": ["-created_at"]},
         ),
     ]

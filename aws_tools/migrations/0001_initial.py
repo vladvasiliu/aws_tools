@@ -10,66 +10,126 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='AWSAccount',
+            name="AWSAccount",
             fields=[
-                ('_name', models.CharField(blank=True, max_length=100)),
-                ('id', models.CharField(max_length=25, primary_key=True, serialize=False)),
-                ('role_arn', models.CharField(max_length=100)),
+                ("_name", models.CharField(blank=True, max_length=100)),
+                ("id", models.CharField(max_length=25, primary_key=True, serialize=False)),
+                ("role_arn", models.CharField(max_length=100)),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False,},
         ),
         migrations.CreateModel(
-            name='EBSSnapshot',
+            name="EBSSnapshot",
             fields=[
-                ('_name', models.CharField(blank=True, max_length=100)),
-                ('id', models.CharField(max_length=25, primary_key=True, serialize=False)),
-                ('region_name', models.CharField(choices=[('us-east-1', 'US East (N. Virginia)'), ('us-east-2', 'US East (Ohio)'), ('us-west-1', 'US West (N. California)'), ('us-west-2', 'US West (Oregon)'), ('ap-south-1', 'Asia Pacific (Mumbai)'), ('ap-northeast-2', 'Asia Pacific (Seoul)'), ('ap-southeast-1', 'Asia Pacific (Singapore)'), ('ap-southeast-2', 'Asia Pacific (Sydney)'), ('ap-northeast-1', 'Asia Pacific (Tokyo)'), ('eu-central-1', 'EU (Frankfurt)'), ('eu-west-1', 'EU (Ireland)'), ('sa-east-1', 'Sout America (São Paolo)')], editable=False, max_length=25)),
-                ('aws_account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='aws_tools.AWSAccount')),
+                ("_name", models.CharField(blank=True, max_length=100)),
+                ("id", models.CharField(max_length=25, primary_key=True, serialize=False)),
+                (
+                    "region_name",
+                    models.CharField(
+                        choices=[
+                            ("us-east-1", "US East (N. Virginia)"),
+                            ("us-east-2", "US East (Ohio)"),
+                            ("us-west-1", "US West (N. California)"),
+                            ("us-west-2", "US West (Oregon)"),
+                            ("ap-south-1", "Asia Pacific (Mumbai)"),
+                            ("ap-northeast-2", "Asia Pacific (Seoul)"),
+                            ("ap-southeast-1", "Asia Pacific (Singapore)"),
+                            ("ap-southeast-2", "Asia Pacific (Sydney)"),
+                            ("ap-northeast-1", "Asia Pacific (Tokyo)"),
+                            ("eu-central-1", "EU (Frankfurt)"),
+                            ("eu-west-1", "EU (Ireland)"),
+                            ("sa-east-1", "Sout America (São Paolo)"),
+                        ],
+                        editable=False,
+                        max_length=25,
+                    ),
+                ),
+                (
+                    "aws_account",
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="aws_tools.AWSAccount"),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False,},
         ),
         migrations.CreateModel(
-            name='EBSVolume',
+            name="EBSVolume",
             fields=[
-                ('_name', models.CharField(blank=True, max_length=100)),
-                ('id', models.CharField(max_length=25, primary_key=True, serialize=False)),
-                ('region_name', models.CharField(choices=[('us-east-1', 'US East (N. Virginia)'), ('us-east-2', 'US East (Ohio)'), ('us-west-1', 'US West (N. California)'), ('us-west-2', 'US West (Oregon)'), ('ap-south-1', 'Asia Pacific (Mumbai)'), ('ap-northeast-2', 'Asia Pacific (Seoul)'), ('ap-southeast-1', 'Asia Pacific (Singapore)'), ('ap-southeast-2', 'Asia Pacific (Sydney)'), ('ap-northeast-1', 'Asia Pacific (Tokyo)'), ('eu-central-1', 'EU (Frankfurt)'), ('eu-west-1', 'EU (Ireland)'), ('sa-east-1', 'Sout America (São Paolo)')], editable=False, max_length=25)),
-                ('present', models.BooleanField(default=True)),
-                ('aws_account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='aws_tools.AWSAccount')),
+                ("_name", models.CharField(blank=True, max_length=100)),
+                ("id", models.CharField(max_length=25, primary_key=True, serialize=False)),
+                (
+                    "region_name",
+                    models.CharField(
+                        choices=[
+                            ("us-east-1", "US East (N. Virginia)"),
+                            ("us-east-2", "US East (Ohio)"),
+                            ("us-west-1", "US West (N. California)"),
+                            ("us-west-2", "US West (Oregon)"),
+                            ("ap-south-1", "Asia Pacific (Mumbai)"),
+                            ("ap-northeast-2", "Asia Pacific (Seoul)"),
+                            ("ap-southeast-1", "Asia Pacific (Singapore)"),
+                            ("ap-southeast-2", "Asia Pacific (Sydney)"),
+                            ("ap-northeast-1", "Asia Pacific (Tokyo)"),
+                            ("eu-central-1", "EU (Frankfurt)"),
+                            ("eu-west-1", "EU (Ireland)"),
+                            ("sa-east-1", "Sout America (São Paolo)"),
+                        ],
+                        editable=False,
+                        max_length=25,
+                    ),
+                ),
+                ("present", models.BooleanField(default=True)),
+                (
+                    "aws_account",
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="aws_tools.AWSAccount"),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False,},
         ),
         migrations.CreateModel(
-            name='Instance',
+            name="Instance",
             fields=[
-                ('_name', models.CharField(blank=True, max_length=100)),
-                ('id', models.CharField(max_length=25, primary_key=True, serialize=False)),
-                ('region_name', models.CharField(choices=[('us-east-1', 'US East (N. Virginia)'), ('us-east-2', 'US East (Ohio)'), ('us-west-1', 'US West (N. California)'), ('us-west-2', 'US West (Oregon)'), ('ap-south-1', 'Asia Pacific (Mumbai)'), ('ap-northeast-2', 'Asia Pacific (Seoul)'), ('ap-southeast-1', 'Asia Pacific (Singapore)'), ('ap-southeast-2', 'Asia Pacific (Sydney)'), ('ap-northeast-1', 'Asia Pacific (Tokyo)'), ('eu-central-1', 'EU (Frankfurt)'), ('eu-west-1', 'EU (Ireland)'), ('sa-east-1', 'Sout America (São Paolo)')], editable=False, max_length=25)),
-                ('aws_account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='aws_tools.AWSAccount')),
+                ("_name", models.CharField(blank=True, max_length=100)),
+                ("id", models.CharField(max_length=25, primary_key=True, serialize=False)),
+                (
+                    "region_name",
+                    models.CharField(
+                        choices=[
+                            ("us-east-1", "US East (N. Virginia)"),
+                            ("us-east-2", "US East (Ohio)"),
+                            ("us-west-1", "US West (N. California)"),
+                            ("us-west-2", "US West (Oregon)"),
+                            ("ap-south-1", "Asia Pacific (Mumbai)"),
+                            ("ap-northeast-2", "Asia Pacific (Seoul)"),
+                            ("ap-southeast-1", "Asia Pacific (Singapore)"),
+                            ("ap-southeast-2", "Asia Pacific (Sydney)"),
+                            ("ap-northeast-1", "Asia Pacific (Tokyo)"),
+                            ("eu-central-1", "EU (Frankfurt)"),
+                            ("eu-west-1", "EU (Ireland)"),
+                            ("sa-east-1", "Sout America (São Paolo)"),
+                        ],
+                        editable=False,
+                        max_length=25,
+                    ),
+                ),
+                (
+                    "aws_account",
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="aws_tools.AWSAccount"),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False,},
         ),
         migrations.AddField(
-            model_name='ebsvolume',
-            name='instance',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.Instance'),
+            model_name="ebsvolume",
+            name="instance",
+            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to="aws_tools.Instance"),
         ),
         migrations.AddField(
-            model_name='ebssnapshot',
-            name='ebs_volume',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='aws_tools.EBSVolume'),
+            model_name="ebssnapshot",
+            name="ebs_volume",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="aws_tools.EBSVolume"),
         ),
     ]

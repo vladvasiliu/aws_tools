@@ -9,22 +9,31 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0012_instance_backup'),
+        ("aws_tools", "0012_instance_backup"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ebssnapshot',
-            name='ebs_volume',
-            field=models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.EBSVolume'),
+            model_name="ebssnapshot",
+            name="ebs_volume",
+            field=models.ForeignKey(
+                blank=True,
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="aws_tools.EBSVolume",
+            ),
         ),
         migrations.AlterField(
-            model_name='ebsvolume',
-            name='instance',
-            field=models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, to='aws_tools.Instance'),
+            model_name="ebsvolume",
+            name="instance",
+            field=models.ForeignKey(
+                blank=True,
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="aws_tools.Instance",
+            ),
         ),
-        migrations.AlterOrderWithRespectTo(
-            name='ebssnapshot',
-            order_with_respect_to='created_at',
-        ),
+        migrations.AlterOrderWithRespectTo(name="ebssnapshot", order_with_respect_to="created_at",),
     ]

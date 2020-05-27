@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0025_auto_20190410_0459'),
+        ("aws_tools", "0025_auto_20190410_0459"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='securitygroupruleiprange',
-            name='security_group_rule',
-            field=models.ManyToManyField(null=True, related_name='ip_range', to='aws_tools.SecurityGroupRule'),
+            model_name="securitygroupruleiprange",
+            name="security_group_rule",
+            field=models.ManyToManyField(null=True, related_name="ip_range", to="aws_tools.SecurityGroupRule"),
         ),
         migrations.AlterField(
-            model_name='securitygroupruleusergrouppair',
-            name='peering_status',
+            model_name="securitygroupruleusergrouppair",
+            name="peering_status",
             field=models.CharField(blank=True, max_length=25),
         ),
         migrations.AlterField(
-            model_name='securitygroupruleusergrouppair',
-            name='vpc_id',
+            model_name="securitygroupruleusergrouppair",
+            name="vpc_id",
             field=models.CharField(blank=True, max_length=25),
         ),
         migrations.AlterField(
-            model_name='securitygroupruleusergrouppair',
-            name='vpc_peering_connection_id',
+            model_name="securitygroupruleusergrouppair",
+            name="vpc_peering_connection_id",
             field=models.CharField(blank=True, max_length=25),
         ),
     ]

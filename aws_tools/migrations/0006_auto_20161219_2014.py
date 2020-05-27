@@ -8,18 +8,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0005_ebssnapshot_state'),
+        ("aws_tools", "0005_ebssnapshot_state"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='instance',
-            name='backup',
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name='instance',
-            name='backup_time',
-            field=models.TimeField(default='03:00:00'),
-        ),
+        migrations.AddField(model_name="instance", name="backup", field=models.BooleanField(default=True),),
+        migrations.AddField(model_name="instance", name="backup_time", field=models.TimeField(default="03:00:00"),),
     ]

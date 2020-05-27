@@ -8,17 +8,19 @@ from aws_tools.helpers import default_schedule, validate_schedule
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0038_auto_20200516_1529'),
+        ("aws_tools", "0038_auto_20200516_1529"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='instanceschedule',
-            name='schedule',
-        ),
+        migrations.RemoveField(model_name="instanceschedule", name="schedule",),
         migrations.AddField(
-            model_name='instanceschedule',
-            name='sched',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.PositiveSmallIntegerField(choices=[(0, 'nothing'), (1, 'turn on'), (2, 'turn off')]), default=default_schedule, size=None, validators=[validate_schedule]),
+            model_name="instanceschedule",
+            name="sched",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.PositiveSmallIntegerField(choices=[(0, "nothing"), (1, "turn on"), (2, "turn off")]),
+                default=default_schedule,
+                size=None,
+                validators=[validate_schedule],
+            ),
         ),
     ]

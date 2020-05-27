@@ -8,38 +8,76 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0015_auto_20180608_1752'),
+        ("aws_tools", "0015_auto_20180608_1752"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SecurityGroupRule',
+            name="SecurityGroupRule",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('from_port', models.IntegerField(validators=[django.core.validators.MinValueValidator(-1), django.core.validators.MaxValueValidator(65535)])),
-                ('to_port', models.IntegerField(validators=[django.core.validators.MinValueValidator(-1), django.core.validators.MaxValueValidator(65535)])),
-                ('ip_protocol', models.IntegerField(choices=[(-1, 'all'), (1, 'ICMPv4'), (58, 'ICMPv6'), (6, 'TCP'), (17, 'UDP')])),
-                ('type', models.IntegerField(choices=[(0, 'ingress'), (1, 'egress')])),
-                ('security_group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rule', to='aws_tools.SecurityGroup')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "from_port",
+                    models.IntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(-1),
+                            django.core.validators.MaxValueValidator(65535),
+                        ]
+                    ),
+                ),
+                (
+                    "to_port",
+                    models.IntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(-1),
+                            django.core.validators.MaxValueValidator(65535),
+                        ]
+                    ),
+                ),
+                (
+                    "ip_protocol",
+                    models.IntegerField(choices=[(-1, "all"), (1, "ICMPv4"), (58, "ICMPv6"), (6, "TCP"), (17, "UDP")]),
+                ),
+                ("type", models.IntegerField(choices=[(0, "ingress"), (1, "egress")])),
+                (
+                    "security_group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="rule", to="aws_tools.SecurityGroup"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SecurityGroupRuleIPRange',
+            name="SecurityGroupRuleIPRange",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cidr', models.GenericIPAddressField()),
-                ('description', models.CharField(blank=True, max_length=100)),
-                ('security_group_rule', models.ManyToManyField(related_name='ip_range', to='aws_tools.SecurityGroupRule')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("cidr", models.GenericIPAddressField()),
+                ("description", models.CharField(blank=True, max_length=100)),
+                (
+                    "security_group_rule",
+                    models.ManyToManyField(related_name="ip_range", to="aws_tools.SecurityGroupRule"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SecurityGroupRuleUserGroupPair',
+            name="SecurityGroupRuleUserGroupPair",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_id', models.IntegerField(validators=[django.core.validators.MaxLengthValidator(12), django.core.validators.MinLengthValidator(12)])),
-                ('group_id', models.CharField(max_length=25)),
-                ('description', models.CharField(blank=True, max_length=100)),
-                ('security_group_rule', models.ManyToManyField(related_name='user_group_pair', to='aws_tools.SecurityGroupRule')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "user_id",
+                    models.IntegerField(
+                        validators=[
+                            django.core.validators.MaxLengthValidator(12),
+                            django.core.validators.MinLengthValidator(12),
+                        ]
+                    ),
+                ),
+                ("group_id", models.CharField(max_length=25)),
+                ("description", models.CharField(blank=True, max_length=100)),
+                (
+                    "security_group_rule",
+                    models.ManyToManyField(related_name="user_group_pair", to="aws_tools.SecurityGroupRule"),
+                ),
             ],
         ),
     ]

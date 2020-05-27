@@ -8,23 +8,11 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aws_tools', '0003_auto_20161204_2000'),
+        ("aws_tools", "0003_auto_20161204_2000"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='awsaccount',
-            name='present',
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name='ebssnapshot',
-            name='present',
-            field=models.BooleanField(default=True),
-        ),
-        migrations.AddField(
-            model_name='instance',
-            name='present',
-            field=models.BooleanField(default=True),
-        ),
+        migrations.AddField(model_name="awsaccount", name="present", field=models.BooleanField(default=True),),
+        migrations.AddField(model_name="ebssnapshot", name="present", field=models.BooleanField(default=True),),
+        migrations.AddField(model_name="instance", name="present", field=models.BooleanField(default=True),),
     ]

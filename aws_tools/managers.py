@@ -14,6 +14,8 @@ class EBSVolumeManager(models.Manager):
         #     elif vol.ebssnapshot_set.latest().created_at.date() < now.date():
         #         to_snapshot.append(vol)
         # return to_snapshot
-        return self.filter(instance__backup=True, instance__backup_time__lt=now.time(), present=True)\
-            .annotate(latest_snapshot_date=Max('ebssnapshot__created_at')) \
+        return (
+            self.filter(instance__backup=True, instance__backup_time__lt=now.time(), present=True)
+            .annotate(latest_snapshot_date=Max("ebssnapshot__created_at"))
             .filter(Q(latest_snapshot_date__lt=now.date()) | Q(latest_snapshot_date__isnull=True))
+        )
