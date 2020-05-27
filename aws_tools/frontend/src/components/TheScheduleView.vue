@@ -6,8 +6,7 @@
         :show-all="false"
         :object-error="schedules_error"
         :object-list="schedules"
-        :selected-object="selectedSchedule"
-        @selectObject="select"
+        :route-dest="routeDest"
       />
     </div>
     <div class="col">
@@ -26,11 +25,6 @@ export default {
   components: {
     ObjectListGroupCard
   },
-  data: function () {
-    return {
-      selectedSchedule: null
-    }
-  },
   computed: {
     ...mapGetters(['schedules', 'schedules_error']),
     faExclamationTriangle () { return faExclamationTriangle }
@@ -39,6 +33,8 @@ export default {
     this.$store.dispatch('LOAD_SCHEDULE_LIST')
   },
   methods: {
+    routeDest: (schedule) => ({ name: 'ScheduleViewID', params: { id: schedule.id } }),
+
     select: function (object) {
       this.selectedSchedule = object
     },

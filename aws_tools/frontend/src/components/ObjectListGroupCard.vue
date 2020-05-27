@@ -25,18 +25,16 @@
     >
       <b-list-group-item
         v-if="objectList.length>1 && showAll"
-        :active="!selectedObject"
         action
-        @click="select()"
       >
         All
       </b-list-group-item>
       <b-list-group-item
         v-for="object in objectList"
         :key="object.id"
-        :active="selectedObject === object || objectList.length === 1"
         action
-        @click="select(object)"
+        :to="routeDest(object)"
+        active-class="active"
       >
         {{ object.name }}
       </b-list-group-item>
@@ -59,16 +57,11 @@ export default {
     showAll: { type: Boolean, default: () => { return false }, required: false },
     objectList: { type: Array, default: null },
     objectError: { type: Object, default: null },
-    selectedObject: { type: Object, default: null },
-    cardTitle: { type: String, default: 'Object list', required: true }
+    cardTitle: { type: String, default: 'Object list', required: true },
+    routeDest: { type: Function, required: true }
   },
   computed: {
     faExclamationTriangle () { return faExclamationTriangle }
-  },
-  methods: {
-    select: function (object) {
-      this.$emit('selectObject', object)
-    }
   }
 }
 </script>
