@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'aws_tools.apps.AwsToolsConfig',
     'rest_framework',
     'netfields',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [

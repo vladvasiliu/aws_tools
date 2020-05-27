@@ -3,7 +3,7 @@
 import django.contrib.postgres.fields.jsonb
 import django.core.serializers.json
 from django.db import migrations
-import helpers
+from aws_tools.helpers import default_schedule
 
 
 class Migration(migrations.Migration):
@@ -20,6 +20,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='instanceschedule',
             name='schedule',
-            field=django.contrib.postgres.fields.jsonb.JSONField(default=helpers.default_schedule, encoder=django.core.serializers.json.DjangoJSONEncoder),
+            field=django.contrib.postgres.fields.jsonb.JSONField(default=default_schedule, encoder=django.core.serializers.json.DjangoJSONEncoder),
         ),
     ]

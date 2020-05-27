@@ -2,7 +2,7 @@
 
 import django.contrib.postgres.fields
 from django.db import migrations, models
-import helpers
+from aws_tools.helpers import default_schedule, validate_schedule
 
 
 class Migration(migrations.Migration):
@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='instanceschedule',
             name='sched',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.PositiveSmallIntegerField(choices=[(0, 'nothing'), (1, 'turn on'), (2, 'turn off')]), default=helpers.default_schedule, size=None, validators=[helpers.validate_schedule]),
+            field=django.contrib.postgres.fields.ArrayField(base_field=models.PositiveSmallIntegerField(choices=[(0, 'nothing'), (1, 'turn on'), (2, 'turn off')]), default=default_schedule, size=None, validators=[validate_schedule]),
         ),
     ]

@@ -7,4 +7,4 @@ django-filter
 psycopg2
 djangorestframework
 drf-nested-routers
-django-q
+django-celery-beat
