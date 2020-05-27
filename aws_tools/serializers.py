@@ -25,9 +25,9 @@ class AWSRegionBriefSerializer(serializers.HyperlinkedModelSerializer):
 
 class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
     instance_set = serializers.HyperlinkedRelatedField(many=True, view_name="instance-detail", read_only=True)
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
     regions = AWSRegionBriefSerializer(many=True, read_only=True)
-    name = serializers.CharField(read_only=True)
+    name = serializers.ReadOnlyField()
 
     class Meta:
         model = AWSAccount
@@ -43,9 +43,9 @@ class EBSVolumeBriefSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class InstanceSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
     ebsvolume_set = EBSVolumeBriefSerializer(many=True, read_only=True)
-    name = serializers.CharField(read_only=True)
+    name = serializers.ReadOnlyField()
 
     class Meta:
         model = Instance
@@ -59,9 +59,9 @@ class EBSSnapshotBriefSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EBSVolumeSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
     ebssnapshot_set = EBSSnapshotBriefSerializer(many=True, read_only=True)
-    name = serializers.CharField(read_only=True)
+    name = serializers.ReadOnlyField()
 
     class Meta:
         model = EBSVolume
@@ -69,7 +69,7 @@ class EBSVolumeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EBSSnapshotSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
 
     class Meta:
         model = EBSSnapshot
@@ -102,7 +102,7 @@ class SecurityGroupRuleUserGroupPairBriefSerializer(serializers.HyperlinkedModel
 
 class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
     parent_lookup_kwargs = {"security_group_pk": "security_group__pk"}
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
     ip_range = SecurityGroupRuleIPRangeBriefSerializer(many=True, read_only=True)
     user_group_pair = SecurityGroupRuleUserGroupPairBriefSerializer(many=True, read_only=True)
 
@@ -112,7 +112,7 @@ class SecurityGroupRuleSerializer(NestedHyperlinkedModelSerializer):
 
 
 class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
     rule_list = serializers.HyperlinkedIdentityField(
         view_name="securitygrouprule-list", lookup_url_kwarg="security_group_pk"
     )
@@ -125,7 +125,7 @@ class SecurityGroupSerializer(serializers.HyperlinkedModelSerializer):
 
 class SecurityGroupRuleBriefSerializer(NestedHyperlinkedModelSerializer):
     parent_lookup_kwargs = {"security_group_pk": "security_group__pk"}
-    id = serializers.CharField(read_only=True)
+    id = serializers.ReadOnlyField()
 
     class Meta:
         model = SecurityGroupRule
