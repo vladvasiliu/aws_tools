@@ -47,9 +47,14 @@ const index = new Router({
     },
     {
       path: '/schedules',
-      name: 'ScheduleView',
       component: () => import('../components/TheScheduleView'),
       children: [
+        {
+          path: '',
+          name: 'ScheduleView',
+          component: () => import('../components/NothingSelected'),
+          props: { title: 'No schedule selected', message: 'Please select a schedule' }
+        },
         {
           path: ':id',
           name: 'ScheduleViewID',
