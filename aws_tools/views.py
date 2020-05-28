@@ -105,7 +105,7 @@ class SecurityGroupRuleUserGroupPairViewSet(viewsets.ReadOnlyModelViewSet):
 
 class InstanceScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = InstanceScheduleSerializer
-    queryset = InstanceSchedule.objects.order_by("name").annotate(instance_count=Count("instance"))
+    queryset = InstanceSchedule.objects.order_by("name").annotate(instance_count=Count("instance")).order_by("name")
 
 
 class InstanceScheduleInstanceListViewSet(viewsets.ReadOnlyModelViewSet):
