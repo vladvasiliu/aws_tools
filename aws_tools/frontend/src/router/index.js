@@ -20,8 +20,20 @@ const index = new Router({
     },
     {
       path: '/instances',
-      name: 'InstanceView',
-      component: TheInstanceView
+      component: TheInstanceView,
+      children: [
+        {
+          path: '',
+          name: 'InstanceView',
+          component: () => import('../components/InstanceList')
+        },
+        {
+          name: 'InstanceViewForAccount',
+          path: 'for_account/:id',
+          component: () => import('../components/InstanceList'),
+          props: (route) => ({ selectedAccountID: route.params.id })
+        }
+      ]
       // meta: { requiresAuth: true }
     },
     {
@@ -39,7 +51,7 @@ const index = new Router({
       component: () => import('../components/TheScheduleView'),
       children: [
         {
-          path: '/schedules/:id',
+          path: ':id',
           name: 'ScheduleViewID',
           component: () => import('../components/ScheduleDetail'),
           props: (route) => ({ selectedScheduleID: parseInt(route.params.id) })

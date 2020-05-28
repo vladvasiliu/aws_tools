@@ -22,13 +22,13 @@ export default {
     InstanceAccordion
   },
   props: {
-    selectedAccount: { type: Object, default: null }
+    selectedAccountID: { type: String, default: undefined, required: false }
   },
   computed: {
     instanceList: function () {
       const result = this.$store.state.instance.instances
-      if (this.selectedAccount !== null) {
-        return result.filter(instance => instance.aws_account === this.selectedAccount.url)
+      if (this.selectedAccountID !== undefined) {
+        return result.filter(instance => instance.aws_account === this.selectedAccountID)
       }
       return result
     },

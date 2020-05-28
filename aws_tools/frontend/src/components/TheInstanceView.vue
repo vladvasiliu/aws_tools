@@ -2,34 +2,30 @@
   <div class="row">
     <div class="col-3">
       <account-list
-        :selected-account="selectedAccount"
-        @selectAccount="selectAccount"
+        :route-dest="routeDest"
+        :route-dest-all="routeDestAll"
       />
     </div>
     <div class="col">
-      <instance-list :selected-account="selectedAccount" />
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-// import AccountList from './account_list.vue'
-// import InstanceList from './instance_list.vue'
+import { RouteDestAll } from './ObjectListGroupCard'
 
 export default {
   components: {
-    AccountList: () => ({ component: import('./account_list') }),
-    InstanceList: () => ({ component: import('./instance_list') })
+    AccountList: () => ({ component: import('./AWSAccountList') })
   },
   data: function () {
     return {
-      selectedAccount: null
+      routeDestAll: new RouteDestAll('All', { name: 'InstanceView' })
     }
   },
   methods: {
-    selectAccount: function (event) {
-      this.selectedAccount = event.account
-    }
+    routeDest: (account) => ({ name: 'InstanceViewForAccount', params: { id: account.id } })
   }
 }
 </script>

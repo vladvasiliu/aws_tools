@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import AccountList from './account_list'
+import AccountList from './AWSAccountList'
 import SecurityGroupList from './SecurityGroupList'
 
 export default {

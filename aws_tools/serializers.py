@@ -46,6 +46,7 @@ class InstanceSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     ebsvolume_set = EBSVolumeBriefSerializer(many=True, read_only=True)
     name = serializers.ReadOnlyField()
+    aws_account = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Instance

@@ -24,10 +24,13 @@
       flush
     >
       <b-list-group-item
-        v-if="objectList.length>1 && showAll"
+        v-if="objectList.length>1 && routeDestAll"
         action
+        :to="routeDestAll.location"
+        active-class="active"
+        exact
       >
-        All
+        {{ routeDestAll.text }}
       </b-list-group-item>
       <b-list-group-item
         v-for="object in objectList"
@@ -51,14 +54,19 @@
 <script>
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
+export function RouteDestAll (text, location) {
+  this.text = text
+  this.location = location
+}
+
 export default {
   name: 'ObjectListGroupCard',
   props: {
-    showAll: { type: Boolean, default: () => { return false }, required: false },
     objectList: { type: Array, default: null },
     objectError: { type: Object, default: null },
     cardTitle: { type: String, default: 'Object list', required: true },
-    routeDest: { type: Function, required: true }
+    routeDest: { type: Function, required: true },
+    routeDestAll: { type: RouteDestAll, default: undefined, required: false }
   },
   computed: {
     faExclamationTriangle () { return faExclamationTriangle }
