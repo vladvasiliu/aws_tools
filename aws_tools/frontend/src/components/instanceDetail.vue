@@ -12,10 +12,10 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="3">
+      <b-col cols="auto" align-self="center">
         <strong>Backup: </strong>
       </b-col>
-      <b-col cols="9">
+      <b-col cols="2" align-self="center">
         <b-form-checkbox
           v-model="backup"
           inline
@@ -29,18 +29,25 @@
           </b-badge>
         </b-form-checkbox>
       </b-col>
-      <b-col
-        cols="3"
-        align-self="center"
+      <b-col cols="auto" align-self="center"
       >
         <strong>Schedule:</strong>
       </b-col>
-      <b-col cols="9">
+      <b-col cols="auto">
         <b-select
           v-model="schedule"
           :options="scheduleList"
           inline
         />
+      </b-col>
+      <b-col
+        v-if="schedule"
+        cols="auto"
+        align-self="center"
+      >
+        <b-link :to="{ name: 'ScheduleViewID', params: { id: schedule } }">
+          Details
+        </b-link>
       </b-col>
     </b-row>
   </b-container>

@@ -47,6 +47,7 @@ class InstanceSerializer(serializers.HyperlinkedModelSerializer):
     ebsvolume_set = EBSVolumeBriefSerializer(many=True, read_only=True)
     name = serializers.ReadOnlyField()
     aws_account = serializers.PrimaryKeyRelatedField(read_only=True)
+    schedule = serializers.PrimaryKeyRelatedField(queryset=InstanceSchedule.objects.all(), allow_null=True)
 
     class Meta:
         model = Instance
