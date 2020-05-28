@@ -3,6 +3,22 @@ import axios from 'axios'
 const state = {
   instances: []
 }
+
+export class Instance {
+  constructor (instance = {}) {
+    this.id = instance.id
+    this.url = instance.url
+    this.ebsvolume_set = instance.ebsvolume_set
+    this.name = instance.name
+    this.aws_account = instance.aws_account
+    this.schedule = instance.schedule
+    this.present = instance.present
+    this.region_name = instance.region_name
+    this.backup_time = instance.backup_time
+    this.backup = instance.backup
+  }
+}
+
 const actions = {
   LOAD_INSTANCE_LIST: function ({ commit }) {
     return axios.get('/Instances/').then(
@@ -23,7 +39,7 @@ const actions = {
 
 const mutations = {
   SET_INSTANCE_LIST: (state, { list }) => {
-    state.instances = list
+    state.instances = list.map(i => new Instance(i))
   },
   UPDATE_INSTANCE: (state, { newInstance }) => {
     state.instances = state.instances.map(instance => {

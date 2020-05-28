@@ -1,5 +1,17 @@
 import axios from 'axios'
 
+export class Schedule {
+  constructor (schedule = {}) {
+    this.url = schedule.url
+    this.id = schedule.id
+    this.instance_count = schedule.instance_count
+    this.instance_list = schedule.instance_list
+    this.name = schedule.name
+    this.schedule = schedule.schedule
+    this.active = schedule.active
+  }
+}
+
 export default {
   state: {
     schedules: [],
@@ -25,7 +37,7 @@ export default {
   },
   mutations: {
     SET_SCHEDULE_LIST: (state, { list }) => {
-      state.schedules = list
+      state.schedules = list.map(s => new Schedule(s))
     },
     SET_SCHEDULE_ERROR: (state, { error }) => {
       state.schedules_error = error.message

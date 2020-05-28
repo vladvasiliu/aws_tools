@@ -12,10 +12,16 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col cols="auto" align-self="center">
+      <b-col
+        cols="auto"
+        align-self="center"
+      >
         <strong>Backup: </strong>
       </b-col>
-      <b-col cols="2" align-self="center">
+      <b-col
+        cols="2"
+        align-self="center"
+      >
         <b-form-checkbox
           v-model="backup"
           inline
@@ -29,7 +35,9 @@
           </b-badge>
         </b-form-checkbox>
       </b-col>
-      <b-col cols="auto" align-self="center"
+      <b-col
+        cols="auto"
+        align-self="center"
       >
         <strong>Schedule:</strong>
       </b-col>
@@ -54,9 +62,11 @@
 </template>
 
 <script>
+import { Instance } from '../store/modules/instance'
+
 export default {
   props: {
-    instance: { type: Object, required: true },
+    instance: { type: Instance, required: true },
     scheduleList: { type: Array, required: true }
   },
   computed: {

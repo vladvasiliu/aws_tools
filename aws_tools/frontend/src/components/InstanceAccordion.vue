@@ -22,6 +22,7 @@
 <script>
 import InstanceDetail from './instanceDetail'
 import VolumeList from './volumeList'
+import { Instance } from '../store/modules/instance'
 
 export default {
   name: 'InstanceAccordion',
@@ -30,7 +31,7 @@ export default {
     VolumeList
   },
   props: {
-    instance: { type: Object, default: null },
+    instance: { type: Instance, default: null },
     scheduleList: { type: Array, required: true }
   }
 }
