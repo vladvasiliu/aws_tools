@@ -7,8 +7,8 @@
 amqp==2.5.2               # via kombu
 asgiref==3.2.7            # via django
 billiard==3.6.3.0         # via celery
-boto3==1.13.16            # via -r requirements.in
-botocore==1.16.16         # via boto3, s3transfer
+boto3==1.13.19            # via -r requirements.in
+botocore==1.16.19         # via boto3, s3transfer
 celery[redis]==4.4.2      # via -r requirements.in, django-celery-beat
 django-celery-beat==2.0.0  # via -r requirements.in
 django-choices==1.7.1     # via -r requirements.in
