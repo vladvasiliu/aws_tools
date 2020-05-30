@@ -38,7 +38,7 @@ export default {
   },
   created () {
     this.$store.dispatch('LOAD_INSTANCE_LIST').then(() => {})
-    this.$store.dispatch('LOAD_SCHEDULE_LIST').then(() => {})
+    this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {})
   }
 }
 </script>
