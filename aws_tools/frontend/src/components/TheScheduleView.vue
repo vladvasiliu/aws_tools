@@ -10,7 +10,10 @@
       />
     </div>
     <div class="col">
-      <router-view />
+      <router-view
+        @scheduleDelete="scheduleDelete"
+        @scheduleChange="scheduleChange"
+      />
     </div>
   </div>
 </template>
@@ -30,24 +33,50 @@ export default {
     faExclamationTriangle () { return faExclamationTriangle }
   },
   created () {
-    this.$store.dispatch('LOAD_SCHEDULE_LIST')
+    this.$store.dispatch('SCHEDULE_LOAD_LIST')
   },
   methods: {
     routeDest: (schedule) => ({ name: 'ScheduleViewID', params: { id: schedule.id } }),
 
-    select: function (object) {
-      this.selectedSchedule = object
-    },
-
     scheduleChange: function (newSchedule) {
       const newValue = {
-        schedule: this.selectedSchedule,
+        schedule: newSchedule,
         changes: {
           active: newSchedule.active,
           schedule: newSchedule.schedule
         }
       }
-      this.$store.dispatch('UPDATE_SCHEDULE', newValue)
+      this.$store.dispatch('SCHEDULE_UPDATE', newValue)
+    },
+
+    scheduleDelete: function (schedule) {
+      this.$store.dispatch('SCHEDULE_DELETE', schedule).then(
+        () => {
+          this.$bvToast.toast(schedule.name + ' was successfully deleted', {
+            title: 'Schedule deleted',
+            solid: true,
+            variant: 'info',
+            isStatus: true
+          })
+          this.$router.push({ name: 'ScheduleView' })
+        },
+        err => {
+          const h = this.$createElement
+          const message = h(
+            'p',
+            {},
+            [
+              h('strong', {}, schedule.name + ':'),
+              h('div', {}, err.message)
+            ]
+          )
+          this.$bvToast.toast([message], {
+            title: 'Failed to delete schedule',
+            solid: true,
+            variant: 'warning'
+          })
+        }
+      )
     }
   }
 }

@@ -13,36 +13,51 @@
             Modified
           </b-badge>
         </b-col>
-        <b-col sm="4">
-          <b-row
-            class="mt-n1 mb-n1"
-            cols-sm="1"
-            cols-md="1"
-            cols-lg="2"
-          >
-            <b-col>
-              <b-button
+        <b-col
+          align-self="end"
+          cols="auto"
+        >
+          <b-button-toolbar class="mb-n1 mt-n1">
+            <b-button
+              :disabled="!isLocalModified"
+              :variant="isLocalModified ? 'primary' : 'outline-secondary'"
+              size="sm"
+              @click="saveChanges"
+            >
+              Save
+            </b-button>
+            <b-dropdown
+              id="dropdown-1"
+              variant="primary"
+              split-variant="outline-primary"
+              size="sm"
+              right
+              class="ml-1"
+              @click="saveChanges"
+            >
+              <b-dropdown-item-button>Rename</b-dropdown-item-button>
+              <b-dropdown-item-button
                 size="sm"
                 :disabled="!isLocalModified"
-                :variant="isLocalModified ? 'outline-primary' : 'outline-secondary'"
                 block
                 @click="cancelChanges"
               >
-                Cancel
-              </b-button>
-            </b-col>
-            <b-col>
-              <b-button
-                size="sm"
-                :disabled="!isLocalModified"
-                :variant="isLocalModified ? 'primary' : 'outline-secondary'"
-                block
-                @click="saveChanges"
+                Cancel changes
+              </b-dropdown-item-button>
+              <b-dropdown-divider />
+              <b-dropdown-item-button
+                v-b-modal:delete-modal-id
+                variant="danger"
               >
-                Save
-              </b-button>
-            </b-col>
-          </b-row>
+                Delete
+              </b-dropdown-item-button>
+            </b-dropdown>
+          </b-button-toolbar>
+          <schedule-detail-delete-modal
+            modal-id="delete-modal-id"
+            :schedule="schedule"
+            @confirm-delete="deleteSchedule"
+          />
         </b-col>
       </b-row>
     </template>
@@ -80,7 +95,7 @@
                 >
                   List
                 </b-link>
-                <instance-list-modal
+                <schedule-detail-modal
                   modal-id="instance_modal_id"
                   :schedule="schedule"
                 />
@@ -153,7 +168,8 @@ function localScheduleFromSelected (selectedSchedule) {
 export default {
   name: 'ScheduleDetail',
   components: {
-    'instance-list-modal': () => import('./ScheduleDetailModal')
+    ScheduleDetailModal: () => import('./ScheduleDetailModal'),
+    ScheduleDetailDeleteModal: () => import('./ScheduleDetailDeleteModal')
   },
   filters: {
     state_to_variant: function (value) {
@@ -182,8 +198,7 @@ export default {
     }
   },
   props: {
-  //   schedule: { type: Object, default: null, required: false }
-    selectedScheduleID: { type: Number, default: 0, required: true }
+    selectedScheduleID: { type: Number, default: undefined }
   },
   data: function () {
     const selectedSchedule = this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
@@ -218,6 +233,9 @@ export default {
     },
     saveChanges: function () {
       this.$emit('scheduleChange', this.local_schedule)
+    },
+    deleteSchedule: function () {
+      this.$emit('scheduleDelete', this.schedule)
     }
   }
 }

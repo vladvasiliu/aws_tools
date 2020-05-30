@@ -56,7 +56,12 @@ const index = new Router({
           props: { title: 'No schedule selected', message: 'Please select a schedule' }
         },
         {
-          path: ':id',
+          path: 'new',
+          name: 'ScheduleViewNew',
+          component: () => import('../components/ScheduleDetail')
+        },
+        {
+          path: ':id(\\d+)',
           name: 'ScheduleViewID',
           component: () => import('../components/ScheduleDetail'),
           props: (route) => ({ selectedScheduleID: parseInt(route.params.id) })

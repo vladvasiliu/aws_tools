@@ -18,7 +18,7 @@ export default {
     schedules_error: null
   },
   actions: {
-    LOAD_SCHEDULE_LIST ({ commit }) {
+    SCHEDULE_LOAD_LIST ({ commit }) {
       axios.get('/Schedules/').then(
         response => {
           commit('SET_SCHEDULE_LIST', { list: response.data })
@@ -29,10 +29,23 @@ export default {
         }
       )
     },
-    UPDATE_SCHEDULE ({ commit }, newValue) {
+    SCHEDULE_UPDATE ({ commit }, newValue) {
       axios.patch(newValue.schedule.url, newValue.changes).then(response => {
         commit('UPDATE_SCHEDULE', { newSchedule: response.data })
       })
+    },
+    SCHEDULE_DELETE ({ commit }, schedule) {
+      return new Promise((resolve, reject) =>
+        axios.delete(schedule.url).then(
+          () => {
+            commit('DELETE_SCHEDULE', { schedule })
+            resolve()
+          },
+          error => {
+            reject(error.toJSON())
+          }
+        )
+      )
     }
   },
   mutations: {
@@ -49,6 +62,10 @@ export default {
         }
         return schedule
       })
+    },
+    DELETE_SCHEDULE: (state, { schedule }) => {
+      const scheduleIdx = state.schedules.findIndex(obj => obj.id === schedule.id)
+      state.schedules.splice(scheduleIdx, 1)
     }
   },
   getters: {

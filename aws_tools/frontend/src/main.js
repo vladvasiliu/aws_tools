@@ -2,7 +2,7 @@ import axios from 'axios'
 import Vue from 'vue'
 import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
+import BootstrapVue, { BVConfigPlugin } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -10,6 +10,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import App from './components/App.vue'
 import store from './store'
 import router from './router'
+
+import bootstrapConfig from './bootstrap_config'
+
+Vue.use(BVConfigPlugin, bootstrapConfig)
 
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
