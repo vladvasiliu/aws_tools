@@ -3,7 +3,23 @@
     no-body
   >
     <template v-slot:header>
-      <strong>{{ cardTitle }}</strong>
+      <b-row>
+        <b-col>
+          <strong>{{ cardTitle }}</strong>
+        </b-col>
+        <b-col
+          v-if="routeDestAdd"
+          cols="auto"
+        >
+          <b-button
+            class="mt-n2 mb-n2"
+            :to="routeDestAdd.location"
+            variant="light"
+          >
+            <font-awesome-icon :icon="addIcon" />
+          </b-button>
+        </b-col>
+      </b-row>
     </template>
     <div
       v-if="objectList == null && objectError == null"
@@ -36,7 +52,7 @@
         v-for="object in objectList"
         :key="object.id"
         action
-        :to="routeDest(object)"
+        :to="routeDestFun(object)"
         active-class="active"
         class="text-truncate"
       >
@@ -53,9 +69,9 @@
 </template>
 
 <script>
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons'
 
-export function RouteDestAll (text, location) {
+export function RouteDest (text, location) {
   this.text = text
   this.location = location
 }
@@ -66,13 +82,16 @@ export default {
     objectList: { type: Array, default: null },
     objectError: { type: Object, default: null },
     cardTitle: { type: String, default: 'Object list', required: true },
-    routeDest: { type: Function, required: true },
-    routeDestAll: { type: RouteDestAll, default: undefined, required: false }
+    routeDestFun: { type: Function, required: true },
+    routeDestAll: { type: RouteDest, default: undefined, required: false },
+    routeDestAdd: { type: RouteDest, default: undefined, required: false }
   },
   computed: {
-    faExclamationTriangle () { return faExclamationTriangle }
+    faExclamationTriangle () { return faExclamationTriangle },
+    addIcon () { return faPlus }
   }
 }
+
 </script>
 
 <style lang="scss" scoped>

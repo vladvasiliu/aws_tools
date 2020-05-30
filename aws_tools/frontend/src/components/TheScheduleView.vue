@@ -6,7 +6,8 @@
         :show-all="false"
         :object-error="schedules_error"
         :object-list="schedules"
-        :route-dest="routeDest"
+        :route-dest-fun="routeDestFun"
+        :route-dest-add="routeDestAdd"
       />
     </b-col>
     <b-col>
@@ -21,12 +22,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-import ObjectListGroupCard from './ObjectListGroupCard'
+import ObjectListGroupCard, { RouteDest } from './ObjectListGroupCard'
 
 export default {
   name: 'TheScheduleView',
   components: {
     ObjectListGroupCard
+  },
+  data: function () {
+    return {
+      routeDestAdd: new RouteDest('Add', { name: 'ScheduleViewNew' })
+    }
   },
   computed: {
     ...mapGetters(['schedules', 'schedules_error']),
@@ -36,7 +42,7 @@ export default {
     this.$store.dispatch('SCHEDULE_LOAD_LIST')
   },
   methods: {
-    routeDest: (schedule) => ({ name: 'ScheduleViewID', params: { id: schedule.id } }),
+    routeDestFun: (schedule) => ({ name: 'ScheduleViewID', params: { id: schedule.id } }),
 
     scheduleChange: function (newSchedule) {
       const newValue = {

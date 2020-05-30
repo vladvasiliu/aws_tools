@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-3">
       <account-list
-        :route-dest="routeDest"
+        :route-dest-fun="routeDestFun"
         :route-dest-all="routeDestAll"
       />
     </div>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { RouteDestAll } from './ObjectListGroupCard'
+import { RouteDest } from './ObjectListGroupCard'
 
 export default {
   components: {
@@ -21,11 +21,11 @@ export default {
   },
   data: function () {
     return {
-      routeDestAll: new RouteDestAll('All', { name: 'InstanceView' })
+      routeDestAll: new RouteDest('All', { name: 'InstanceView' })
     }
   },
   methods: {
-    routeDest: (account) => ({ name: 'InstanceViewForAccount', params: { id: account.id } })
+    routeDestFun: (account) => ({ name: 'InstanceViewForAccount', params: { id: account.id } })
   }
 }
 </script>
