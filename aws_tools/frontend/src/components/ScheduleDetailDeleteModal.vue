@@ -18,7 +18,7 @@
     >
       <BIconExclamationTriangleFill v-if="schedule.instance_count" />
       <BIconInfoCircle v-else />
-      There {{ scheduleCountMsg }} using to this schedule.
+      There {{ scheduleCountMsg }} using this schedule.
     </b-alert>
   </b-modal>
 </template>
