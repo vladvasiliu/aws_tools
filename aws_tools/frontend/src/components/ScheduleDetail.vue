@@ -3,25 +3,33 @@
     <template v-slot:header>
       <b-row>
         <b-col>
-          <strong>{{ schedule.name }}</strong>
-          <b-badge
-            v-if="isLocalModified"
-            class="ml-3"
-            variant="warning"
-            pill
-          >
-            Modified
-          </b-badge>
+          <div v-if="!renaming">
+            <strong>{{ local_schedule.name }}</strong>
+            <b-badge
+              v-if="isLocalModified"
+              class="ml-3"
+              variant="warning"
+              pill
+            >
+              Modified
+            </b-badge>
+          </div>
+          <b-form-input
+            v-else
+            v-model="local_schedule.name"
+            autofocus
+            class="mt-n2 mb-n2 h-100 d-inline-block"
+            @blur="renaming = !renaming"
+          />
         </b-col>
         <b-col
           align-self="end"
           cols="auto"
         >
-          <b-button-toolbar class="mb-n1 mt-n1">
+          <b-button-toolbar class="mb-n2 mt-n2">
             <b-button
               :disabled="!isLocalModified"
               :variant="isLocalModified ? 'primary' : 'outline-secondary'"
-              size="sm"
               @click="saveChanges"
             >
               Save
@@ -35,9 +43,10 @@
               class="ml-1"
               @click="saveChanges"
             >
-              <b-dropdown-item-button>Rename</b-dropdown-item-button>
+              <b-dropdown-item-button @click="renaming = !renaming">
+                Rename
+              </b-dropdown-item-button>
               <b-dropdown-item-button
-                size="sm"
                 :disabled="!isLocalModified"
                 block
                 @click="cancelChanges"
@@ -203,7 +212,8 @@ export default {
   data: function () {
     const selectedSchedule = this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
     return {
-      local_schedule: localScheduleFromSelected(selectedSchedule)
+      local_schedule: localScheduleFromSelected(selectedSchedule),
+      renaming: false
     }
   },
   computed: {
@@ -211,7 +221,7 @@ export default {
       return this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
     },
     isLocalModified: function () {
-      return !(_.isEqual(this.local_schedule.schedule, this.schedule.schedule) && _.isEqual(this.local_schedule.active, this.schedule.active))
+      return !(_.isEqual(this.local_schedule.schedule, this.schedule.schedule) && _.isEqual(this.local_schedule.active, this.schedule.active) && _.isEqual(this.local_schedule.name, this.schedule.name))
     }
   },
   watch: {

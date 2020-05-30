@@ -43,7 +43,8 @@ export default {
         schedule: newSchedule,
         changes: {
           active: newSchedule.active,
-          schedule: newSchedule.schedule
+          schedule: newSchedule.schedule,
+          name: newSchedule.name
         }
       }
       this.$store.dispatch('SCHEDULE_UPDATE', newValue).then(
