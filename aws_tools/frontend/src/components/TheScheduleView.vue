@@ -46,7 +46,32 @@ export default {
           schedule: newSchedule.schedule
         }
       }
-      this.$store.dispatch('SCHEDULE_UPDATE', newValue)
+      this.$store.dispatch('SCHEDULE_UPDATE', newValue).then(
+        () => {
+          this.$bvToast.toast(newSchedule.name + ' was successfully saved', {
+            title: 'Schedule updated',
+            solid: true,
+            variant: 'info',
+            isStatus: true
+          })
+        },
+        err => {
+          const h = this.$createElement
+          const message = h(
+            'p',
+            {},
+            [
+              h('strong', {}, newSchedule.name + ':'),
+              h('div', {}, err.message)
+            ]
+          )
+          this.$bvToast.toast([message], {
+            title: 'Failed to update schedule',
+            solid: true,
+            variant: 'warning'
+          })
+        }
+      )
     },
 
     scheduleDelete: function (schedule) {

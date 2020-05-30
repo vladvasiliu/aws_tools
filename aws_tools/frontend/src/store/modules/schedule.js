@@ -30,9 +30,17 @@ export default {
       )
     },
     SCHEDULE_UPDATE ({ commit }, newValue) {
-      axios.patch(newValue.schedule.url, newValue.changes).then(response => {
-        commit('UPDATE_SCHEDULE', { newSchedule: response.data })
-      })
+      return new Promise((resolve, reject) =>
+        axios.patch(newValue.schedule.url, newValue.changes).then(
+          response => {
+            commit('UPDATE_SCHEDULE', { newSchedule: response.data })
+            resolve(response)
+          },
+          error => {
+            reject(error.toJSON())
+          }
+        )
+      )
     },
     SCHEDULE_DELETE ({ commit }, schedule) {
       return new Promise((resolve, reject) =>
