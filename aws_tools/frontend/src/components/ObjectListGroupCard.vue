@@ -38,6 +38,7 @@
         action
         :to="routeDest(object)"
         active-class="active"
+        class="text-truncate"
       >
         {{ object.name }}
       </b-list-group-item>

@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div class="col-3">
+  <b-row align-h="between">
+    <b-col cols="3">
       <ObjectListGroupCard
         card-title="Schedules"
         :show-all="false"
@@ -8,14 +8,14 @@
         :object-list="schedules"
         :route-dest="routeDest"
       />
-    </div>
-    <div class="col">
+    </b-col>
+    <b-col>
       <router-view
         @scheduleDelete="scheduleDelete"
         @scheduleChange="scheduleChange"
       />
-    </div>
-  </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
