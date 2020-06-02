@@ -153,7 +153,7 @@ class InstanceSchedule(models.Model):
     Day 0 and 7 is Sunday, Day 1 is Monday
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     schedule = ArrayField(
         base_field=models.PositiveSmallIntegerField(choices=ScheduleAction.choices),
         default=default_schedule,
