@@ -44,23 +44,24 @@ export default {
   methods: {
     routeDestFun: (schedule) => ({ name: 'ScheduleViewID', params: { id: schedule.id } }),
 
-    scheduleChange: function (newSchedule) {
+    scheduleChange: function (schedule) {
       const newValue = {
-        schedule: newSchedule,
+        schedule: schedule,
         changes: {
-          active: newSchedule.active,
-          schedule: newSchedule.schedule,
-          name: newSchedule.name
+          active: schedule.active,
+          schedule: schedule.schedule,
+          name: schedule.name
         }
       }
       this.$store.dispatch('SCHEDULE_UPDATE', newValue).then(
-        () => {
-          this.$bvToast.toast(newSchedule.name + ' was successfully saved', {
-            title: 'Schedule updated',
+        newSchedule => {
+          this.$bvToast.toast(schedule.name + ' was successfully saved', {
+            title: 'Schedule saved',
             solid: true,
             variant: 'info',
             isStatus: true
           })
+          this.$router.replace({ name: 'ScheduleViewID', params: { id: newSchedule.id } })
         },
         err => {
           const h = this.$createElement
@@ -68,12 +69,12 @@ export default {
             'p',
             {},
             [
-              h('strong', {}, newSchedule.name + ':'),
+              h('strong', {}, schedule.name + ':'),
               h('div', {}, err.message)
             ]
           )
           this.$bvToast.toast([message], {
-            title: 'Failed to update schedule',
+            title: 'Failed to save schedule',
             solid: true,
             variant: 'warning'
           })

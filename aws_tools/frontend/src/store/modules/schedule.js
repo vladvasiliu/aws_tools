@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { _ } from 'vue-underscore'
 
 export class Schedule {
   constructor (schedule = {}) {
@@ -9,6 +10,14 @@ export class Schedule {
     this.name = schedule.name
     this.schedule = schedule.schedule
     this.active = schedule.active
+  }
+
+  static empty () {
+    return new Schedule({
+      name: 'New Schedule',
+      schedule: _.range(24 * 7).map(() => 0),
+      active: true
+    })
   }
 }
 
@@ -30,11 +39,19 @@ export default {
       )
     },
     SCHEDULE_UPDATE ({ commit }, newValue) {
+      let action
+      if (newValue.schedule.url) {
+        action = axios.patch(newValue.schedule.url, newValue.changes)
+      } else {
+        action = axios.post('/Schedules/', newValue.schedule)
+      }
+
       return new Promise((resolve, reject) =>
-        axios.patch(newValue.schedule.url, newValue.changes).then(
+        action.then(
           response => {
-            commit('UPDATE_SCHEDULE', { newSchedule: response.data })
-            resolve(response)
+            const newSchedule = new Schedule(response.data)
+            commit('UPDATE_SCHEDULE', { newSchedule: newSchedule })
+            resolve(newSchedule)
           },
           error => {
             reject(error.toJSON())
@@ -64,12 +81,12 @@ export default {
       state.schedules_error = error.message
     },
     UPDATE_SCHEDULE: (state, { newSchedule }) => {
-      state.schedules = state.schedules.map(schedule => {
-        if (schedule.url === newSchedule.url) {
-          return Object.assign(schedule, newSchedule)
-        }
-        return schedule
-      })
+      const oldSchedule = state.schedules.find(schedule => schedule.id === newSchedule.id)
+      if (oldSchedule) {
+        Object.assign(oldSchedule, newSchedule)
+      } else {
+        state.schedules.push(newSchedule)
+      }
     },
     DELETE_SCHEDULE: (state, { schedule }) => {
       const scheduleIdx = state.schedules.findIndex(obj => obj.id === schedule.id)

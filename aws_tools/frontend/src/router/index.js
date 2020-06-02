@@ -58,7 +58,8 @@ const index = new Router({
         {
           path: 'new',
           name: 'ScheduleViewNew',
-          component: () => import('../components/ScheduleDetail')
+          component: () => import('../components/ScheduleDetail'),
+          props: { createNew: true }
         },
         {
           path: ':id(\\d+)',

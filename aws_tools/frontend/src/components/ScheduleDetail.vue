@@ -1,5 +1,5 @@
 <template>
-  <b-card v-if="schedule">
+  <b-card v-if="local_schedule">
     <template v-slot:header>
       <b-row>
         <b-col>
@@ -166,6 +166,7 @@
 
 <script>
 import { _ } from 'vue-underscore'
+import { Schedule } from '../store/modules/schedule'
 
 function localScheduleFromSelected (selectedSchedule) {
   if (selectedSchedule === undefined) { return null }
@@ -207,18 +208,23 @@ export default {
     }
   },
   props: {
-    selectedScheduleID: { type: Number, default: undefined }
+    selectedScheduleID: { type: Number, default: undefined },
+    createNew: { type: Boolean, default: false }
   },
   data: function () {
-    const selectedSchedule = this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
+    const selectedSchedule = this.createNew ? Schedule.empty() : this.$store.getters.getScheduleById(this.selectedScheduleID)
     return {
       local_schedule: localScheduleFromSelected(selectedSchedule),
-      renaming: false
+      renaming: this.createNew
     }
   },
   computed: {
     schedule: function () {
-      return this.$store.state.schedule.schedules.find(schedule => schedule.id === this.selectedScheduleID)
+      if (this.createNew) {
+        return Schedule.empty()
+      } else {
+        return this.$store.getters.getScheduleById(this.selectedScheduleID)
+      }
     },
     isLocalModified: function () {
       return !(_.isEqual(this.local_schedule.schedule, this.schedule.schedule) && _.isEqual(this.local_schedule.active, this.schedule.active) && _.isEqual(this.local_schedule.name, this.schedule.name))
