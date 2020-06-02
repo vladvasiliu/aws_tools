@@ -21,6 +21,18 @@ export class Schedule {
   }
 }
 
+function compareSchedule (scheduleA, scheduleB) {
+  let compare = 0
+  const nameA = scheduleA.name.toUpperCase()
+  const nameB = scheduleB.name.toUpperCase()
+  if (nameA > nameB) {
+    compare = 1
+  } else if (nameA < nameB) {
+    compare = -1
+  }
+  return compare
+}
+
 export default {
   state: {
     schedules: [],
@@ -75,7 +87,7 @@ export default {
   },
   mutations: {
     SET_SCHEDULE_LIST: (state, { list }) => {
-      state.schedules = list.map(s => new Schedule(s))
+      state.schedules = list.map(s => new Schedule(s)).sort(compareSchedule)
     },
     SET_SCHEDULE_ERROR: (state, { error }) => {
       state.schedules_error = error.message
@@ -87,6 +99,7 @@ export default {
       } else {
         state.schedules.push(newSchedule)
       }
+      state.schedules = state.schedules.sort(compareSchedule)
     },
     DELETE_SCHEDULE: (state, { schedule }) => {
       const scheduleIdx = state.schedules.findIndex(obj => obj.id === schedule.id)

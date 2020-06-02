@@ -61,7 +61,7 @@ export default {
             variant: 'info',
             isStatus: true
           })
-          this.$router.replace({ name: 'ScheduleViewID', params: { id: newSchedule.id } })
+          this.$router.replace({ name: 'ScheduleViewID', params: { id: newSchedule.id } }).catch(() => {})
         },
         err => {
           const h = this.$createElement
