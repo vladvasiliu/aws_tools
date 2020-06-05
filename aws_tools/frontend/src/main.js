@@ -6,6 +6,8 @@ import BootstrapVue, { BVConfigPlugin } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VueMoment from 'vue-moment'
+import moment from 'moment-timezone'
 
 import App from './components/App.vue'
 import store from './store'
@@ -18,7 +20,7 @@ Vue.use(BVConfigPlugin, bootstrapConfig)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
-Vue.use(require('vue-moment'))
+Vue.use(VueMoment, { moment })
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

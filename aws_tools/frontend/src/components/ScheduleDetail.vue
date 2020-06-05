@@ -116,6 +116,17 @@
       <b-col
         lg="8"
       >
+        <b-row align-h="center">
+          <b-col cols="auto">
+            <strong>Time zone</strong>
+          </b-col>
+          <b-col cols="auto">
+            <b-form-radio-group
+              v-model="selectedTZ"
+              :options="selectedTZOptions"
+            />
+          </b-col>
+        </b-row>
         <b-table-simple
           hover
           small
@@ -213,9 +224,17 @@ export default {
   },
   data: function () {
     const selectedSchedule = this.createNew ? Schedule.empty() : this.$store.getters.getScheduleById(this.selectedScheduleID)
+    const localTZName = this.$moment.tz.guess()
+    const localTZ = this.$moment.tz.zone(localTZName)
+    const utcTZ = this.$moment.tz.zone('UTC')
     return {
       local_schedule: localScheduleFromSelected(selectedSchedule),
-      renaming: this.createNew
+      renaming: this.createNew,
+      selectedTZ: localTZ,
+      selectedTZOptions: [
+        { text: localTZ.name, value: localTZ },
+        { text: utcTZ.name, value: utcTZ }
+      ]
     }
   },
   computed: {
@@ -228,6 +247,9 @@ export default {
     },
     isLocalModified: function () {
       return !(_.isEqual(this.local_schedule.schedule, this.schedule.schedule) && _.isEqual(this.local_schedule.active, this.schedule.active) && _.isEqual(this.local_schedule.name, this.schedule.name))
+    },
+    selectedUTCOffset: function () {
+      return this.selectedTZ.utcOffset(this.$moment.now())
     }
   },
   watch: {
@@ -246,7 +268,10 @@ export default {
     },
     dayRange: () => _.range(7),
     hourRange: () => _.range(24),
-    interval: (day, hour) => day * 24 + hour,
+    interval: function (day, hour) {
+      const offset = this.selectedUTCOffset / 60
+      return (168 + day * 24 + hour + offset) % 168 // 24 * 7 = 168
+    },
     cancelChanges: function () {
       this.local_schedule = Object.assign({}, this.schedule)
     },

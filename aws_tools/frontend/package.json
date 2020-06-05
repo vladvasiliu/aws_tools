@@ -19,6 +19,7 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "moment-timezone": "^0.5.31",
     "underscore": "^1.10.2",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
