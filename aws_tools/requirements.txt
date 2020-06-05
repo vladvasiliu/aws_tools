@@ -7,8 +7,8 @@
 amqp==2.6.0               # via kombu
 asgiref==3.2.7            # via django
 billiard==3.6.3.0         # via celery
-boto3==1.13.19            # via -r requirements.in
-botocore==1.16.19         # via boto3, s3transfer
+boto3==1.13.20            # via -r requirements.in
+botocore==1.16.20         # via boto3, s3transfer
 celery[redis]==4.4.3      # via -r requirements.in, django-celery-beat
 django-celery-beat==2.0.0  # via -r requirements.in
 django-choices==1.7.1     # via -r requirements.in
@@ -26,7 +26,7 @@ psycopg2==2.8.5           # via -r requirements.in
 python-crontab==2.5.1     # via django-celery-beat
 python-dateutil==2.8.1    # via botocore, python-crontab
 pytz==2020.1              # via celery, django, django-timezone-field
-redis==3.5.2              # via celery
+redis==3.5.3              # via celery
 s3transfer==0.3.3         # via boto3
 six==1.15.0               # via django-choices, django-netfields, python-dateutil
 sqlparse==0.3.1           # via django

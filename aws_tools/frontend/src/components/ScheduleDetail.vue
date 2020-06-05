@@ -233,6 +233,9 @@ export default {
   watch: {
     schedule: function (newVal) {
       this.local_schedule = localScheduleFromSelected(newVal)
+    },
+    createNew: function (newVal) {
+      this.renaming = newVal
     }
   },
   methods: {
