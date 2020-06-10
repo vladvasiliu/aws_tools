@@ -463,3 +463,93 @@ class SecurityGroupRuleUserGroupPair(models.Model):
 
     class Meta:
         unique_together = [("user_id", "group_id")]
+
+
+class RDSClient(AWSClient):
+    client_class = "rds"
+    _describe_action = None
+    _collection_name = None
+    _item_id_name = None
+    id = models.AutoField(primary_key=True)
+    engine = models.CharField(max_length=255, editable=False)
+    engine_version = models.CharField(max_length=255, editable=False)
+    multi_az = models.BooleanField(editable=False)
+    region = models.ForeignKey(AWSRegion, editable=False, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "RDS Server"
+        abstract = True
+        unique_together = ["_name", "aws_account", "region"]
+
+    @property
+    def region_name(self):
+        return self.region.name
+
+    @classmethod
+    def _update_from_aws(cls, account: AWSAccount):
+        current_objects = []
+        for region in account.regions.all() or AWSRegion.objects.all():
+            client = aws_client(cls.client_class, role_arn=account.role_arn, region_name=region.name)
+            action = getattr(client, cls._describe_action)
+            next_token = None
+
+            while True:
+                if next_token:
+                    response = action(Marker=next_token)
+                else:
+                    response = action()
+
+                for element in response[cls._collection_name]:
+                    defaults = {
+                        "engine": element["Engine"],
+                        "engine_version": element["EngineVersion"],
+                        "multi_az": element["MultiAZ"]
+                    }
+                    obj, _ = cls.objects.update_or_create(_name=element[cls._item_id_name],
+                                                          region=region,
+                                                          aws_account=account,
+                                                          defaults=defaults)
+                    current_objects.append(obj)
+
+                if not next_token:
+                    break
+        return current_objects
+
+    @classmethod
+    def _remove_orphans(cls, account: AWSAccount, current_objects: list):
+        to_remove = cls.objects.filter(aws_account=account).exclude(id__in=[obj.id for obj in current_objects])
+        to_remove_count = to_remove.count()
+        if not to_remove_count:
+            logger.info(f"No orphaned {cls._meta.verbose_name} to remove.")
+            return
+        elif to_remove_count == 1:
+            obj_msg = f"{cls._meta.verbose_name}"
+        else:
+            obj_msg = f"{cls._meta.verbose_name_plural}"
+        to_remove.delete()
+        logger.info(f"Removed {to_remove_count} orphaned {obj_msg}.")
+
+    @classmethod
+    def update(cls, account: AWSAccount):
+        logger.info(f"Updating {cls._meta.verbose_name_plural} for account: {account} ({account.id}).")
+        current_objects = cls._update_from_aws(account)
+        logger.info(f"{cls._meta.verbose_name_plural} found: {len(current_objects)}.")
+        cls._remove_orphans(account, current_objects)
+
+
+class RDSInstance(RDSClient):
+    _collection_name = "DBInstances"
+    _describe_action = "describe_db_instances"
+    _item_id_name = 'DBInstanceIdentifier'
+
+    class Meta:
+        verbose_name = "RDS Instance"
+
+
+class RDSCluster(RDSClient):
+    _collection_name = "DBClusters"
+    _describe_action = "describe_db_clusters"
+    _item_id_name = 'DBClusterIdentifier'
+
+    class Meta:
+        verbose_name = "RDS Cluster"
