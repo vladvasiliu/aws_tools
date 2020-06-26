@@ -1,3 +1,5 @@
+from typing import Type, List
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
@@ -13,7 +15,7 @@ from .models import (
     SecurityGroupRule,
     SecurityGroupRuleIPRange,
     SecurityGroupRuleUserGroupPair,
-    InstanceSchedule,
+    InstanceSchedule, RDSInstance, RDSCluster, RDSClient,
 )
 
 
@@ -176,3 +178,30 @@ class InstanceScheduleInstanceSerializer(serializers.HyperlinkedModelSerializer)
         model = AWSAccount
         # fields = ['name', 'id', 'region_name', 'aws_account']
         fields = ["name", "instance_set", "id"]
+
+
+def rds_serializer_factory(mdl, fields: List[str] = None, exclude: List[str] = None) -> Type[serializers.HyperlinkedModelSerializer]:
+    """ Return a serializer for an RDSClient subclass
+
+    :param mdl: The actual subclass to serialize
+    :param fields: The fields to include in the serializer. Takes precedence over `exclude`.
+    :param exclude: The fields to exclude from the serializer. Ignored if `fields` present.
+    :return: A HyperlinkedModelSerializer for the given model.
+    """
+    if exclude is None:
+        exclude = ["region", "_name"]
+
+    class RDSClientSerializer(serializers.HyperlinkedModelSerializer):
+        aws_account = serializers.SlugRelatedField("id", read_only=True)
+        region_name = serializers.ReadOnlyField()
+        name = serializers.ReadOnlyField()
+
+        class Meta:
+            model = mdl
+            abstract = True
+    if fields:
+        setattr(RDSClientSerializer.Meta, "fields", fields)
+    elif exclude:
+        setattr(RDSClientSerializer.Meta, "exclude", exclude)
+
+    return RDSClientSerializer

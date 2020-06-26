@@ -475,11 +475,16 @@ class RDSClient(AWSClient):
     engine_version = models.CharField(max_length=255, editable=False)
     multi_az = models.BooleanField(editable=False)
     region = models.ForeignKey(AWSRegion, editable=False, on_delete=models.CASCADE)
+    schedule = models.ForeignKey(InstanceSchedule, blank=True, null=True, on_delete=models.SET_DEFAULT, default=None)
 
     class Meta:
         verbose_name = "RDS Server"
         abstract = True
         unique_together = ["_name", "aws_account", "region"]
+
+    @property
+    def aws_client(self):
+        return aws_client(self.client_class, role_arn=self.aws_account.role_arn, region_name=self.region_name)
 
     @property
     def region_name(self):

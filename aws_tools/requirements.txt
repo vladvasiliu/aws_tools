@@ -5,11 +5,11 @@
 #    pip-compile
 #
 amqp==2.6.0               # via kombu
-asgiref==3.2.7            # via django
+asgiref==3.2.10           # via django
 billiard==3.6.3.0         # via celery
-boto3==1.13.26            # via -r requirements.in
-botocore==1.16.26         # via boto3, s3transfer
-celery[redis]==4.4.5      # via -r requirements.in, django-celery-beat
+boto3==1.14.10            # via -r requirements.in
+botocore==1.17.10         # via boto3, s3transfer
+celery[redis]==4.4.6      # via -r requirements.in, django-celery-beat
 django-celery-beat==2.0.0  # via -r requirements.in
 django-choices==1.7.1     # via -r requirements.in
 django-filter==2.3.0      # via -r requirements.in
@@ -21,8 +21,8 @@ docutils==0.15.2          # via botocore
 drf-nested-routers==0.91  # via -r requirements.in
 future==0.18.2            # via celery
 jmespath==0.10.0          # via boto3, botocore
-kombu==4.6.10             # via celery
-netaddr==0.7.19           # via django-netfields
+kombu==4.6.11             # via celery
+netaddr==0.7.20           # via django-netfields
 psycopg2==2.8.5           # via -r requirements.in
 python-crontab==2.5.1     # via django-celery-beat
 python-dateutil==2.8.1    # via botocore, python-crontab

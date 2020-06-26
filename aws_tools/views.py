@@ -16,6 +16,7 @@ from .serializers import (
     SecurityGroupRuleUserGroupPairSerializer,
     InstanceScheduleSerializer,
     InstanceScheduleInstanceSerializer,
+    rds_serializer_factory,
 )
 from .models import (
     Instance,
@@ -27,7 +28,7 @@ from .models import (
     SecurityGroupRule,
     SecurityGroupRuleIPRange,
     SecurityGroupRuleUserGroupPair,
-    InstanceSchedule,
+    InstanceSchedule, RDSCluster, RDSInstance,
 )
 
 
@@ -119,3 +120,13 @@ class InstanceScheduleInstanceListViewSet(viewsets.ReadOnlyModelViewSet):
             )
             .distinct()
         )
+
+
+class RDSInstanceViewSet(viewsets.ModelViewSet):
+    serializer_class = rds_serializer_factory(RDSInstance)
+    queryset = RDSInstance.objects.all()
+
+
+class RDSClusterViewSet(viewsets.ModelViewSet):
+    serializer_class = rds_serializer_factory(RDSCluster)
+    queryset = RDSCluster.objects.all()
