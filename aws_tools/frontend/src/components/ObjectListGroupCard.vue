@@ -71,9 +71,11 @@
 <script>
 import { faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons'
 
-export function RouteDest (text, location) {
-  this.text = text
-  this.location = location
+export class RouteDest {
+  constructor (text, location) {
+    this.text = text
+    this.location = location
+  }
 }
 
 export default {

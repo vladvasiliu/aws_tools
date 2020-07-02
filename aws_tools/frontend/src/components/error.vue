@@ -6,9 +6,15 @@
         class="display-4"
       />
       <div
-        class="font-weight-light font-italic mt-3"
+        class="font-weight-bold mt-3"
       >
         {{ message }}
+      </div>
+      <div
+        v-if="details"
+        class="text-secondary font-italic"
+      >
+        {{ details }}
       </div>
     </div>
   </div>

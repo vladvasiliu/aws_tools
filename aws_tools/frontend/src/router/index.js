@@ -37,6 +37,24 @@ const index = new Router({
       // meta: { requiresAuth: true }
     },
     {
+      path: '/rds',
+      component: () => import('../components/TheRDSView'),
+      children: [
+        {
+          path: '',
+          name: 'RDSView',
+          component: () => import('../components/RDSList')
+        },
+        {
+          name: 'RDSList',
+          path: 'for_account/:id',
+          component: () => import('../components/RDSList'),
+          props: (route) => ({ selectedAccountID: route.params.id })
+        }
+      ]
+      // meta: { requiresAuth: true }
+    },
+    {
       path: '/security_groups',
       name: 'SecurityGroupView',
       component: () => import('../components/TheSecurityGroupView'),

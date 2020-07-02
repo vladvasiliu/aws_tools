@@ -12,13 +12,19 @@
           :to="{ name: 'InstanceView' }"
           active-class="active"
         >
-          <font-awesome-icon :icon="serverIcon" /> Instances
+          <font-awesome-icon :icon="serverIcon" /> EC2
+        </b-nav-item>
+        <b-nav-item
+          :to="{ name: 'RDSView' }"
+          active-class="active"
+        >
+          <font-awesome-icon :icon="dbIcon" /> DB
         </b-nav-item>
         <b-nav-item
           :to="{ name: 'SecurityGroupView' }"
           active-class="active"
         >
-          <font-awesome-icon :icon="securityIcon" /> Security groups
+          <font-awesome-icon :icon="securityIcon" /> Security
         </b-nav-item>
         <b-nav-item
           :to="{ name: 'ScheduleView' }"
@@ -50,15 +56,16 @@
 import { mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUser, faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
-import { faUserSlash, faShieldAlt, faServer } from '@fortawesome/free-solid-svg-icons'
+import { faUserSlash, faShieldAlt, faServer, faDatabase } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUser, faUserSlash, faServer, faShieldAlt, faCalendarAlt)
+library.add(faUser, faUserSlash, faServer, faShieldAlt, faCalendarAlt, faDatabase)
 
 export default {
   name: 'NavBar',
 
   computed: {
     ...mapGetters(['userName']),
+    dbIcon () { return faDatabase },
     userIcon () { return faUser },
     serverIcon () { return faServer },
     securityIcon () { return faShieldAlt },
