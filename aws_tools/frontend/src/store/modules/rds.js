@@ -9,6 +9,7 @@ export class RDS {
     this.id = this.name
     this.present = rds.present
     this.engine = rds.engine
+    this.region_name = rds.region_name
     this.engine_version = rds.engine_version
     this.multi_az = rds.multi_az
     this.schedule = rds.schedule
@@ -30,7 +31,7 @@ function compareRDS (RDSA, RDSB) {
 
 export default {
   state: {
-    rds: []
+    rdsList: []
   },
   actions: {
     RDS_LOAD_LIST ({ commit }) {
@@ -46,16 +47,38 @@ export default {
           err => { reject(err.toJSON()) }
         )
       )
+    },
+    RDS_UPDATE ({ commit }, newValue) {
+      return new Promise((resolve, reject) =>
+        axios.patch(newValue.url, newValue.changes).then(
+          response => {
+            const newRDS = new RDS(response.data)
+            commit('UPDATE_RDS', { newRDS: newRDS })
+            resolve(newRDS)
+          },
+          error => {
+            reject(error.toJSON())
+          }
+        )
+      )
     }
   },
   mutations: {
     SET_RDS_LIST: (state, { instanceList, clusterList }) => {
       const cl = clusterList.map(s => new RDS({ ...s, kind: 'cluster' }))
       const il = instanceList.map(s => new RDS({ ...s, kind: 'instance' }))
-      state.rds = cl.concat(il).sort(compareRDS)
+      state.rdsList = cl.concat(il).sort(compareRDS)
+    },
+    UPDATE_RDS: (state, { newRDS }) => {
+      state.rdsList = state.rdsList.map(rds => {
+        if (rds.id === newRDS.id) {
+          return Object.assign(rds, newRDS)
+        }
+        return rds
+      })
     }
   },
   getters: {
-    rds: state => state.rds
+    rds: state => state.rdsList
   }
 }

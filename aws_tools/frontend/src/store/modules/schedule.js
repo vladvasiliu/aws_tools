@@ -111,6 +111,7 @@ export default {
     schedules_error: state => state.schedules_error,
     getScheduleById: (state) => (id) => {
       return state.schedules.find(schedule => schedule.id === id)
-    }
+    },
+    scheduleSelectOptions: state => [{ value: null, text: 'None' }, ...state.schedules.map((schedule) => { return { value: schedule.id, text: schedule.name + (schedule.active ? '' : ' (inactive)') } })]
   }
 }

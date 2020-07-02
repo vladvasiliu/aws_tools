@@ -195,6 +195,7 @@ def rds_serializer_factory(mdl, fields: List[str] = None, exclude: List[str] = N
         aws_account = serializers.SlugRelatedField("id", read_only=True)
         region_name = serializers.ReadOnlyField()
         name = serializers.ReadOnlyField()
+        schedule = serializers.PrimaryKeyRelatedField(queryset=InstanceSchedule.objects.all(), allow_null=True)
 
         class Meta:
             model = mdl

@@ -49,7 +49,10 @@
               inline
             />
             <b-input-group-append v-if="schedule">
-              <b-button :to="{ name: 'ScheduleViewID', params: { id: schedule } }" variant="info">
+              <b-button
+                :to="{ name: 'ScheduleViewID', params: { id: schedule } }"
+                variant="info"
+              >
                 Show
               </b-button>
             </b-input-group-append>

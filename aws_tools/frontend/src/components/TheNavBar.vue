@@ -18,7 +18,7 @@
           :to="{ name: 'RDSView' }"
           active-class="active"
         >
-          <font-awesome-icon :icon="dbIcon" /> DB
+          <font-awesome-icon :icon="dbIcon" /> RDS
         </b-nav-item>
         <b-nav-item
           :to="{ name: 'SecurityGroupView' }"

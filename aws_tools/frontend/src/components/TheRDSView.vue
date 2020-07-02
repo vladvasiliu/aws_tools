@@ -16,7 +16,7 @@
       />
     </b-col>
     <b-col>
-      <router-view />
+      <router-view :schedule-list="scheduleSelectOptions" />
     </b-col>
   </b-row>
 </template>
@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rds'])
+    ...mapGetters(['rds', 'scheduleSelectOptions'])
   },
   created () {
     this.$store.dispatch('RDS_LOAD_LIST').then(
@@ -53,6 +53,7 @@ export default {
         }
       }
     ).finally(() => { this.loading = false })
+    this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {})
   },
   methods: {
     routeDestFun: (account) => ({ name: 'RDSList', params: { id: account.id } })

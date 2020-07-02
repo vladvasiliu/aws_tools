@@ -6,7 +6,7 @@
     <template v-slot:collapsedContent="slotProps">
       <InstanceAccordion
         :instance="slotProps.object"
-        :schedule-list="scheduleList"
+        :schedule-list="scheduleSelectOptions"
       />
     </template>
   </AccordionView>
@@ -15,6 +15,7 @@
 <script>
 import AccordionView from './AccordionView'
 import InstanceAccordion from './InstanceAccordion'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -32,9 +33,7 @@ export default {
       }
       return result
     },
-    scheduleList: function () {
-      return [{ value: null, text: 'None' }, ...this.$store.state.schedule.schedules.map((schedule) => { return { value: schedule.id, text: schedule.name + (schedule.active ? '' : ' (inactive)') } })]
-    }
+    ...mapGetters(['scheduleSelectOptions'])
   },
   created () {
     this.$store.dispatch('LOAD_INSTANCE_LIST').then(() => {})
