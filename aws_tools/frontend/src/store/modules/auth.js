@@ -12,7 +12,7 @@ function userName (response) {
 
 export default {
   state: {
-    userName: null
+    userName: undefined
   },
 
   getters: {
@@ -31,18 +31,16 @@ export default {
 
   actions: {
     getUser (context) {
-      return axios
-        .get('/user/')
-        .then(response => {
-          context.commit('SET_USERNAME', { userName: userName(response) })
-        })
-        .catch(error => {
-          if (error.response && error.response.status === 403) {
-            console.error('Unauthenticated')
-          } else {
-            console.error(error.request)
-          }
-        })
+      return new Promise((resolve, reject) =>
+        axios.get('/user/')
+          .then(response => {
+            context.commit('SET_USERNAME', { userName: userName(response) })
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
+      )
     }
   }
 }

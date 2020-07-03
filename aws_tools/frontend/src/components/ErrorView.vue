@@ -8,13 +8,19 @@
       <div
         class="font-weight-bold mt-3"
       >
-        {{ message }}
+        {{ error.message }}
       </div>
       <div
-        v-if="details"
+        v-if="error.details"
         class="text-secondary font-italic"
       >
-        {{ details }}
+        {{ error.details }}
+      </div>
+      <div
+        v-if="error.more"
+        class="text-secondary font-italic"
+      >
+        {{ error.more }}
       </div>
     </div>
   </div>
@@ -23,17 +29,18 @@
 <script>
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
+export class Error {
+  constructor (message = 'Something went wrong...', details = '', more = '') {
+    this.message = message
+    this.details = details
+    this.more = more
+  }
+}
+
 export default {
-  name: 'Error',
+  name: 'ErrorView',
   props: {
-    message: {
-      type: String,
-      default () { return 'Something went wrong...' }
-    },
-    details: {
-      type: String,
-      default () { return '' }
-    }
+    error: { type: Error, default: new Error() }
   },
   data () {
     return {
@@ -41,6 +48,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>

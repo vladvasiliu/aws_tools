@@ -7,15 +7,15 @@
 amqp==2.6.0               # via kombu
 asgiref==3.2.10           # via django
 billiard==3.6.3.0         # via celery
-boto3==1.14.10            # via -r requirements.in
-botocore==1.17.10         # via boto3, s3transfer
+boto3==1.14.16            # via -r requirements.in
+botocore==1.17.16         # via boto3, s3transfer
 celery[redis]==4.4.6      # via -r requirements.in, django-celery-beat
 django-celery-beat==2.0.0  # via -r requirements.in
 django-choices==1.7.1     # via -r requirements.in
 django-filter==2.3.0      # via -r requirements.in
 django-netfields==1.2.2   # via -r requirements.in
 django-timezone-field==4.0  # via django-celery-beat
-django==3.0.7             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-timezone-field, djangorestframework, drf-nested-routers
+django==3.0.8             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-timezone-field, djangorestframework, drf-nested-routers
 djangorestframework==3.11.0  # via -r requirements.in, drf-nested-routers
 docutils==0.15.2          # via botocore
 drf-nested-routers==0.91  # via -r requirements.in

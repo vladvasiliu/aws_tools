@@ -20,9 +20,9 @@
         v-if="loading"
         message="Loading instances..."
       />
-      <Error
+      <error-view
         v-else-if="error"
-        :message="error.message"
+        :error="error"
       />
       <AccordionView
         v-else
@@ -46,11 +46,13 @@
 
 <script>
 import AccordionView from './AccordionView'
+import { Error } from './ErrorView'
+
 export default {
   name: 'ScheduleDetailModal',
   components: {
     AccordionView,
-    Error: () => import('./error'),
+    ErrorView: () => import('./ErrorView'),
     Loading: () => import('./loading')
   },
   props: {
@@ -71,14 +73,14 @@ export default {
         .then(response => {
           this.instance_list = response.data
           if (!this.instance_list.length) {
-            this.error = { message: 'No instances found.' }
+            this.error = new Error('No instances found.')
           }
         })
         .catch(error => {
           if (!error.response) {
             this.error = error
           } else {
-            this.error = { message: error.response.statusText }
+            this.error = new Error(error.response.statusText)
           }
         })
         .finally(() => {

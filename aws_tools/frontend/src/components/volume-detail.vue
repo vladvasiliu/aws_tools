@@ -1,12 +1,12 @@
 <template>
   <div class="container-fluid mh-100">
-    <Error
-      v-if="error"
-      v-bind="error"
-    />
     <Loading
-      v-else-if="loading"
+      v-if="loading"
       message="Loading snapshots..."
+    />
+    <ErrorView
+      v-else-if="error"
+      :error="error"
     />
     <volume-detail-snapshots
       v-else
@@ -17,13 +17,13 @@
 
 <script>
 import Loading from './loading'
-import Error from './error'
 import VolumeDetailSnapshots from './volume-detail-snapshots'
+import { Error } from './ErrorView'
 
 export default {
   name: 'VolumeDetail',
   components: {
-    Error,
+    ErrorView: () => (import('./ErrorView')),
     Loading,
     VolumeDetailSnapshots
   },
@@ -48,22 +48,22 @@ export default {
       .then(response => {
         this.snapshots = response.data.ebssnapshot_set
         if (!this.snapshots.length) {
-          this.error = { message: 'No snapshots found.' }
+          this.error = new Error('No snapshots found')
         }
       })
       .catch(error => {
-        console.log(error)
-        if (!error.response) {
-          this.error = error
-        } else {
+        let message = 'Failed to get snapshots'
+        let other = ''
+        if (error.response) {
           switch (error.response.status) {
             case 404:
-              this.error = { message: 'No snapshots found.' }
+              message = 'No snapshots found.'
               break
             default:
-              this.error = { message: error.response.statusText }
+              other = error.response.data
           }
         }
+        this.error = new Error(message, error.message, other)
       })
       .finally(() => {
         this.loading = false

@@ -1,9 +1,8 @@
 <template>
   <loading v-if="loading" />
-  <error
+  <error-view
     v-else-if="error"
-    :message="error.message"
-    :details="error.details"
+    :error="error"
   />
   <b-row
     v-else
@@ -25,13 +24,14 @@
 import { mapGetters } from 'vuex'
 import { RouteDest } from './ObjectListGroupCard'
 import Loading from './loading'
+import { Error } from './ErrorView'
 
 export default {
   name: 'TheRDSView',
   components: {
     Loading,
     AccountList: () => ({ component: import('./AWSAccountList') }),
-    Error: () => ({ component: import('./error') })
+    ErrorView: () => ({ component: import('./ErrorView') })
   },
   data: function () {
     return {
@@ -47,10 +47,7 @@ export default {
     this.$store.dispatch('RDS_LOAD_LIST').then(
       () => {},
       (err) => {
-        this.error = {
-          message: 'Failed to retrieve databases',
-          details: err.message
-        }
+        this.error = new Error('Failed to retrieve databases', err.message)
       }
     ).finally(() => { this.loading = false })
     this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {})
