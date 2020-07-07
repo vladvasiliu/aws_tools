@@ -40,14 +40,17 @@ export default {
   },
   actions: {
     SCHEDULE_LOAD_LIST ({ commit }) {
-      axios.get('/Schedules/').then(
-        response => {
-          commit('SET_SCHEDULE_LIST', { list: response.data })
-        },
-        err => {
-          console.error(err)
-          commit('SET_SCHEDULE_ERROR', { error: err })
-        }
+      return new Promise((resolve, reject) =>
+        axios.get('/Schedules/').then(
+          response => {
+            commit('SET_SCHEDULE_LIST', { list: response.data })
+            resolve()
+          },
+          err => {
+            console.error(err)
+            reject(err)
+          }
+        )
       )
     },
     SCHEDULE_UPDATE ({ commit }, newValue) {

@@ -16,8 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { Error } from './ErrorView'
+// import { Error } from './ErrorView'
 import Loading from './loading'
 
 export default {
@@ -28,31 +27,14 @@ export default {
   },
   data: function () {
     return {
-      loading: true,
+      loading: false,
       error: undefined
     }
   },
   computed: {
-    ...mapGetters(['userName'])
   },
   beforeCreate () {
     document.title = 'AWS Tools'
-    this.$store.dispatch('getUser')
-      .then(() => {
-        // this.$router.push({ name: 'InstanceView' })
-      })
-      .catch((error) => {
-        let details2 = ''
-        if (error.response) {
-          details2 = error.response.data
-        }
-        this.error = new Error(
-          'Failed to check authentication',
-          error.message,
-          details2
-        )
-      })
-      .finally(() => { this.loading = false })
   }
 }
 </script>

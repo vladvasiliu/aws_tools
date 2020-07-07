@@ -7,7 +7,7 @@
       <b-navbar-brand to="/">
         AWS Tools
       </b-navbar-brand>
-      <b-navbar-nav v-if="userName !== null">
+      <b-navbar-nav v-if="oidcUser !== null">
         <b-nav-item
           :to="{ name: 'InstanceView' }"
           active-class="active"
@@ -34,16 +34,16 @@
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav
-        v-if="userName !== null"
+        v-if="oidcUser !== null"
         class="ml-auto"
       >
         <b-nav-item-dropdown right>
           <span
             slot="button-content"
           >
-            <font-awesome-icon :icon="userIcon" /> {{ userName }}
+            <font-awesome-icon :icon="userIcon" /> {{ oidcUser.name }}
           </span>
-          <b-dropdown-item @click="logout">
+          <b-dropdown-item @click="signOutOidc">
             Logout
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUser, faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
 import { faUserSlash, faShieldAlt, faServer, faDatabase } from '@fortawesome/free-solid-svg-icons'
@@ -64,7 +64,7 @@ export default {
   name: 'NavBar',
 
   computed: {
-    ...mapGetters(['userName']),
+    ...mapGetters(['oidcUser']),
     dbIcon () { return faDatabase },
     userIcon () { return faUser },
     serverIcon () { return faServer },
@@ -72,16 +72,8 @@ export default {
     scheduleIcon () { return faCalendarAlt }
   },
 
-  // mounted () {
-  //   this.$store.dispatch('getUser')
-  // },
-
   methods: {
-    logout () {
-      this.$store.dispatch('logout', {}).then(() => {
-        location.reload()
-      })
-    }
+    ...mapActions(['signOutOidc'])
   }
 }
 </script>

@@ -7,29 +7,36 @@
 amqp==2.6.0               # via kombu
 asgiref==3.2.10           # via django
 billiard==3.6.3.0         # via celery
-boto3==1.14.16            # via -r requirements.in
-botocore==1.17.16         # via boto3, s3transfer
+boto3==1.14.17            # via -r requirements.in
+botocore==1.17.17         # via boto3, s3transfer
 celery[redis]==4.4.6      # via -r requirements.in, django-celery-beat
+certifi==2020.6.20        # via requests
+chardet==3.0.4            # via requests
 django-celery-beat==2.0.0  # via -r requirements.in
 django-choices==1.7.1     # via -r requirements.in
 django-filter==2.3.0      # via -r requirements.in
 django-netfields==1.2.2   # via -r requirements.in
 django-timezone-field==4.0  # via django-celery-beat
-django==3.0.8             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-timezone-field, djangorestframework, drf-nested-routers
-djangorestframework==3.11.0  # via -r requirements.in, drf-nested-routers
+django==3.0.8             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-timezone-field, djangorestframework, drf-nested-routers, drf-oidc-auth
+djangorestframework==3.11.0  # via -r requirements.in, drf-nested-routers, drf-oidc-auth
 docutils==0.15.2          # via botocore
 drf-nested-routers==0.91  # via -r requirements.in
-future==0.18.2            # via celery
+drf-oidc-auth==0.10.0     # via -r requirements.in
+future==0.18.2            # via celery, pyjwkest
+idna==2.10                # via requests
 jmespath==0.10.0          # via boto3, botocore
 kombu==4.6.11             # via celery
-netaddr==0.7.20           # via django-netfields
+netaddr==0.8.0            # via django-netfields
 psycopg2==2.8.5           # via -r requirements.in
+pycryptodomex==3.9.8      # via pyjwkest
+pyjwkest==1.4.2           # via drf-oidc-auth
 python-crontab==2.5.1     # via django-celery-beat
 python-dateutil==2.8.1    # via botocore, python-crontab
 pytz==2020.1              # via celery, django, django-timezone-field
 redis==3.5.3              # via celery
+requests==2.24.0          # via pyjwkest
 s3transfer==0.3.3         # via boto3
-six==1.15.0               # via django-choices, django-netfields, python-dateutil
+six==1.15.0               # via django-choices, django-netfields, pyjwkest, python-dateutil
 sqlparse==0.3.1           # via django
-urllib3==1.25.9           # via botocore
+urllib3==1.25.9           # via botocore, requests
 vine==1.3.0               # via amqp, celery

@@ -45,7 +45,7 @@ DATABASES = {
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ["192.168.1.26", "127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -146,8 +146,11 @@ CACHES = {
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.IsAdminUser',
+        # 'rest_framework.permissions.IsAdminUser',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oidc_auth.authentication.JSONWebTokenAuthentication',
+    ]
 }
 
 SITE_ID = 1
@@ -165,7 +168,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8080',
     'http://localhost:8080',
-    'http://192.168.1.26:8080',
     'null',
 )
 
@@ -173,30 +175,6 @@ INTERNAL_IPS = (
     '127.0.0.1'
 )
 
-SAML2_AUTH = {
-    'METADATA_AUTO_CONF_URL': conf_secret['samlURL'],
-
-    'DEFAULT_NEXT_URL': '/',
-
-    'CREATE_USER': True,
-    'NEW_USER_PROFILE': {
-        'USER_GROUPS': [],
-        'ACTIVE_STATUS': False,
-        'STAFF_STATUS': False,
-        'SUPERUSER_STATUS': False,
-    },
-    'ATTRIBUTES_MAP': {
-        'email': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
-        'username': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
-        'first_name': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname',
-        'last_name': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname',
-    },
-    'ENTITY_ID': 'http://localhost:8080/saml2_auth/acs/',
-    'USE_JWT': False,
-}
-
-
-import os
 
 LOGGING = {
     'version': 1,
@@ -227,3 +205,25 @@ CELERY_BROKER_URL = "redis://localhost:6379/0"
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+
+OIDC_AUTH = {
+    # Specify OpenID Connect endpoint. Configuration will be
+    # automatically done based on the discovery document found
+    # at <endpoint>/.well-known/openid-configuration
+    'OIDC_ENDPOINT': conf_secret['oidcEndpoint'],
+    
+    # Accepted audiences the ID Tokens can be issued to
+    'OIDC_AUDIENCES': (conf_secret['oidcClientId'],),
+
+    # (Optional) Function that resolves id_token into user.
+    # This function receives a request and an id_token dict and expects to
+    # return a User object. The default implementation tries to find the user
+    # based on username (natural key) taken from the 'sub'-claim of the
+    # id_token.
+    'OIDC_RESOLVE_USER_FUNCTION': 'oidc_auth.authentication.get_user_by_id',
+
+    # (Optional) Number of seconds in the past valid tokens can be
+    # issued (default 600)
+    'OIDC_LEEWAY': 3600,
+}

@@ -13,12 +13,14 @@
       <div
         v-if="error.details"
         class="text-secondary font-italic"
+        style="white-space: pre-wrap"
       >
         {{ error.details }}
       </div>
       <div
         v-if="error.more"
         class="text-secondary font-italic"
+        style="white-space: pre-wrap"
       >
         {{ error.more }}
       </div>

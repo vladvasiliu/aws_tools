@@ -1,8 +1,10 @@
 from logging import getLogger
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import boto3
+from rest_framework.exceptions import AuthenticationFailed
 
 from .constants import ScheduleAction
 
@@ -72,3 +74,14 @@ def validate_schedule(value: dict):
         raise ValidationError(_("there should be 168 entries, one for each hour of the week"))
     if set(value) <= set(ScheduleAction):
         raise ValidationError(_("values should be a ScheduleAction"))
+
+
+def get_user_by_id(request, id_token):
+    User = get_user_model()
+    print('getting user by id')
+    try:
+        user = User.objects.get_by_natural_key(id_token.get('preferred_username'))
+    except User.DoesNotExist:
+        msg = _('Invalid Authorization header. User not found.')
+        raise AuthenticationFailed(msg)
+    return user

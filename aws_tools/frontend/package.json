@@ -20,13 +20,15 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "moment-timezone": "^0.5.31",
+    "oidc-client": "^1.10.1",
     "underscore": "^1.10.2",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.3.4",
     "vue-underscore": "^0.1.4",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "vuex-oidc": "^3.5.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",

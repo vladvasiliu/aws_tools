@@ -1,5 +1,13 @@
 <template>
-  <b-row align-h="between">
+  <Loading v-if="loading" />
+  <error-view
+    v-else-if="error"
+    :error="error"
+  />
+  <b-row
+    v-else
+    align-h="between"
+  >
     <b-col cols="3">
       <ObjectListGroupCard
         card-title="Schedules"
@@ -23,15 +31,21 @@
 import { mapGetters } from 'vuex'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import ObjectListGroupCard, { RouteDest } from './ObjectListGroupCard'
+import Loading from './loading'
+import ErrorView, { Error } from './ErrorView'
 
 export default {
   name: 'TheScheduleView',
   components: {
+    ErrorView,
+    Loading,
     ObjectListGroupCard
   },
   data: function () {
     return {
-      routeDestAdd: new RouteDest('Add', { name: 'ScheduleViewNew' })
+      routeDestAdd: new RouteDest('Add', { name: 'ScheduleViewNew' }),
+      loading: true,
+      error: undefined
     }
   },
   computed: {
@@ -40,6 +54,12 @@ export default {
   },
   created () {
     this.$store.dispatch('SCHEDULE_LOAD_LIST')
+      .then(() => {})
+      .catch((err) => {
+        console.log(err)
+        this.error = new Error('Failed to retrieve schedules', err.message, err.response.data)
+      })
+      .finally(() => { this.loading = false })
   },
   methods: {
     routeDestFun: (schedule) => ({ name: 'ScheduleViewID', params: { id: schedule.id } }),

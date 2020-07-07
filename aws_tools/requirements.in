@@ -2,9 +2,10 @@ boto3
 celery[redis]
 Django
 django-choices
-django-netfields
 django-filter
+django-netfields
 psycopg2
 djangorestframework
 drf-nested-routers
 django-celery-beat
+drf-oidc-auth

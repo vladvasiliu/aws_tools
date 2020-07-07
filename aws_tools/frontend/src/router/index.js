@@ -1,16 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// import auth from '../store'
-
 import HomeView from '../components/home'
 import TheInstanceView from '../components/TheInstanceView'
 import PageNotFound from '../components/404'
 import Unauthorized from '../components/403'
 
+import OidcCallback from '../components/OidcCallback'
+
+import { vuexOidcCreateRouterMiddleware } from 'vuex-oidc'
+import store from '../store'
+
 Vue.use(Router)
 
-const index = new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -34,7 +37,6 @@ const index = new Router({
           props: (route) => ({ selectedAccountID: route.params.id })
         }
       ]
-      // meta: { requiresAuth: true }
     },
     {
       path: '/rds',
@@ -93,6 +95,16 @@ const index = new Router({
       component: Unauthorized
     },
     {
+      path: '/oidc-callback',
+      name: 'oidcCallback',
+      component: OidcCallback
+    },
+    {
+      path: '/oidc-silent-renew',
+      name: 'oidcSilentRenew',
+      component: () => import('../components/OidcSilentRenew')
+    },
+    {
       path: '*',
       name: 'PageNotFound',
       component: PageNotFound
@@ -100,13 +112,6 @@ const index = new Router({
   ]
 })
 
-// index.beforeEach((to, from, next) => {
-//   console.log('to: ', to)
-//   if (to.name !== 'UnauthorizedView' && auth.getters.isAuthenticated() === null) {
-//     next({ name: 'UnauthorizedView', replace: true })
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach(vuexOidcCreateRouterMiddleware(store))
 
-export default index
+export default router
