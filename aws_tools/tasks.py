@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
+from itertools import chain
 from typing import Callable
 
 from django.db.models.functions import TruncMonth
@@ -16,8 +17,8 @@ from django.core.cache import cache
 from django.db.models import ObjectDoesNotExist, Max
 
 from aws_tools.constants import ScheduleAction
-from aws_tools.models import AWSAccount, Instance, EBSVolume, AWSOrganization, InstanceSchedule
-
+from aws_tools.models import AWSAccount, Instance, EBSVolume, AWSOrganization, InstanceSchedule, RDSClient
+from aws_tools.exceptions import RDSInvalidState
 
 logger = get_task_logger(__name__)
 
@@ -183,13 +184,7 @@ def run_bulk_operation(operation: Callable, obj_list: list, param_name: str):
         logger.info("Done")
 
 
-def _execute_schedule(schedule: InstanceSchedule):
-    schedule_action = schedule.compute_action()
-
-    if schedule_action == ScheduleAction.NOTHING:
-        logger.info(f"Nothing to do for schedule '{schedule}'")
-        return
-
+def _execute_schedule_for_instances(schedule: InstanceSchedule):
     instance_list = schedule.instance_set.select_related("aws_account")
 
     instance_grouping = {}
@@ -197,6 +192,8 @@ def _execute_schedule(schedule: InstanceSchedule):
     for instance in instance_list:
         account_dict = instance_grouping.setdefault(instance.aws_account, {})
         account_dict.setdefault(instance.region_name, []).append(instance.id)
+
+    schedule_action = schedule.compute_action()
 
     if schedule_action == ScheduleAction.TURN_OFF:
         action = "stop_instances"
@@ -215,6 +212,47 @@ def _execute_schedule(schedule: InstanceSchedule):
             else:
                 operation = getattr(aws_client, action)
                 run_bulk_operation(operation, obj_list=instance_list, param_name="InstanceIds")
+
+
+def _execute_schedule_for_rds(schedule: InstanceSchedule):
+    cluster_set = schedule.rdscluster_set.all()
+    instance_set = schedule.rdsinstance_set.all()
+
+    if not cluster_set and not instance_set:
+        logger.info(f"No RDS DB concerned by schedule '{schedule}'")
+        return
+
+    rds_chain = chain(cluster_set, instance_set)
+
+    schedule_action = schedule.compute_action()
+    if schedule_action == ScheduleAction.TURN_OFF:
+        action = RDSClient.stop
+        action_name = "stop"
+    elif schedule_action == ScheduleAction.TURN_ON:
+        action = RDSClient.start
+        action_name = "start"
+    else:
+        raise Exception(f"unknown action '{schedule_action}'.")
+
+    logger.info(f"Running {action_name} RDS for schedule '{schedule}'")
+    for rds in rds_chain:
+        try:
+            action(rds)
+            logger.info(f"{action_name} '{rds}'")
+        except RDSInvalidState as e:
+            logger.info(f"Cannot {action_name} '{rds}': {e}")
+        except Exception as e:
+            logger.error(f"Failed to {action_name} for '{rds}': {e}")
+
+
+
+def _execute_schedule(schedule: InstanceSchedule):
+    if schedule.compute_action() == ScheduleAction.NOTHING:
+        logger.info(f"Nothing to do for schedule '{schedule}'")
+        return
+
+    _execute_schedule_for_instances(schedule)
+    _execute_schedule_for_rds(schedule)
 
 
 @shared_task

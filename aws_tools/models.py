@@ -12,7 +12,7 @@ import logging
 from django.utils import timezone
 from netfields import CidrAddressField, NetManager
 
-from .exceptions import ResourceNotFoundException
+from .exceptions import ResourceNotFoundException, RDSInvalidState
 from .helpers import resource_name, aws_resource, is_managed, aws_client, default_schedule, validate_schedule
 from .constants import AWSRegionChoice, IPProtocol, AWSSecurityGroupRuleType, ScheduleAction
 from .managers import EBSVolumeManager
@@ -221,7 +221,7 @@ class Instance(AWSEC2Resource):
         instance = self._aws_resource()
         instance.start()
         if wait_for_it:
-            instance.waint_until_stopped()
+            instance.wait_until_stopped()
 
     def status(self):
         instance = self._aws_resource()
@@ -470,6 +470,9 @@ class RDSClient(AWSClient):
     _describe_action = None
     _collection_name = None
     _item_id_name = None
+    _stop_action = None
+    _start_action = None
+
     id = models.AutoField(primary_key=True)
     engine = models.CharField(max_length=255, editable=False)
     engine_version = models.CharField(max_length=255, editable=False)
@@ -541,11 +544,28 @@ class RDSClient(AWSClient):
         logger.info(f"{cls._meta.verbose_name_plural} found: {len(current_objects)}.")
         cls._remove_orphans(account, current_objects)
 
+    def _run_action(self, action_name):
+        client = self.aws_client
+        operation = getattr(client, action_name)
+        kwargs = {self._item_id_name: self.name}
+        try:
+            return operation(**kwargs)
+        except (client.exceptions.InvalidDBInstanceStateFault, client.exceptions.InvalidDBClusterStateFault) as e:
+            raise RDSInvalidState(e) from e
+
+    def start(self):
+        return self._run_action(self._start_action)
+
+    def stop(self):
+        return self._run_action(self._stop_action)
+
 
 class RDSInstance(RDSClient):
     _collection_name = "DBInstances"
     _describe_action = "describe_db_instances"
     _item_id_name = 'DBInstanceIdentifier'
+    _start_action = 'start_db_instance'
+    _stop_action = 'stop_db_instance'
 
     class Meta:
         verbose_name = "RDS Instance"
@@ -555,6 +575,8 @@ class RDSCluster(RDSClient):
     _collection_name = "DBClusters"
     _describe_action = "describe_db_clusters"
     _item_id_name = 'DBClusterIdentifier'
+    _start_action = 'start_db_cluster'
+    _stop_action = 'stop_db_cluster'
 
     class Meta:
         verbose_name = "RDS Cluster"
