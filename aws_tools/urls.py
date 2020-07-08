@@ -17,7 +17,8 @@ from .views import (
     InstanceScheduleViewSet,
     InstanceScheduleInstanceListViewSet,
     RDSClusterViewSet,
-    RDSInstanceViewSet
+    RDSInstanceViewSet,
+    version
 )
 
 router = routers.DefaultRouter()
@@ -46,4 +47,5 @@ urlpatterns = [
     url(r"api/", include(security_group_router.urls)),
     url(r"api/", include(instance_schedule_router.urls)),
     url(r"api/user", current_user, name="current_user"),
+    url(r"api/version", version, name="version"),
 ]

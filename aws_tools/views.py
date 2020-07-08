@@ -1,6 +1,6 @@
 from django.db.models import Max, Prefetch, Count
-from rest_framework import viewsets, status
-from rest_framework.decorators import action, api_view
+from rest_framework import viewsets, status, permissions
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 
 from .serializers import (
@@ -130,3 +130,9 @@ class RDSInstanceViewSet(viewsets.ModelViewSet):
 class RDSClusterViewSet(viewsets.ModelViewSet):
     serializer_class = rds_serializer_factory(RDSCluster)
     queryset = RDSCluster.objects.all()
+
+
+@api_view()
+@permission_classes([permissions.AllowAny])
+def version(request):
+    return Response('0.1.0')
