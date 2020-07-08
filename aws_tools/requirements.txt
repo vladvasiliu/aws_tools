@@ -7,8 +7,8 @@
 amqp==2.6.0               # via kombu
 asgiref==3.2.10           # via django
 billiard==3.6.3.0         # via celery
-boto3==1.14.17            # via -r requirements.in
-botocore==1.17.17         # via boto3, s3transfer
+boto3==1.14.18            # via -r requirements.in
+botocore==1.17.18         # via boto3, s3transfer
 celery[redis]==4.4.6      # via -r requirements.in, django-celery-beat
 certifi==2020.6.20        # via requests
 chardet==3.0.4            # via requests
