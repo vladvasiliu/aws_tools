@@ -221,7 +221,7 @@ OIDC_AUTH = {
     # return a User object. The default implementation tries to find the user
     # based on username (natural key) taken from the 'sub'-claim of the
     # id_token.
-    'OIDC_RESOLVE_USER_FUNCTION': 'oidc_auth.authentication.get_user_by_id',
+    'OIDC_RESOLVE_USER_FUNCTION': 'aws_tools.helpers.get_user_by_id',
 
     # (Optional) Number of seconds in the past valid tokens can be
     # issued (default 600)

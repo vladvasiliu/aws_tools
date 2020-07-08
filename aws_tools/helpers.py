@@ -77,11 +77,23 @@ def validate_schedule(value: dict):
 
 
 def get_user_by_id(request, id_token):
+    """Returns a user for the token
+
+    If the user doesn't exist, it will be created.
+    If the user exists and some of the properties are different, they will be updated.
+    The Django username is used as the equivalent of the `sub` field on the token.
+
+    :param request: Unused
+    :param id_token: An OpenID Connect JWT token describing the user
+    :return:
+    """
     User = get_user_model()
-    print('getting user by id')
-    try:
-        user = User.objects.get_by_natural_key(id_token.get('preferred_username'))
-    except User.DoesNotExist:
-        msg = _('Invalid Authorization header. User not found.')
-        raise AuthenticationFailed(msg)
+
+    user, _ = User.objects.update_or_create(
+        username=id_token.get('sub'),
+        defaults={
+            "first_name": id_token.get("given_name"),
+            "last_name": id_token.get("family_name"),
+            "email": id_token.get("email"),
+    })
     return user

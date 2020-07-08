@@ -5,5 +5,5 @@ export const oidcSettings = {
   silent_redirect_uri: window.location.origin + '/oidc-silent-renew',
   automaticSilentRenew: true,
   response_type: 'code',
-  scope: 'openid profile'
+  scope: 'openid profile email'
 }

@@ -56,7 +56,6 @@ export default {
     this.$store.dispatch('SCHEDULE_LOAD_LIST')
       .then(() => {})
       .catch((err) => {
-        console.log(err)
         this.error = new Error('Failed to retrieve schedules', err.message, err.response.data)
       })
       .finally(() => { this.loading = false })

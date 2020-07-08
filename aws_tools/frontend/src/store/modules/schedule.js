@@ -47,7 +47,6 @@ export default {
             resolve()
           },
           err => {
-            console.error(err)
             reject(err)
           }
         )
