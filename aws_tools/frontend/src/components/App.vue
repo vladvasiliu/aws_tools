@@ -18,7 +18,7 @@
       <b-container>
         <b-row>
           <b-col>
-            AWS Tools <small>v0.1.0</small>
+            AWS Tools <small>{{ version }}</small>
           </b-col>
         </b-row>
       </b-container>
@@ -39,7 +39,8 @@ export default {
   data: function () {
     return {
       loading: false,
-      error: undefined
+      error: undefined,
+      version: process.env.VUE_APP_VERSION
     }
   },
   computed: {
