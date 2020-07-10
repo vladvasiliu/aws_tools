@@ -2,8 +2,7 @@ import axios from 'axios'
 
 export default {
   state: {
-    aws_accounts: null,
-    aws_accounts_error: null
+    aws_accounts: null
   },
   actions: {
     LOAD_AWS_ACCOUNT_LIST ({ commit }) {

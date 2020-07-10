@@ -34,7 +34,7 @@ export default {
     this.$store.dispatch('LOAD_AWS_ACCOUNT_LIST')
       .then(
         () => {},
-        (err) => { this.error = new Error('Failed to load accounts', err.data) }
+        (err) => { this.error = new Error('Failed to load accounts', err.message) }
       )
       .finally(() => { this.loading = false })
   }

@@ -2,27 +2,45 @@
   <div class="container-fluid text-center m-5 w-auto">
     <div class="col text-danger">
       <font-awesome-icon
+        id="error-icon"
         :icon="icon"
-        class="display-4"
+        :size="iconSize"
       />
-      <div
-        class="font-weight-bold mt-3"
+      <b-popover
+        v-if="tooltip"
+        target="error-icon"
+        triggers="hover"
       >
-        {{ error.message }}
-      </div>
-      <div
-        v-if="error.details"
-        class="text-secondary font-italic"
-        style="white-space: pre-wrap"
-      >
-        {{ error.details }}
-      </div>
-      <div
-        v-if="error.more"
-        class="text-secondary font-italic"
-        style="white-space: pre-wrap"
-      >
-        {{ error.more }}
+        <template v-slot:title>
+          {{ error.message }}
+        </template>
+        <div
+          v-if="error.details"
+          style="white-space: pre-wrap"
+        >
+          {{ error.details }}
+        </div>
+      </b-popover>
+      <div v-else>
+        <div
+          class="font-weight-bold mt-3"
+        >
+          {{ error.message }}
+        </div>
+        <div
+          v-if="error.details"
+          class="text-secondary font-italic"
+          style="white-space: pre-wrap"
+        >
+          {{ error.details }}
+        </div>
+        <div
+          v-if="error.more"
+          class="text-secondary font-italic"
+          style="white-space: pre-wrap"
+        >
+          {{ error.more }}
+        </div>
       </div>
     </div>
   </div>
@@ -42,7 +60,9 @@ export class Error {
 export default {
   name: 'ErrorView',
   props: {
-    error: { type: Error, default: new Error() }
+    error: { type: Error, default: new Error() },
+    tooltip: { type: Boolean, default: false },
+    iconSize: { type: String, default: '4x' }
   },
   data () {
     return {

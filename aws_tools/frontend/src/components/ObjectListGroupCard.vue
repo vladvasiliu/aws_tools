@@ -27,14 +27,12 @@
     >
       <b-spinner />
     </div>
-    <div
-      v-else-if="objectError"
-      v-b-tooltip.hover
-      class="text-center text-danger"
-      :title="objectError.message"
-    >
-      <font-awesome-icon :icon="faExclamationTriangle" />
-    </div>
+    <error-view
+      v-if="objectError"
+      :error="objectError"
+      :tooltip="true"
+      :icon-size="'2x'"
+    />
     <b-list-group
       v-if="Array.isArray(objectList) && objectList.length > 0"
       flush
@@ -70,7 +68,6 @@
 
 <script>
 import { faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Error } from './ErrorView'
 
 export class RouteDest {
   constructor (text, location) {
@@ -81,8 +78,11 @@ export class RouteDest {
 
 export default {
   name: 'ObjectListGroupCard',
+  components: {
+    ErrorView: () => (import('./ErrorView'))
+  },
   props: {
-    loading: { type: Boolean, default: true },
+    loading: { type: Boolean, default: false },
     objectList: { type: Array, default: null },
     objectError: { type: Error, default: null },
     cardTitle: { type: String, default: 'Object list', required: true },
