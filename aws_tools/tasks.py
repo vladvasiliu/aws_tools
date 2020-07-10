@@ -17,7 +17,7 @@ from django.core.cache import cache
 from django.db.models import ObjectDoesNotExist, Max
 
 from aws_tools.constants import ScheduleAction
-from aws_tools.models import AWSAccount, Instance, EBSVolume, AWSOrganization, InstanceSchedule, RDSClient
+from aws_tools.models import AWSAccount, Instance, EBSVolume, AWSOrganization, InstanceSchedule, RDSClient, RDSInstance, RDSCluster
 from aws_tools.exceptions import RDSInvalidState
 
 logger = get_task_logger(__name__)
@@ -43,6 +43,7 @@ def get_busy():
     snapshot_volumes()
     update_instances()
     clean_snapshots()
+    update_rds()
 
 
 @shared_task
@@ -53,6 +54,28 @@ def update_organizations():
             org.update_accounts()
         except ClientError as e:
             logger.error("Failed to update accounts for Org # %s (%s) : %s" % (org.id, org.name, e))
+
+
+@shared_task(bind=True)
+def update_rds(self):
+    for aws_account in AWSAccount.objects.all():
+        account_hexdigest = md5(aws_account.id.encode()).hexdigest()
+        lock_id = "{0}-lock-{1}".format(self.name, account_hexdigest)
+        account_name = aws_account.id
+        if aws_account.name != aws_account.id:
+            account_name = f"{account_name} ({aws_account.name})"
+        with cache_lock(lock_id, self.app.oid) as acquired:
+            if acquired:
+                try:
+                    RDSInstance.update(aws_account)
+                except Exception as e:
+                    logger.error(f"Failed to update RDS Instances for account {account_name}: {e}")
+                try:
+                    RDSCluster.update(aws_account)
+                except Exception as e:
+                    logger.error(f"Failed to update RDS Clusters for account {account_name}: {e}")
+            else:
+                logger.info(f"RDS for account {account_name} are already being updated.")
 
 
 @shared_task
