@@ -1,5 +1,6 @@
 boto3
 celery[redis]
+daphne
 Django
 django-choices
 django-filter
