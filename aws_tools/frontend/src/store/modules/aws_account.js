@@ -7,14 +7,17 @@ export default {
   },
   actions: {
     LOAD_AWS_ACCOUNT_LIST ({ commit }) {
-      axios.get('/AWSAccounts/').then(
-        response => {
-          commit('SET_ACCOUNT_LIST', { list: response.data })
-        },
-        err => {
-          console.error(err)
-          commit('SET_ACCOUNTS_ERROR', { error: err })
-        }
+      return new Promise((resolve, reject) =>
+        axios.get('/AWSAccounts/').then(
+          response => {
+            commit('SET_ACCOUNT_LIST', { list: response.data })
+            resolve()
+          },
+          err => {
+            commit('SET_ACCOUNTS_ERROR', { error: err })
+            reject(err.toJSON())
+          }
+        )
       )
     }
   },

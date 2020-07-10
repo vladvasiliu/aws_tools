@@ -14,11 +14,11 @@
         <router-view />
       </div>
     </div>
-    <footer class="footer bg-light text-secondary text-center">
+    <footer class="footer bg-light text-secondary text-center font-weight-light">
       <b-container>
         <b-row>
           <b-col>
-            AWS Tools <small>{{ version }}</small>
+            <small>AWS Tools • {{ version }}</small>
           </b-col>
         </b-row>
       </b-container>

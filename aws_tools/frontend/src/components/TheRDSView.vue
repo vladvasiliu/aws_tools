@@ -50,7 +50,7 @@ export default {
         this.error = new Error('Failed to retrieve databases', err.message)
       }
     ).finally(() => { this.loading = false })
-    this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {})
+    this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {}, () => {})
   },
   methods: {
     routeDestFun: (account) => ({ name: 'RDSList', params: { id: account.id } })

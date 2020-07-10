@@ -24,6 +24,12 @@ export default {
       routeDestAll: new RouteDest('All', { name: 'InstanceView' })
     }
   },
+  mounted () {
+    this.$store.dispatch('LOAD_INSTANCE_LIST').then(
+      () => {},
+      () => {}
+    )
+  },
   methods: {
     routeDestFun: (account) => ({ name: 'InstanceViewForAccount', params: { id: account.id } })
   }

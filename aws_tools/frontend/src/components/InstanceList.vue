@@ -35,9 +35,8 @@ export default {
     },
     ...mapGetters(['scheduleSelectOptions'])
   },
-  created () {
-    this.$store.dispatch('LOAD_INSTANCE_LIST').then(() => {})
-    this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {})
+  mounted () {
+    this.$store.dispatch('SCHEDULE_LOAD_LIST').then(() => {}, () => {})
   }
 }
 </script>

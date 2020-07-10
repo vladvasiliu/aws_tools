@@ -21,19 +21,27 @@ export class Instance {
 
 const actions = {
   LOAD_INSTANCE_LIST: function ({ commit }) {
-    return axios.get('/Instances/').then(
-      response => {
-        commit('SET_INSTANCE_LIST', { list: response.data })
-      },
-      err => {
-        console.log(err)
-      }
-    )
+    return new Promise((resolve, reject) =>
+      axios.get('/Instances/').then(
+        response => {
+          commit('SET_INSTANCE_LIST', { list: response.data })
+          resolve()
+        },
+        err => {
+          reject(err.toJSON())
+        }
+      ))
   },
   UPDATE_INSTANCE: function ({ commit }, newValue) {
-    axios.patch(newValue.instance.url, newValue.changes).then(response => {
-      commit('UPDATE_INSTANCE', { newInstance: response.data })
-    })
+    return new Promise((resolve, reject) =>
+      axios.patch(newValue.instance.url, newValue.changes).then(
+        response => {
+          commit('UPDATE_INSTANCE', { newInstance: response.data })
+          resolve()
+        },
+        err => { reject(err.toJSON()) }
+      )
+    )
   }
 }
 

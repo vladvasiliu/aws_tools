@@ -22,16 +22,16 @@
       </b-row>
     </template>
     <div
-      v-if="objectList == null && objectError == null"
+      v-if="loading"
       class="text-center"
     >
       <b-spinner />
     </div>
     <div
-      v-else-if="objectList == null && objectError != null"
+      v-else-if="objectError"
       v-b-tooltip.hover
       class="text-center text-danger"
-      :title="objectError"
+      :title="objectError.message"
     >
       <font-awesome-icon :icon="faExclamationTriangle" />
     </div>
@@ -70,6 +70,7 @@
 
 <script>
 import { faExclamationTriangle, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { Error } from './ErrorView'
 
 export class RouteDest {
   constructor (text, location) {
@@ -81,8 +82,9 @@ export class RouteDest {
 export default {
   name: 'ObjectListGroupCard',
   props: {
+    loading: { type: Boolean, default: true },
     objectList: { type: Array, default: null },
-    objectError: { type: Object, default: null },
+    objectError: { type: Error, default: null },
     cardTitle: { type: String, default: 'Object list', required: true },
     routeDestFun: { type: Function, required: true },
     routeDestAll: { type: RouteDest, default: undefined, required: false },
