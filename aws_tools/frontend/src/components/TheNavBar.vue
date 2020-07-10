@@ -20,12 +20,12 @@
         >
           <font-awesome-icon :icon="dbIcon" /> RDS
         </b-nav-item>
-        <b-nav-item
-          :to="{ name: 'SecurityGroupView' }"
-          active-class="active"
-        >
-          <font-awesome-icon :icon="securityIcon" /> Security
-        </b-nav-item>
+        <!--        <b-nav-item-->
+        <!--          :to="{ name: 'SecurityGroupView' }"-->
+        <!--          active-class="active"-->
+        <!--        >-->
+        <!--          <font-awesome-icon :icon="securityIcon" /> Security-->
+        <!--        </b-nav-item>-->
         <b-nav-item
           :to="{ name: 'ScheduleView' }"
           active-class="active"
