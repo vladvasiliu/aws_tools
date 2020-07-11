@@ -45,7 +45,7 @@ DATABASES = {
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = conf_secret.get("allowedHosts", ["127.0.0.1", "localhost"])
 
 # Application definition
 
@@ -164,12 +164,12 @@ BOOTSTRAP4 = {
 USE_X_FORWARDED_HOST = True
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:8080',
-    'http://localhost:8080',
-    'null',
-)
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://127.0.0.1:8080',
+#     'http://localhost:8080',
+#     'null',
+# )
 
 INTERNAL_IPS = (
     '127.0.0.1'
