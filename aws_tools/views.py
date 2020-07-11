@@ -134,5 +134,5 @@ class RDSClusterViewSet(viewsets.ModelViewSet):
 
 @api_view()
 @permission_classes([permissions.AllowAny])
-def version(request):
-    return Response('0.1.0')
+def status(request):
+    return Response('OK')
