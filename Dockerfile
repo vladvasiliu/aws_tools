@@ -21,5 +21,7 @@ LABEL maintainer="Vlad Vasiliu <vladvasiliun@yahoo.fr>"
 
 EXPOSE 8001
 
+RUN     apk add --no-cache postgresql-dev
+
 COPY --from=builder /venv /venv
 WORKDIR /venv/aws_tools_proj
