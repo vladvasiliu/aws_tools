@@ -278,10 +278,16 @@ def _execute_schedule(schedule: InstanceSchedule):
     _execute_schedule_for_rds(schedule)
 
 
-@shared_task
-def run_schedules():
+@shared_task(bind=True)
+def run_schedules(self):
     for schedule in InstanceSchedule.objects.all():
-        try:
-            _execute_schedule(schedule)
-        except Exception as e:
-            logger.error(f"Failed to execute schedule '{schedule}': {e}")
+        schedule_hexdigest = md5(schedule.id.encode()).hexdigest()
+        lock_id = "{0}-lock-{1}".format(self.name, schedule_hexdigest)
+        with cache_lock(lock_id, self.app.oid) as acquired:
+            if acquired:
+                try:
+                    _execute_schedule(schedule)
+                except Exception as e:
+                    logger.error(f"Failed to execute schedule '{schedule}': {e}")
+            else:
+                logger.info(f"Schedule '{schedule.name}' is already being executed.")
