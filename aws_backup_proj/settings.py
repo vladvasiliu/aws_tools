@@ -49,6 +49,6 @@ OIDC_AUTH = {
 }
 
 
-secure_proxy_header = conf_secret.get("secureProxyHeader", None)
-if secure_proxy_header:
-    SECURE_PROXY_SSL_HEADER = ('secure_proxy_header', 'https')
+secure_proxy_ssl_header = conf_secret.get("secureProxySSLHeader", None)
+if secure_proxy_ssl_header:
+    SECURE_PROXY_SSL_HEADER = (secure_proxy_ssl_header, 'https')
