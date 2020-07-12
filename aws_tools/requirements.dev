@@ -5,3 +5,4 @@ coverage
 moto  # mock aws server
 pip-tools
 pre-commit
+boto3-stubs

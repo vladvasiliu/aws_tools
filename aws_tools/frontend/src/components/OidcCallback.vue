@@ -29,7 +29,6 @@ export default {
         this.$router.push(redirectedPath)
       })
       .catch((err) => {
-        console.log(err)
         this.error = new Error('Authorization failed', err.message)
       })
       .finally(() => { this.loading = false })

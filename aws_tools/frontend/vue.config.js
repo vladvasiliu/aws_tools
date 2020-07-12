@@ -1,6 +1,8 @@
-const { gitDescribeSync } = require('git-describe')
-const gitInfo = gitDescribeSync({ dirtyMark: '-dev' })
-process.env.VUE_APP_VERSION = gitInfo.semverString
+if (!process.env.VUE_APP_VERSION) {
+  const { gitDescribeSync } = require('git-describe')
+  const gitInfo = gitDescribeSync({ dirtyMark: '-dev' })
+  process.env.VUE_APP_VERSION = gitInfo.semverString
+}
 
 module.exports = {
   devServer: {

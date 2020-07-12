@@ -12,13 +12,13 @@ export default {
     getSecurityGroupList ({ commit }) {
       axios.get('/SecurityGroups').then(
         response => { commit('SET_SECURITY_GROUP_LIST', { list: response.data }) },
-        err => { console.error(err) }
+        () => {}
       )
     },
     getSecurityGroupRules ({ commit }, securityGroup) {
       axios.get(securityGroup.rule_list).then(
         response => { commit('ADD_SECURITY_GROUP_RULES', { list: response.data }) },
-        err => { console.error(err) }
+        () => {}
       )
     }
   },

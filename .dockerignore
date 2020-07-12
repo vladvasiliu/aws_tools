@@ -487,5 +487,5 @@ tags
 # Persistent undo
 [._]*.un~
 
-aws_tools/frontend
+aws_tools/frontend/node_modules
 aws_tools/tests

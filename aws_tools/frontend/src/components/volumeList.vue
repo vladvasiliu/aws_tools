@@ -118,12 +118,8 @@ export default {
     },
     createSnapshot (volume) {
       this.axios.post(volume.url + 'create_snapshot/')
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        .then(() => {})
+        .catch(() => {})
     }
   }
 }
