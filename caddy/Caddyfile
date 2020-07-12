@@ -1,0 +1,5 @@
+:8000 {
+    root * /static_root/
+    try_files {path} /index.html?{query}&p={path}
+    file_server
+}
