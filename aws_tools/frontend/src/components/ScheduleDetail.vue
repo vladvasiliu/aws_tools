@@ -94,21 +94,25 @@
               </b-td>
             </b-tr>
             <b-tr>
-              <b-th>Instances</b-th>
+              <b-th>EC2</b-th>
               <b-td>
                 {{ local_schedule.instance_count }}
-                <b-link
-                  v-show="local_schedule.instance_count"
-                  v-b-modal.instance_modal_id
-                  :disabled="!local_schedule.instance_count"
-                >
-                  List
-                </b-link>
-                <schedule-detail-modal
-                  modal-id="instance_modal_id"
-                  :schedule="schedule"
-                />
+                <!--                <b-link-->
+                <!--                  v-show="local_schedule.instance_count"-->
+                <!--                  v-b-modal.instance_modal_id-->
+                <!--                  :disabled="!local_schedule.instance_count"-->
+                <!--                >-->
+                <!--                  List-->
+                <!--                </b-link>-->
+                <!--                <schedule-detail-modal-->
+                <!--                  modal-id="instance_modal_id"-->
+                <!--                  :schedule="schedule"-->
+                <!--                />-->
               </b-td>
+            </b-tr>
+            <b-tr>
+              <b-th>RDS</b-th>
+              <b-td>{{ local_schedule.rds_instance_count + local_schedule.rds_cluster_count }}</b-td>
             </b-tr>
           </b-tbody>
         </b-table-simple>
@@ -189,7 +193,7 @@ function localScheduleFromSelected (selectedSchedule) {
 export default {
   name: 'ScheduleDetail',
   components: {
-    ScheduleDetailModal: () => import('./ScheduleDetailModal'),
+    // ScheduleDetailModal: () => import('./ScheduleDetailModal'),
     ScheduleDetailDeleteModal: () => import('./ScheduleDetailDeleteModal')
   },
   filters: {

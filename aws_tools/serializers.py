@@ -155,6 +155,8 @@ class SecurityGroupRuleUserGroupPairSerializer(serializers.HyperlinkedModelSeria
 class InstanceScheduleSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     instance_count = serializers.ReadOnlyField()
+    rds_instance_count = serializers.ReadOnlyField()
+    rds_cluster_count = serializers.ReadOnlyField()
     instance_list = serializers.HyperlinkedIdentityField(view_name="schedule-list", lookup_url_kwarg="schedule_pk")
 
     class Meta:

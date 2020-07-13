@@ -12,13 +12,13 @@
     <h5>Confirm deletion of schedule: <strong class="text-danger font-italic">{{ schedule.name }}</strong></h5>
     <br>
     <b-alert
-      :variant="schedule.instance_count ? 'warning' : 'info'"
+      :variant="scheduleUseCount ? 'warning' : 'info'"
       show=""
       class="text-center"
     >
-      <BIconExclamationTriangleFill v-if="schedule.instance_count" />
+      <BIconExclamationTriangleFill v-if="scheduleUseCount" />
       <BIconInfoCircle v-else />
-      There {{ scheduleCountMsg }} using this schedule.
+      This schedule is {{ scheduleUseCount ? '' : 'not' }} in use.
     </b-alert>
   </b-modal>
 </template>
@@ -38,15 +38,8 @@ export default {
     schedule: { type: Schedule, required: true }
   },
   computed: {
-    scheduleCountMsg: function () {
-      switch (this.schedule.instance_count) {
-        case 0:
-          return 'are no instances'
-        case 1:
-          return 'is one instance'
-        default:
-          return 'are ' + this.schedule.instance_count + ' instances'
-      }
+    scheduleUseCount: function () {
+      return this.schedule.instance_count + this.schedule.rds_instance_count + this.schedule.rds_cluster_count
     }
   }
 }

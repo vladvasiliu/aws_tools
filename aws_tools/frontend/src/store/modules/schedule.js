@@ -6,6 +6,8 @@ export class Schedule {
     this.url = schedule.url
     this.id = schedule.id
     this.instance_count = schedule.instance_count
+    this.rds_instance_count = schedule.rds_instance_count
+    this.rds_cluster_count = schedule.rds_cluster_count
     this.instance_list = schedule.instance_list
     this.name = schedule.name
     this.schedule = schedule.schedule

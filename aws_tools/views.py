@@ -122,7 +122,7 @@ class SecurityGroupRuleUserGroupPairViewSet(viewsets.ReadOnlyModelViewSet):
 
 class InstanceScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = InstanceScheduleSerializer
-    queryset = InstanceSchedule.objects.order_by("name").annotate(instance_count=Count("instance")).order_by("name")
+    queryset = InstanceSchedule.objects.order_by("name").annotate(instance_count=Count("instance"), rds_instance_count=Count('rdsinstance'), rds_cluster_count=Count('rdscluster')).order_by("name")
 
 
 class InstanceScheduleInstanceListViewSet(viewsets.ReadOnlyModelViewSet):
