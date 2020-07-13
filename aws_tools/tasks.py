@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 from itertools import chain
 from typing import Callable
 
+import botocore
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now, timedelta
 
@@ -98,7 +99,7 @@ def update_instances_for_account(self, aws_account_id):
                 logger.info("Updating instances for account %s (%s)" % (aws_account, aws_account_id))
                 try:
                     updated_instances = Instance.update(aws_account)
-                except ClientError as e:
+                except (ClientError, botocore.exceptions.ParamValidationError) as e:
                     logger.error(
                         "Failed to update instances for account %s (%s) : %s" % (aws_account, aws_account_id, e)
                     )
@@ -139,15 +140,16 @@ def snapshot_volumes(self, volumes=None):
     for vol in volumes:
         vol_hexdigest = md5(vol.id.encode()).hexdigest()
         lock_id = "{0}-lock-{1}".format(self.name, vol_hexdigest)
+        vol_name = f"{vol} (instance: {vol.instance}, account: {vol.aws_account})"
         with cache_lock(lock_id, self.app.oid) as acquired:
             if acquired:
-                logger.info("Snapshooting volume %s (Instance: %s, Account: %s)" % (vol, vol.instance, vol.aws_account))
-                vol.snapshot()
+                logger.info(f"Snapshooting volume {vol_name}")
+                try:
+                    vol.snapshot()
+                except (ClientError, botocore.exceptions.ParamValidationError) as e:
+                    logger.error(f"Failed to snapshot volume {vol_name}: {e}")
             else:
-                logger.info(
-                    "Volume %s (Instance: %s, Account: %s) is already being snapshot"
-                    % (vol, vol.instance, vol.aws_account)
-                )
+                logger.info(f"Volume {vol_name} is already being snapshot")
 
 
 @shared_task(bind=True)
