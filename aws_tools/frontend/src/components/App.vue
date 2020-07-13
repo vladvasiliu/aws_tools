@@ -51,7 +51,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   div.main-content {
     min-height: 100vh;
     overflow: auto;
