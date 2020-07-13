@@ -176,6 +176,7 @@ LOGGING = {
 }
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
