@@ -281,7 +281,7 @@ def _execute_schedule(schedule: InstanceSchedule):
 @shared_task(bind=True)
 def run_schedules(self):
     for schedule in InstanceSchedule.objects.all():
-        schedule_hexdigest = md5(schedule.id.encode()).hexdigest()
+        schedule_hexdigest = md5(str(schedule.id).encode()).hexdigest()
         lock_id = "{0}-lock-{1}".format(self.name, schedule_hexdigest)
         with cache_lock(lock_id, self.app.oid) as acquired:
             if acquired:
