@@ -27,7 +27,10 @@
               href="#"
               @click.prevent="createSnapshot(volume)"
             >
-              <font-awesome-icon :icon="snapshotIcon" />
+              <font-awesome-icon
+                :icon="snapshotIcon"
+                :spin="snapshotActive"
+              />
             </b-link>
             <span
               v-b-tooltip.hover.right
@@ -78,7 +81,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { faInfoCircle, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle, faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   components: {
@@ -94,13 +97,16 @@ export default {
     return {
       modalVolume: null,
       infoIcon: faInfoCircle,
-      snapshotIcon: faDownload
+      snapshotActive: false
     }
   },
   computed: {
     ...mapGetters([
       // 'volumes_for_instance'
     ]),
+    snapshotIcon: function () {
+      return this.snapshotActive ? faSpinner : faDownload
+    },
     modalShow: {
       get () {
         return !!this.modalVolume
@@ -117,9 +123,43 @@ export default {
       this.modalVolume = volume
     },
     createSnapshot (volume) {
+      this.snapshotActive = true
+      const h = this.$createElement
       this.axios.post(volume.url + 'create_snapshot/')
-        .then(() => {})
-        .catch(() => {})
+        .then((response) => {
+          const message = h(
+            'p',
+            {},
+            [
+              h('div', {}, 'A new snapshot will be created for volume '),
+              h('em', {}, volume.name)
+            ]
+          )
+          this.$bvToast.toast([message], {
+            title: 'Snapshot started',
+            solid: true,
+            variant: 'info',
+            isStatus: true
+          })
+        })
+        .catch((err) => {
+          const message = h(
+            'p',
+            {},
+            [
+              h('strong', {}, 'Failed to snapshot volume '),
+              h('em', {}, volume.name),
+              h('div', {}, err.message)
+            ]
+          )
+          this.$bvToast.toast([message], {
+            title: 'Snapshot failed',
+            solid: true,
+            variant: 'danger',
+            isStatus: true
+          })
+        })
+      this.snapshotActive = false
     }
   }
 }

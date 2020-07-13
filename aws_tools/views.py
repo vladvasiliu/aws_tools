@@ -1,7 +1,11 @@
+import logging
+
+from botocore.exceptions import ClientError
 from django.db.models import Max, Prefetch, Count
-from rest_framework import viewsets, status, permissions
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED, HTTP_503_SERVICE_UNAVAILABLE
 
 from .serializers import (
     AWSAccountSerializer,
@@ -30,6 +34,9 @@ from .models import (
     SecurityGroupRuleUserGroupPair,
     InstanceSchedule, RDSCluster, RDSInstance,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 class AWSAccountViewSet(viewsets.ModelViewSet):
@@ -64,9 +71,18 @@ class EBSVolumeViewSet(viewsets.ModelViewSet):
     def create_snapshot(self, request, pk):
         volume = self.get_object()
         user = request.user.username
-        snapshot_name = "%s - %s" % (volume.name, user)
-        volume.snapshot(snapshot_name=snapshot_name)
-        return Response({"snapshot": snapshot_name}, status=status.HTTP_200_OK)
+        snapshot_name = f"{volume.name} - {user}"
+        try:
+            volume.snapshot(snapshot_name=snapshot_name)
+        except ClientError as e:
+            logger.error(f"Failed to snapshot volume {volume}: {e}")
+            return Response({"message": "AWS request to create a snapshot failed."},
+                            status=HTTP_503_SERVICE_UNAVAILABLE, exception=True)
+        except Exception as e:
+            logger.exception(f"Failed to snapshot volume {volume}: {e}")
+            return Response({"message": "AWS request to create a snapshot failed."},
+                            status=HTTP_503_SERVICE_UNAVAILABLE, exception=True)
+        return Response({"snapshot": snapshot_name}, status=HTTP_201_CREATED)
 
 
 class EBSSnapshotViewSet(viewsets.ModelViewSet):

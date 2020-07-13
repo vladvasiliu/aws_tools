@@ -45,7 +45,7 @@ OIDC_AUTH = {
 
     # (Optional) Number of seconds in the past valid tokens can be
     # issued (default 600)
-    'OIDC_LEEWAY': 3600,
+    'OIDC_LEEWAY': 3900,
 }
 
 
