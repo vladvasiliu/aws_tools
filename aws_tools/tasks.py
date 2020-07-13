@@ -209,6 +209,9 @@ def run_bulk_operation(operation: Callable, obj_list: list, param_name: str):
 
 def _execute_schedule_for_instances(schedule: InstanceSchedule):
     instance_list = schedule.instance_set.select_related("aws_account")
+    if not instance_list:
+        logger.info(f"No EC2 instance concerned by schedule '{schedule}'")
+        return
 
     instance_grouping = {}
 
