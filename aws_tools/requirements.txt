@@ -4,60 +4,31 @@
 #
 #    pip-compile
 #
-amqp==2.6.0               # via kombu
-asgiref==3.2.10           # via daphne, django
-attrs==19.3.0             # via automat, service-identity, twisted
-autobahn==20.6.2          # via daphne
-automat==20.2.0           # via twisted
+amqp==2.6.1               # via kombu
+asgiref==3.2.10           # via django
 billiard==3.6.3.0         # via celery
-boto3==1.14.20            # via -r requirements.in
-botocore==1.17.20         # via boto3, s3transfer
-celery[redis]==4.4.6      # via -r requirements.in, django-celery-beat
-certifi==2020.6.20        # via requests
-cffi==1.14.0              # via cryptography
-chardet==3.0.4            # via requests
-constantly==15.1.0        # via twisted
-cryptography==2.9.2       # via autobahn, pyopenssl, service-identity
-daphne==2.5.0             # via -r requirements.in
+boto3==1.14.55            # via -r requirements.in
+botocore==1.17.55         # via boto3, s3transfer
+celery[redis]==4.4.7      # via -r requirements.in, django-celery-beat
 django-celery-beat==2.0.0  # via -r requirements.in
 django-choices==1.7.1     # via -r requirements.in
 django-filter==2.3.0      # via -r requirements.in
 django-netfields==1.2.2   # via -r requirements.in
 django-timezone-field==4.0  # via django-celery-beat
-django==3.0.8             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-timezone-field, djangorestframework, drf-nested-routers, drf-oidc-auth
-djangorestframework==3.11.0  # via -r requirements.in, drf-nested-routers, drf-oidc-auth
+django==3.1.1             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-timezone-field, djangorestframework, drf-nested-routers
+djangorestframework==3.11.1  # via -r requirements.in, drf-nested-routers
 docutils==0.15.2          # via botocore
 drf-nested-routers==0.91  # via -r requirements.in
-drf-oidc-auth==0.10.0     # via -r requirements.in
-future==0.18.2            # via celery, pyjwkest
-hyperlink==19.0.0         # via twisted
-idna==2.10                # via hyperlink, requests, twisted
-incremental==17.5.0       # via twisted
 jmespath==0.10.0          # via boto3, botocore
 kombu==4.6.11             # via celery
 netaddr==0.8.0            # via django-netfields
 psycopg2==2.8.5           # via -r requirements.in
-pyasn1-modules==0.2.8     # via service-identity
-pyasn1==0.4.8             # via pyasn1-modules, service-identity
-pycparser==2.20           # via cffi
-pycryptodomex==3.9.8      # via pyjwkest
-pyhamcrest==2.0.2         # via twisted
-pyjwkest==1.4.2           # via drf-oidc-auth
-pyopenssl==19.1.0         # via twisted
 python-crontab==2.5.1     # via django-celery-beat
 python-dateutil==2.8.1    # via botocore, python-crontab
 pytz==2020.1              # via celery, django, django-timezone-field
 redis==3.5.3              # via celery
-requests==2.24.0          # via pyjwkest
 s3transfer==0.3.3         # via boto3
-service-identity==18.1.0  # via twisted
-six==1.15.0               # via automat, cryptography, django-choices, django-netfields, pyjwkest, pyopenssl, python-dateutil
+six==1.15.0               # via django-choices, django-netfields, python-dateutil
 sqlparse==0.3.1           # via django
-twisted[tls]==20.3.0      # via daphne
-txaio==20.4.1             # via autobahn
-urllib3==1.25.9           # via botocore, requests
+urllib3==1.25.10          # via botocore
 vine==1.3.0               # via amqp, celery
-zope.interface==5.1.0     # via twisted
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
