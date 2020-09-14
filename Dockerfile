@@ -1,4 +1,4 @@
-FROM python:3.8.3-alpine3.12 AS builder
+FROM python:3.8.5-alpine3.12 AS builder
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -21,7 +21,7 @@ WORKDIR /venv/aws_tools_proj
 RUN     DJANGO_SETTINGS_MODULE="aws_backup_proj.base_settings" /venv/bin/python manage.py collectstatic --noinput --clear
 
 
-FROM node:lts-alpine AS node-builder
+FROM node:14.10.1-alpine3.12 AS node-builder
 
 ARG VERSION
 ARG VUE_APP_OIDC_AUTHORITY
@@ -33,7 +33,7 @@ RUN npm install
 RUN env VUE_APP_VERSION=$VERSION VUE_APP_OIDC_AUTHORITY=$VUE_APP_OIDC_AUTHORITY VUE_APP_OIDC_CLIENTID=$VUE_APP_OIDC_CLIENTID npm run build
 
 
-FROM python:3.8.3-alpine3.12
+FROM python:3.8.5-alpine3.12
 
 LABEL description="AWS Tools"
 LABEL maintainer="Vlad Vasiliu <vladvasiliun@yahoo.fr>"

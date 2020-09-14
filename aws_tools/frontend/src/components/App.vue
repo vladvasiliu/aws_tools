@@ -7,12 +7,12 @@
         v-else-if="error"
         :error="error"
       />
-      <div
+      <b-container
         v-else
-        class="container mt-3 mb-3"
+        class="mt-3 mb-3"
       >
         <router-view />
-      </div>
+      </b-container>
     </div>
     <footer class="footer bg-light text-secondary text-center font-weight-light">
       <b-container>
