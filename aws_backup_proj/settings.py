@@ -1,3 +1,5 @@
+# These are the production settings.
+
 from .get_env import value_from_env, get_secret
 from .base_settings import *
 

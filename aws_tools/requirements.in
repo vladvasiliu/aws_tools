@@ -2,11 +2,12 @@ boto3
 celery[redis]
 daphne
 Django
+django-celery-beat
 django-choices
 django-filter
 django-netfields
-psycopg2
+django-structlog
 djangorestframework
 drf-nested-routers
-django-celery-beat
 drf-oidc-auth
+psycopg2
