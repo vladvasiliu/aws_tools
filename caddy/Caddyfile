@@ -4,14 +4,11 @@
 }
 
 :8000 {
+    respond /status 200
+    metrics /metrics
     root * /static_root/
     try_files {path} /index.html?{query}&p={path}
     file_server
     log
-    encode zstd gzip
-}
-
-:8800 {
-    metrics
     encode zstd gzip
 }
