@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from itertools import chain
+from time import monotonic
 from typing import Callable
 
 import botocore
@@ -9,7 +10,7 @@ from django.utils.timezone import now, timedelta
 
 from botocore.exceptions import ClientError
 from celery import shared_task
-from celery.five import monotonic
+# from celery.five import monotonic
 from celery.utils.log import get_task_logger
 from contextlib import contextmanager
 from hashlib import md5
