@@ -1,4 +1,13 @@
-FROM python:3.8.6-alpine3.12 AS builder
+ARG PYTHON_IMAGE="python:3.9.1-alpine3.12"
+ARG NODE_IMAGE="node:14.15.4-alpine3.12"
+
+ARG BUILD_DATE
+ARG GIT_HASH
+ARG VERSION
+ARG VUE_APP_OIDC_AUTHORITY
+ARG VUE_APP_OIDC_CLIENTID
+
+FROM $PYTHON_IMAGE AS builder
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -9,7 +18,7 @@ RUN     apk add --no-cache --virtual build-dependencies \
             libffi-dev \
             postgresql-dev
 
-COPY    aws_tools/requirements.txt /
+COPY    requirements.txt /
 
 RUN     pip install virtualenv && \
             virtualenv /venv && \
@@ -33,10 +42,21 @@ RUN npm install
 RUN env VUE_APP_VERSION=$VERSION VUE_APP_OIDC_AUTHORITY=$VUE_APP_OIDC_AUTHORITY VUE_APP_OIDC_CLIENTID=$VUE_APP_OIDC_CLIENTID npm run build
 
 
-FROM python:3.8.6-alpine3.12
+FROM $PYTHON_IMAGE
 
-LABEL description="AWS Tools"
-LABEL maintainer="Vlad Vasiliu <vladvasiliun@yahoo.fr>"
+ARG     VERSION
+ARG     BUILD_DATE
+ARG     GIT_HASH
+
+LABEL org.opencontainers.image.version="$VERSION"
+LABEL org.opencontainers.image.created="$BUILD_DATE"
+LABEL org.opencontainers.image.revision="$GIT_HASH"
+LABEL org.opencontainers.image.title="AWS Tools"
+LABEL org.opencontainers.image.description="Tools to help with AWS operations"
+LABEL org.opencontainers.image.vendor="Vlad Vasiliu"
+LABEL org.opencontainers.image.source="https://github.com/vladvasiliu/aws_tools"
+LABEL org.opencontainers.image.authors="Vlad Vasiliu"
+LABEL org.opencontainers.image.url="https://github.com/vladvasiliu/aws_tools"
 
 EXPOSE 8001
 

@@ -11,6 +11,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+SECRET_KEY = "change_me!__fuweg7ih8oj8pweg65weg7weh8gj90kwe9gjhogiwetbiye0rk[bipjerubyi"
+
 
 # Application definition
 
