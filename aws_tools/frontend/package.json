@@ -30,17 +30,16 @@
     "vuex-oidc": "^3.10.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.10",
-    "@vue/cli-plugin-eslint": "^4.5.10",
-    "@vue/cli-plugin-router": "^4.5.10",
-    "@vue/cli-plugin-vuex": "^4.5.10",
-    "@vue/cli-service": "^4.5.10",
+    "@vue/cli-plugin-babel": "^4.5.11",
+    "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-plugin-router": "^4.5.11",
+    "@vue/cli-plugin-vuex": "^4.5.11",
+    "@vue/cli-service": "^4.5.11",
     "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
     "git-describe": "^4.0.4",
-    "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.12"
   },

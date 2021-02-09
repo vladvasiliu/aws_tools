@@ -4,66 +4,181 @@
 #
 #    pip-compile
 #
-amqp==5.0.2               # via kombu
-asgiref==3.3.1            # via daphne, django
-attrs==20.3.0             # via automat, service-identity, twisted
-authlib==0.15.2           # via drf-oidc-auth
-autobahn==20.12.3         # via daphne
-automat==20.2.0           # via twisted
-billiard==3.6.3.0         # via celery
-boto3==1.16.54            # via -r requirements.in
-botocore==1.19.54         # via boto3, s3transfer
-celery[redis]==5.0.5      # via -r requirements.in, django-celery-beat
-certifi==2020.12.5        # via requests
-cffi==1.14.4              # via cryptography
-chardet==4.0.0            # via requests
-click-didyoumean==0.0.3   # via celery
-click-plugins==1.1.1      # via celery
-click-repl==0.1.6         # via celery
-click==7.1.2              # via celery, click-didyoumean, click-plugins, click-repl
-constantly==15.1.0        # via twisted
-cryptography==3.3.1       # via authlib, autobahn, drf-oidc-auth, pyopenssl, service-identity
-daphne==3.0.1             # via -r requirements.in
-django-celery-beat==2.1.0  # via -r requirements.in
-django-choices==1.7.1     # via -r requirements.in
-django-filter==2.4.0      # via -r requirements.in
-django-ipware==3.0.2      # via django-structlog
-django-netfields==1.2.2   # via -r requirements.in
-django-structlog==2.1.0   # via -r requirements.in
-django-timezone-field==4.1.1  # via django-celery-beat
-django==3.1.5             # via -r requirements.in, django-celery-beat, django-choices, django-filter, django-netfields, django-structlog, django-timezone-field, djangorestframework, drf-nested-routers, drf-oidc-auth
-djangorestframework==3.12.2  # via -r requirements.in, drf-nested-routers, drf-oidc-auth
-drf-nested-routers==0.92.5  # via -r requirements.in
-drf-oidc-auth==1.0.0      # via -r requirements.in
-hyperlink==21.0.0         # via autobahn, twisted
-idna==2.10                # via hyperlink, requests, twisted
-incremental==17.5.0       # via twisted
-jmespath==0.10.0          # via boto3, botocore
-kombu==5.0.2              # via celery
-netaddr==0.8.0            # via django-netfields
-prompt-toolkit==3.0.10    # via click-repl
-psycopg2==2.8.6           # via -r requirements.in
-pyasn1-modules==0.2.8     # via service-identity
-pyasn1==0.4.8             # via pyasn1-modules, service-identity
-pycparser==2.20           # via cffi
-pyhamcrest==2.0.2         # via twisted
-pyopenssl==20.0.1         # via twisted
-python-crontab==2.5.1     # via django-celery-beat
-python-dateutil==2.8.1    # via botocore, python-crontab
-pytz==2020.5              # via celery, django, django-timezone-field
-redis==3.5.3              # via celery
-requests==2.25.1          # via drf-oidc-auth
-s3transfer==0.3.4         # via boto3
-service-identity==18.1.0  # via twisted
-six==1.15.0               # via automat, click-repl, cryptography, django-choices, django-netfields, pyopenssl, python-dateutil
-sqlparse==0.4.1           # via django
-structlog==20.2.0         # via django-structlog
-twisted[tls]==20.3.0      # via daphne
-txaio==20.12.1            # via autobahn
-urllib3==1.26.2           # via botocore, requests
-vine==5.0.0               # via amqp, celery
-wcwidth==0.2.5            # via prompt-toolkit
-zope.interface==5.2.0     # via twisted
+amqp==5.0.5
+    # via kombu
+asgiref==3.3.1
+    # via
+    #   daphne
+    #   django
+attrs==20.3.0
+    # via
+    #   automat
+    #   service-identity
+    #   twisted
+authlib==0.15.3
+    # via drf-oidc-auth
+autobahn==21.1.1
+    # via daphne
+automat==20.2.0
+    # via twisted
+billiard==3.6.3.0
+    # via celery
+boto3==1.17.4
+    # via -r requirements.in
+botocore==1.20.4
+    # via
+    #   boto3
+    #   s3transfer
+celery[redis]==5.0.5
+    # via
+    #   -r requirements.in
+    #   django-celery-beat
+certifi==2020.12.5
+    # via requests
+cffi==1.14.4
+    # via cryptography
+chardet==4.0.0
+    # via requests
+click-didyoumean==0.0.3
+    # via celery
+click-plugins==1.1.1
+    # via celery
+click-repl==0.1.6
+    # via celery
+click==7.1.2
+    # via
+    #   celery
+    #   click-didyoumean
+    #   click-plugins
+    #   click-repl
+constantly==15.1.0
+    # via twisted
+cryptography==3.4.3
+    # via
+    #   authlib
+    #   autobahn
+    #   drf-oidc-auth
+    #   pyopenssl
+    #   service-identity
+daphne==3.0.1
+    # via -r requirements.in
+django-celery-beat==2.2.0
+    # via -r requirements.in
+django-choices==1.7.1
+    # via -r requirements.in
+django-filter==2.4.0
+    # via -r requirements.in
+django-ipware==3.0.2
+    # via django-structlog
+django-netfields==1.2.2
+    # via -r requirements.in
+django-structlog==2.1.0
+    # via -r requirements.in
+django-timezone-field==4.1.1
+    # via django-celery-beat
+django==3.1.6
+    # via
+    #   -r requirements.in
+    #   django-celery-beat
+    #   django-choices
+    #   django-filter
+    #   django-netfields
+    #   django-structlog
+    #   django-timezone-field
+    #   djangorestframework
+    #   drf-nested-routers
+    #   drf-oidc-auth
+djangorestframework==3.12.2
+    # via
+    #   -r requirements.in
+    #   drf-nested-routers
+    #   drf-oidc-auth
+drf-nested-routers==0.92.5
+    # via -r requirements.in
+drf-oidc-auth==1.0.0
+    # via -r requirements.in
+hyperlink==21.0.0
+    # via
+    #   autobahn
+    #   twisted
+idna==2.10
+    # via
+    #   hyperlink
+    #   requests
+    #   twisted
+incremental==17.5.0
+    # via twisted
+jmespath==0.10.0
+    # via
+    #   boto3
+    #   botocore
+kombu==5.0.2
+    # via celery
+netaddr==0.8.0
+    # via django-netfields
+prompt-toolkit==3.0.14
+    # via click-repl
+psycopg2==2.8.6
+    # via -r requirements.in
+pyasn1-modules==0.2.8
+    # via service-identity
+pyasn1==0.4.8
+    # via
+    #   pyasn1-modules
+    #   service-identity
+pycparser==2.20
+    # via cffi
+pyhamcrest==2.0.2
+    # via twisted
+pyopenssl==20.0.1
+    # via twisted
+python-crontab==2.5.1
+    # via django-celery-beat
+python-dateutil==2.8.1
+    # via
+    #   botocore
+    #   python-crontab
+pytz==2021.1
+    # via
+    #   celery
+    #   django
+    #   django-timezone-field
+redis==3.5.3
+    # via celery
+requests==2.25.1
+    # via drf-oidc-auth
+s3transfer==0.3.4
+    # via boto3
+service-identity==18.1.0
+    # via twisted
+six==1.15.0
+    # via
+    #   automat
+    #   click-repl
+    #   django-choices
+    #   django-netfields
+    #   pyopenssl
+    #   python-dateutil
+sqlparse==0.4.1
+    # via django
+structlog==20.2.0
+    # via django-structlog
+twisted[tls]==20.3.0
+    # via daphne
+txaio==20.12.1
+    # via autobahn
+urllib3==1.26.3
+    # via
+    #   botocore
+    #   requests
+vine==5.0.0
+    # via
+    #   amqp
+    #   celery
+wcwidth==0.2.5
+    # via prompt-toolkit
+zope.interface==5.2.0
+    # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
