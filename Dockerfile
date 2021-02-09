@@ -1,5 +1,6 @@
-ARG PYTHON_IMAGE="python:3.9.1-alpine3.13"
-ARG NODE_IMAGE="node:14.15.4-alpine3.12"
+ARG PYTHON_BUILD_IMAGE="python:3.9.1-buster"
+ARG PYTHON_RUN_IMAGE="python:3.9.1-slim-buster"
+ARG NODE_IMAGE="node:14.15.4-buster-slim"
 
 ARG BUILD_DATE
 ARG GIT_HASH
@@ -7,23 +8,19 @@ ARG VERSION
 ARG VUE_APP_OIDC_AUTHORITY
 ARG VUE_APP_OIDC_CLIENTID
 
-FROM $PYTHON_IMAGE AS builder
+FROM $PYTHON_BUILD_IMAGE AS builder
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV STATIC_ROOT /venv/static/static
 
-RUN     apk add --no-cache --virtual build-dependencies \
-            build-base \
-            libffi-dev \
-            postgresql-dev
-
 COPY    requirements.txt /
 
-RUN     pip install virtualenv && \
+RUN     ["/bin/bash", "-c", "\
+            pip install virtualenv && \
             virtualenv /venv && \
             source /venv/bin/activate && \
-            pip install -r /requirements.txt
+            pip install -r /requirements.txt" ]
 
 COPY    . /venv/aws_tools_proj
 WORKDIR /venv/aws_tools_proj
@@ -42,7 +39,7 @@ RUN npm install
 RUN env VUE_APP_VERSION=$VERSION VUE_APP_OIDC_AUTHORITY=$VUE_APP_OIDC_AUTHORITY VUE_APP_OIDC_CLIENTID=$VUE_APP_OIDC_CLIENTID npm run build
 
 
-FROM $PYTHON_IMAGE
+FROM $PYTHON_RUN_IMAGE
 
 ARG     VERSION
 ARG     BUILD_DATE
@@ -59,8 +56,6 @@ LABEL org.opencontainers.image.authors="Vlad Vasiliu"
 LABEL org.opencontainers.image.url="https://github.com/vladvasiliu/aws_tools"
 
 EXPOSE 8001
-
-RUN     apk add --no-cache libpq
 
 COPY --from=builder /venv /venv
 COPY --from=node-builder /venv/frontend/dist /venv/static
