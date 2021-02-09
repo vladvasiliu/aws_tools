@@ -1,4 +1,4 @@
-ARG PYTHON_IMAGE="python:3.9.1-alpine3.12"
+ARG PYTHON_IMAGE="python:3.9.1-alpine3.13"
 ARG NODE_IMAGE="node:14.15.4-alpine3.12"
 
 ARG BUILD_DATE
@@ -30,7 +30,7 @@ WORKDIR /venv/aws_tools_proj
 RUN     DJANGO_SETTINGS_MODULE="aws_backup_proj.base_settings" /venv/bin/python manage.py collectstatic --noinput --clear
 
 
-FROM node:14.10.1-alpine3.12 AS node-builder
+FROM $NODE_IMAGE AS node-builder
 
 ARG VERSION
 ARG VUE_APP_OIDC_AUTHORITY
