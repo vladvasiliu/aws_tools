@@ -17,8 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 
-
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('aws_tools.urls')),
+    url(r"^admin/", admin.site.urls),
+    url(r"^ht/", include("health_check.urls")),
+    url(r"^", include("aws_tools.urls")),
 ]
