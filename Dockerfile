@@ -57,6 +57,7 @@ LABEL org.opencontainers.image.url="https://github.com/vladvasiliu/aws_tools"
 
 EXPOSE 8001
 
+RUN     apt update && apt install -y libpq5 && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /venv /venv
 COPY --from=node-builder /venv/frontend/dist /venv/static
 VOLUME /venv/static
