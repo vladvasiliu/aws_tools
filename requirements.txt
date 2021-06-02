@@ -170,7 +170,7 @@ twisted[tls]==20.3.0
     # via daphne
 txaio==20.12.1
     # via autobahn
-urllib3==1.26.3
+urllib3==1.26.5
     # via
     #   botocore
     #   requests
