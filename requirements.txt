@@ -39,18 +39,18 @@ cffi==1.14.4
     # via cryptography
 chardet==4.0.0
     # via requests
-click-didyoumean==0.0.3
-    # via celery
-click-plugins==1.1.1
-    # via celery
-click-repl==0.1.6
-    # via celery
 click==7.1.2
     # via
     #   celery
     #   click-didyoumean
     #   click-plugins
     #   click-repl
+click-didyoumean==0.0.3
+    # via celery
+click-plugins==1.1.1
+    # via celery
+click-repl==0.1.6
+    # via celery
 constantly==15.1.0
     # via twisted
 cryptography==3.4.3
@@ -62,6 +62,19 @@ cryptography==3.4.3
     #   service-identity
 daphne==3.0.1
     # via -r requirements.in
+django==3.1.13
+    # via
+    #   -r requirements.in
+    #   django-celery-beat
+    #   django-choices
+    #   django-filter
+    #   django-health-check
+    #   django-netfields
+    #   django-structlog
+    #   django-timezone-field
+    #   djangorestframework
+    #   drf-nested-routers
+    #   drf-oidc-auth
 django-celery-beat==2.2.0
     # via -r requirements.in
 django-choices==1.7.1
@@ -78,19 +91,6 @@ django-structlog==2.1.0
     # via -r requirements.in
 django-timezone-field==4.1.1
     # via django-celery-beat
-django==3.1.6
-    # via
-    #   -r requirements.in
-    #   django-celery-beat
-    #   django-choices
-    #   django-filter
-    #   django-health-check
-    #   django-netfields
-    #   django-structlog
-    #   django-timezone-field
-    #   djangorestframework
-    #   drf-nested-routers
-    #   drf-oidc-auth
 djangorestframework==3.12.2
     # via
     #   -r requirements.in
@@ -123,12 +123,12 @@ prompt-toolkit==3.0.14
     # via click-repl
 psycopg2==2.8.6
     # via -r requirements.in
-pyasn1-modules==0.2.8
-    # via service-identity
 pyasn1==0.4.8
     # via
     #   pyasn1-modules
     #   service-identity
+pyasn1-modules==0.2.8
+    # via service-identity
 pycparser==2.20
     # via cffi
 pyhamcrest==2.0.2
