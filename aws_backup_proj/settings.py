@@ -1,4 +1,5 @@
 # These are the production settings.
+import logging
 
 from .get_env import value_from_env, get_secret, get_ec2_ip
 from .base_settings import *
@@ -28,7 +29,10 @@ DATABASES = {
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 ALLOWED_HOSTS = conf_secret.get("allowedHosts", ["127.0.0.1", "localhost"])
-ALLOWED_HOSTS.append(get_ec2_ip())
+try:
+    ALLOWED_HOSTS.append(get_ec2_ip())
+except Exception as e:
+    logging.warning("Failed to retrieve EC2 IP: %s", e)
 
 OIDC_AUTH = {
     # Specify OpenID Connect endpoint. Configuration will be

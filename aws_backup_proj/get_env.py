@@ -74,8 +74,4 @@ def get_ec2_ip() -> str:
     :return: A string containing the instance's IPv4
     """
     endpoint = "http://169.254.169.254/latest/meta-data/local-ipv4"
-    try:
-        # Use a short timeout, the metadata endpoint should answer quickly
-        return requests.get(endpoint, timeout=2.0).text
-    except Exception as e:
-        raise ImproperlyConfigured("Failed to retrieve IPv4 from EC2 instance metadata.") from e
+    return requests.get(endpoint, timeout=2.0).text

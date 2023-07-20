@@ -3,6 +3,6 @@ default_language_version:
 fail_fast: true
 repos:
   - repo: https://github.com/ambv/black
-    rev: 20.8b1
+    rev: 193ee766ca496871f93621d6b58d57a6564ff81b  # frozen: 23.7.0
     hooks:
     - id: black

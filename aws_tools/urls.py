@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.urls import re_path, include
 from rest_framework.schemas import get_schema_view
 
 from rest_framework_nested import routers
@@ -18,7 +18,7 @@ from .views import (
     InstanceScheduleInstanceListViewSet,
     RDSClusterViewSet,
     RDSInstanceViewSet,
-    status
+    status,
 )
 
 router = routers.DefaultRouter()
@@ -31,8 +31,8 @@ router.register(r"SecurityGroups", SecurityGroupViewSet)
 router.register(r"SecurityGroupIPRanges", SecurityGroupRuleIPRangeViewSet)
 router.register(r"SecurityGroupUserGroupPairs", SecurityGroupRuleUserGroupPairViewSet)
 router.register(r"Schedules", InstanceScheduleViewSet)
-router.register(r'RDSInstances', RDSInstanceViewSet)
-router.register(r'RDSClusters', RDSClusterViewSet)
+router.register(r"RDSInstances", RDSInstanceViewSet)
+router.register(r"RDSClusters", RDSClusterViewSet)
 
 security_group_router = routers.NestedDefaultRouter(router, r"SecurityGroups", lookup="security_group")
 security_group_router.register(r"Rules", SecurityGroupRuleViewSet, basename="securitygrouprule")
@@ -43,9 +43,9 @@ instance_schedule_router.register(r"Instances", InstanceScheduleInstanceListView
 schema_view = get_schema_view(title="AWS Tools API", authentication_classes=[], permission_classes=[])
 
 urlpatterns = [
-    url(r"api/", include(router.urls)),
-    url(r"api/", include(security_group_router.urls)),
-    url(r"api/", include(instance_schedule_router.urls)),
-    url(r"api/user", current_user, name="current_user"),
-    url(r"api/status", status, name="status"),
+    re_path(r"api/", include(router.urls)),
+    re_path(r"api/", include(security_group_router.urls)),
+    re_path(r"api/", include(instance_schedule_router.urls)),
+    re_path(r"api/user", current_user, name="current_user"),
+    re_path(r"api/status", status, name="status"),
 ]
