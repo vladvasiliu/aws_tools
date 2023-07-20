@@ -6,6 +6,7 @@ django-celery-beat
 django-choices
 django-filter
 django-health-check
+django-iam-dbauth
 django-netfields
 django-structlog
 djangorestframework

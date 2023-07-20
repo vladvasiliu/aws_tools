@@ -1,5 +1,6 @@
 # These are the production settings.
 import logging
+from pathlib import Path
 
 from .get_env import value_from_env, get_secret, get_ec2_ip
 from .base_settings import *
@@ -11,16 +12,23 @@ conf_secret = get_secret(secret_name, secret_region)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = conf_secret["secretKey"]
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_iam_dbauth.aws.postgresql",
         "NAME": conf_secret["dbName"],
         "HOST": conf_secret["dbHost"],
         "USER": conf_secret["dbUsername"],
-        "PASSWORD": conf_secret["dbPassword"],
+        "OPTIONS": {
+            "use_iam_auth": True,
+            "sslmode": "verify-full",
+            "sslrootcert": BASE_DIR / "global-bundle.pem",
+            "region_name": secret_region,
+        },
     }
 }
 

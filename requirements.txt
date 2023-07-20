@@ -6,6 +6,8 @@
 #
 amqp==5.1.1
     # via kombu
+anyio==3.7.1
+    # via httpcore
 asgiref==3.7.2
     # via
     #   daphne
@@ -25,7 +27,9 @@ automat==22.10.0
 billiard==4.1.0
     # via celery
 boto3==1.28.7
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   django-iam-dbauth
 botocore==1.31.7
     # via
     #   boto3
@@ -35,7 +39,9 @@ celery[redis]==5.3.1
     #   -r requirements.in
     #   django-celery-beat
 certifi==2023.5.7
-    # via requests
+    # via
+    #   httpcore
+    #   requests
 cffi==1.15.1
     # via cryptography
 charset-normalizer==3.2.0
@@ -72,6 +78,7 @@ django==4.2.3
     #   django-choices
     #   django-filter
     #   django-health-check
+    #   django-iam-dbauth
     #   django-netfields
     #   django-structlog
     #   django-timezone-field
@@ -86,6 +93,8 @@ django-filter==23.2
     # via -r requirements.in
 django-health-check==3.17.0
     # via -r requirements.in
+django-iam-dbauth==0.1.4
+    # via -r requirements.in
 django-ipware==5.0.0
     # via django-structlog
 django-netfields==1.3.1
@@ -99,16 +108,23 @@ djangorestframework==3.14.0
     #   -r requirements.in
     #   drf-nested-routers
     #   drf-oidc-auth
+dnspython==2.4.0
+    # via django-iam-dbauth
 drf-nested-routers==0.93.4
     # via -r requirements.in
 drf-oidc-auth==3.0.0
     # via -r requirements.in
+h11==0.14.0
+    # via httpcore
+httpcore==0.17.3
+    # via dnspython
 hyperlink==21.0.0
     # via
     #   autobahn
     #   twisted
 idna==3.4
     # via
+    #   anyio
     #   hyperlink
     #   requests
     #   twisted
@@ -161,6 +177,11 @@ six==1.16.0
     #   django-choices
     #   django-netfields
     #   python-dateutil
+sniffio==1.3.0
+    # via
+    #   anyio
+    #   dnspython
+    #   httpcore
 sqlparse==0.4.4
     # via django
 structlog==23.1.0
