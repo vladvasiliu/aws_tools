@@ -36,9 +36,11 @@ INSTALLED_APPS = [
     # "health_check.contrib.celery",  # requires celery
     "health_check.contrib.celery_ping",  # requires celery
     "health_check.contrib.redis",  # requires Redis broker
+    "django_prometheus",
 ]
 
 MIDDLEWARE = [
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -47,6 +49,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_structlog.middlewares.RequestMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = "aws_backup_proj.urls"
@@ -124,6 +127,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAdminUser',
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "oidc_auth.authentication.BearerTokenAuthentication",
         "oidc_auth.authentication.JSONWebTokenAuthentication",
     ],
 }
@@ -218,3 +222,5 @@ REDIS_URL = "redis://redis:6379"
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

@@ -5,6 +5,7 @@ from pathlib import Path
 from .get_env import value_from_env, get_secret, get_ec2_ip
 from .base_settings import *
 
+
 secret_name = value_from_env("AWS_SECRET_NAME")
 secret_region = value_from_env("AWS_SECRET_REGION")
 conf_secret = get_secret(secret_name, secret_region)
@@ -23,6 +24,7 @@ DATABASES = {
         "NAME": conf_secret["dbName"],
         "HOST": conf_secret["dbHost"],
         "USER": conf_secret["dbUsername"],
+        "CONN_MAX_AGE": 600,
         "OPTIONS": {
             "use_iam_auth": True,
             "sslmode": "verify-full",
@@ -47,8 +49,6 @@ OIDC_AUTH = {
     # automatically done based on the discovery document found
     # at <endpoint>/.well-known/openid-configuration
     "OIDC_ENDPOINT": conf_secret["oidcEndpoint"],
-    # Accepted audiences the ID Tokens can be issued to
-    "OIDC_AUDIENCES": (conf_secret["oidcClientId"],),
     # (Optional) Function that resolves id_token into user.
     # This function receives a request and an id_token dict and expects to
     # return a User object. The default implementation tries to find the user

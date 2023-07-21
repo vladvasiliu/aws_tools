@@ -27,9 +27,7 @@ automat==22.10.0
 billiard==4.1.0
     # via celery
 boto3==1.28.7
-    # via
-    #   -r requirements.in
-    #   django-iam-dbauth
+    # via -r requirements.in
 botocore==1.31.7
     # via
     #   boto3
@@ -78,7 +76,6 @@ django==4.2.3
     #   django-choices
     #   django-filter
     #   django-health-check
-    #   django-iam-dbauth
     #   django-netfields
     #   django-structlog
     #   django-timezone-field
@@ -93,11 +90,11 @@ django-filter==23.2
     # via -r requirements.in
 django-health-check==3.17.0
     # via -r requirements.in
-django-iam-dbauth==0.1.4
-    # via -r requirements.in
 django-ipware==5.0.0
     # via django-structlog
 django-netfields==1.3.1
+    # via -r requirements.in
+django-prometheus==2.3.1
     # via -r requirements.in
 django-structlog==5.3.0
     # via -r requirements.in
@@ -109,7 +106,7 @@ djangorestframework==3.14.0
     #   drf-nested-routers
     #   drf-oidc-auth
 dnspython==2.4.0
-    # via django-iam-dbauth
+    # via -r requirements.in
 drf-nested-routers==0.93.4
     # via -r requirements.in
 drf-oidc-auth==3.0.0
@@ -138,9 +135,11 @@ kombu==5.3.1
     # via celery
 netaddr==0.8.0
     # via django-netfields
+prometheus-client==0.17.1
+    # via django-prometheus
 prompt-toolkit==3.0.39
     # via click-repl
-psycopg2==2.9.6
+psycopg2-binary==2.9.6
     # via -r requirements.in
 pyasn1==0.5.0
     # via
@@ -207,7 +206,7 @@ vine==5.0.0
     #   kombu
 wcwidth==0.2.6
     # via prompt-toolkit
-zope.interface==6.0
+zope-interface==6.0
     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:

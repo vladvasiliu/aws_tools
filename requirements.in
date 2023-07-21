@@ -6,10 +6,11 @@ django-celery-beat
 django-choices
 django-filter
 django-health-check
-django-iam-dbauth
 django-netfields
+django-prometheus
 django-structlog
 djangorestframework
+dnspython
 drf-nested-routers
 drf-oidc-auth
-psycopg2
+psycopg2-binary
