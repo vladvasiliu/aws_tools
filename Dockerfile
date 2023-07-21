@@ -14,7 +14,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV STATIC_ROOT /venv/static/static
 
-COPY    requirements.txt /
+COPY    backend/requirements.txt /
 
 RUN     ["/bin/bash", "-c", "\
             pip install virtualenv && \
@@ -33,7 +33,7 @@ ARG VERSION
 ARG VUE_APP_OIDC_AUTHORITY
 ARG VUE_APP_OIDC_CLIENTID
 
-COPY ./aws_tools/frontend /venv/frontend/
+COPY backend/aws_tools/frontend /venv/frontend/
 WORKDIR /venv/frontend
 RUN npm install
 RUN env VUE_APP_VERSION=$VERSION VUE_APP_OIDC_AUTHORITY=$VUE_APP_OIDC_AUTHORITY VUE_APP_OIDC_CLIENTID=$VUE_APP_OIDC_CLIENTID npm run build

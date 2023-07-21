@@ -108,4 +108,4 @@ ENV/
 *.sqlite3
 *.db
 
-aws_backup_proj/settings/prod.py
+backend/aws_backup_proj/settings/prod.py
