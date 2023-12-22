@@ -26,14 +26,15 @@ class AWSRegionBriefSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AWSAccountSerializer(serializers.HyperlinkedModelSerializer):
-    instance_set = serializers.HyperlinkedRelatedField(many=True, view_name="instance-detail", read_only=True)
+    # instance_set = serializers.HyperlinkedRelatedField(many=True, view_name="instance-detail", read_only=True)
     id = serializers.ReadOnlyField()
-    regions = AWSRegionBriefSerializer(many=True, read_only=True)
+    # regions = AWSRegionBriefSerializer(many=True, read_only=True)
     name = serializers.ReadOnlyField()
 
     class Meta:
         model = AWSAccount
-        exclude = ["_name"]
+        # exclude = ["_name"]
+        fields = ["id", "name"]
 
 
 class EBSVolumeBriefSerializer(serializers.HyperlinkedModelSerializer):
